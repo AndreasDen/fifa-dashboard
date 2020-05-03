@@ -1,29 +1,25 @@
 import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Router from 'vue-router'
+import TeamOverview from '../views/TeamOverview'
+import PlayerOverview from '../views/PlayerOverview'
+import PlayerComparison from '../views/PlayerComparison'
+import NewGameForm from '../views/NewGameForm'
 
-Vue.use(VueRouter)
+Vue.use(Router)
 
-  const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: function () {
-      return import(/* webpackChunkName: "about" */ '../views/About.vue')
-    }
-  }
-]
-
-const router = new VueRouter({
-  routes
+export default new Router({
+  mode: 'history',
+  // base: __dirname,
+  routes: [
+    {
+      path: '/team-overview',
+      name: 'TeamOverview',
+      component: TeamOverview,
+      props: true
+    },
+    {path: '/player-overview', name: 'PlayerOverview', component: PlayerOverview, props: true},
+    {path: '/player-comparison', name: 'PlayerComparison', component: PlayerComparison, props: true},
+    {path: '/new-game-form', name: 'NewGameForm', component: NewGameForm, props: true},
+    {path: '/', redirect: {name: 'TeamOverview'}}
+  ]
 })
-
-export default router

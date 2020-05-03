@@ -1,32 +1,48 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <div id="top">
+      <div class="nav">
+        <router-link to='/'>Team Overview</router-link>
+        <router-link to="/player-comparison">Player Comparison</router-link>
+        <router-link to="/player-overview">Player Overview</router-link>
+        <router-link to="/new-game-form">New Game</router-link>
+      </div>
     </div>
-    <router-view/>
+    <div id="content">
+      <router-view :allData=allData :loaded="loaded"></router-view>
+    </div>
   </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
 
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+export default {
+  name: 'App',
+  data () {
+    return {
+      loaded: false,
+      allData: null
     }
+  },
+  watch: {
+    allData: function () {
+      this.loaded = true
+    }
+  },
+  beforeCreate () {
+    this.$axios.get('').then(response => (this.allData = response.data.players))
   }
 }
+</script>
+
+<style>
+  #app {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #222840;
+    margin-top: 60px;
+    background: #131633;
+  }
 </style>
