@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <line-chart v-if="loaded" :chart-data="eloHistoryDataCollection" :options="optionsLineChart"></line-chart>
-    <bar-chart v-if="loaded" :chart-data="eloDataCollection" :options="optionsBarChart"></bar-chart>
-  </div>
+    <div class="fifa-dashboard">
+        <line-chart v-if="loaded" :chart-data="eloHistoryDataCollection" :options="optionsLineChart"></line-chart>
+        <bar-chart v-if="loaded" :chart-data="eloDataCollection" :options="optionsBarChart"></bar-chart>
+    </div>
 </template>
 
 <script>
@@ -22,33 +22,30 @@ export default {
   data () {
     return {
       optionsBarChart: {
-        legend: {
-          position: 'bottom',
-          labels: {
-            // fontColor: 'white',
-          }
-        },
+        responsive: true,
+        maintainAspectRatio: false,
+        legend: false,
         scales: {
           yAxes: [{
             ticks: {
-              fontColor: 'white',
+              // fontColor: 'white',
               // stepSize: 1,
               fontSize: 12,
               beginAtZero: false
             },
             gridLines: {
               display: false,
-              color: ['white']
+              // color: ['white']
             }
           }],
           xAxes: [{
             ticks: {
-              fontColor: 'white',
+              // fontColor: 'white',
               fontSize: 12,
               beginAtZero: true
             },
             gridLines: {
-              color: ['white']
+              // color: ['white']
             }
           }]
         },
@@ -62,33 +59,38 @@ export default {
         // responsiveAnimationDuration: 0 // animation duration after a resize
       },
       optionsLineChart: {
+        responsive: true,
+        maintainAspectRatio: false,
         legend: {
           position: 'bottom',
           labels: {
-            // fontColor: 'white',
-          }
+            fontFamiliy: "Comfortaa-Bold",
+            fontColor: '#4f4f4f',
+            padding: 16,
+            fontSize: 14
+          },
         },
         scales: {
           yAxes: [{
             ticks: {
-              fontColor: 'white',
+              // fontColor: 'white',
               // stepSize: 1,
               fontSize: 12,
               beginAtZero: false
             },
             gridLines: {
               display: false,
-              color: ['white']
-            }
+              // color: ['white']
+            },
           }],
           xAxes: [{
             ticks: {
-              fontColor: 'white',
+              // fontColor: 'white',
               fontSize: 12,
               beginAtZero: true
             },
             gridLines: {
-              color: ['white']
+              // color: ['white']
             }
           }]
         },
@@ -99,7 +101,7 @@ export default {
             scaleID: 'y-axis-0',
             value: 1200,
             endValue: 1200,
-            borderColor: 'rgb(75, 192, 192)',
+            // borderColor: 'rgb(75, 192, 192)',
             borderWidth: 4,
             label: {
               enabled: true,
@@ -116,7 +118,8 @@ export default {
       return this.allData ? this.allData.map(players => Math.round(players.stats.elo.current)) : {}
     },
     allPlayersColor: function () {
-      return this.allData ? this.allData.map(players => '#' + players.hex_color) : {}
+      // return this.allData ? this.allData.map(players => '#' + players.hex_color) : {}
+      return 'linear-gradient(90deg, rgba(30,218,171,1) 0%, rgba(127,251,159,1) 100%)'
     },
     allPlayersName: function () {
       return this.allData ? this.allData.map(players => players.user.name) : {}
@@ -141,25 +144,29 @@ export default {
       let datasets = []
       let labels = [...Array(26).keys()]
       this.allPlayersHistory.map((playerHistory, index) => {
+
         datasets.push(
-          {
-            label: this.allPlayersName[index],
-            backgroundColor: [this.allPlayersColor[index]],
-            // fill: false,
-            data: playerHistory.slice(playerHistory.length - 26),
-            width: 1000,
-            borderColor: this.allPlayersColor[index],
-            borderWidth: 2,
-            scaleOverride: true,
-            scaleSteps: 10,
-            scaleStepWidth: 50,
-            scaleStartValue: 1000,
-            trendlineLinear: {
-              style: 'rgba(255,105,180, .8)',
-              lineStyle: 'dotted|solid',
-              width: 2
+            {
+              label: this.allPlayersName[index],
+              backgroundColor: 'transparent',
+              // backgroundColor: [this.allPlayersColor],
+              fill: false,
+              data: playerHistory.slice(playerHistory.length - 26),
+              // borderColor: this.allPlayersColor[index],
+              borderColor: this.allPlayersColor,
+              pointHoverRadius: 5,
+              borderWidth: 2,
+              hidden: index !== 0,
+              // scaleOverride: true,
+              // scaleSteps: 10,
+              // scaleStepWidth: 50,
+              // scaleStartValue: 1000,
+              trendlineLinear: {
+                style: 'rgba(255,105,180, .8)',
+                lineStyle: 'dotted|solid',
+                width: 2
+              }
             }
-          }
         )
       })
       return {labels, datasets}
@@ -168,6 +175,24 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.fifa-dashboard {
+    display: flex;
 
+    > div {
+        flex: 1 1 calc(33% - 175px);
+        width: 100%;
+        background-color: #fcfcfc;
+        padding: 16px;
+        border-radius: 8px;
+        max-width: calc(50% - (175px/2));
+        height: 350px;
+        position: relative;
+        box-shadow: 10px 10px 16px -8px rgba(0,0,0,0.4);
+
+      &:nth-child(even) {
+        margin-left: 24px;
+      }
+    }
+}
 </style>

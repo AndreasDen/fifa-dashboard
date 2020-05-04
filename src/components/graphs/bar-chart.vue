@@ -18,8 +18,7 @@ export default {
     }
   },
   watch: {
-    chartData: function (newVal, oldVal) {
-      console.log(this.options)
+    chartData: function () {
       this.addGradient()
       this.renderChart(this.chartData, this.options)
     }
@@ -46,7 +45,12 @@ export default {
     },
     addGradient: function () {
       this.chartData.datasets.map(dataset => {
-        dataset.backgroundColor = this.createGradient(dataset.backgroundColor)
+        // dataset.backgroundColor = this.createGradient(dataset.backgroundColor)
+        let gradient = this.$refs.canvas.getContext('2d').createLinearGradient(0, 0, 0, 450)
+        gradient.addColorStop(0, 'rgba(30,218,171,1)')
+        gradient.addColorStop(1, 'rgba(127,251,159,1)')
+
+        dataset.backgroundColor = gradient;
       })
     }
   },
@@ -58,5 +62,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
+    canvas {
+    }
 </style>
