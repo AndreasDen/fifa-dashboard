@@ -31,7 +31,7 @@ export default {
     }
   },
   beforeCreate () {
-    this.$axios.get('https://trvmp-prod.herokuapp.com/player_stats').then(response => (this.allData = response.data.players))
+    this.$axios.get('').then(response => (this.allData = response.data.players))
   }
 }
 </script>
