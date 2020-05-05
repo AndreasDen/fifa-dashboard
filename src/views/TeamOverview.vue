@@ -28,35 +28,45 @@ export default {
         scales: {
           yAxes: [{
             ticks: {
-              // fontColor: 'white',
-              // stepSize: 1,
-              fontSize: 12,
               beginAtZero: false
             },
             gridLines: {
               display: false,
-              // color: ['white']
             }
           }],
           xAxes: [{
             ticks: {
-              // fontColor: 'white',
-              fontSize: 12,
               beginAtZero: true
-            },
-            gridLines: {
-              // color: ['white']
             }
           }]
         },
+        tooltips: {
+          enabled: false
+        },
         animation: {
-          // easing: 'easeInOutBack'
-          // duration: 4000 // general animation time
+          easing: 'easeInOutCubic',
+          duration: 1000,// general animation time,
+          onComplete: function () {
+            var chartInstance = this.chart,
+                ctx = chartInstance.ctx;
+            ctx.textAlign = 'center';
+            ctx.fillStyle = "#4f4f4f";
+            ctx.textBaseline = 'bottom';
+            // ctx.fontFace = '16px';
+            ctx.font = '20px';
+
+            this.data.datasets.forEach(function (dataset, i) {
+              var meta = chartInstance.controller.getDatasetMeta(i);
+              meta.data.forEach(function (bar, index) {
+                var data = dataset.data[index];
+                ctx.fillText(data, bar._model.x, bar._model.y - 5);
+              });
+            });
+          }
+        },
+        hover: {
+          animationDuration: 0,
         }
-        // hover: {
-        //   animationDuration: 0 // duration of animations when hovering an item
-        // },
-        // responsiveAnimationDuration: 0 // animation duration after a resize
       },
       optionsLineChart: {
         responsive: true,
@@ -73,40 +83,17 @@ export default {
         scales: {
           yAxes: [{
             ticks: {
-              // fontColor: 'white',
-              // stepSize: 1,
               fontSize: 12,
               beginAtZero: false
-            },
-            gridLines: {
-              display: false,
-              // color: ['white']
             },
           }],
           xAxes: [{
             ticks: {
-              // fontColor: 'white',
               fontSize: 12,
               beginAtZero: true
             },
             gridLines: {
-              // color: ['white']
-            }
-          }]
-        },
-        annotation: {
-          annotations: [{
-            type: 'line',
-            mode: 'horizontal',
-            scaleID: 'y-axis-0',
-            value: 1200,
-            endValue: 1200,
-            // borderColor: 'rgb(75, 192, 192)',
-            borderWidth: 4,
-            label: {
-              enabled: true,
-              content: 'Trendline',
-              yAdjust: -16
+              display: false,
             }
           }]
         }
@@ -116,10 +103,6 @@ export default {
   computed: {
     allPlayersCurrentElo: function () {
       return this.allData ? this.allData.map(players => Math.round(players.stats.elo.current)) : {}
-    },
-    allPlayersColor: function () {
-      // return this.allData ? this.allData.map(players => '#' + players.hex_color) : {}
-      return 'linear-gradient(90deg, rgba(30,218,171,1) 0%, rgba(127,251,159,1) 100%)'
     },
     allPlayersName: function () {
       return this.allData ? this.allData.map(players => players.user.name) : {}
@@ -140,7 +123,7 @@ export default {
       }
     },
     eloHistoryDataCollection: function () {
-      let datasets = []
+      let datasets = [];
       let labels = [...Array(26).keys()]
       this.allPlayersHistory.map((playerHistory, index) => {
 
