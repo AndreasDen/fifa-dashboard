@@ -132,9 +132,8 @@ export default {
         labels: this.allPlayersName,
         datasets: [
           {
-            backgroundColor: this.allPlayersColor,
+            backgroundColor: ['rgba(30,47,218,1)', 'rgba(127,236,251,1)'],
             data: this.allPlayersCurrentElo,
-            borderColor: this.allPlayersColor,
             borderWidth: 2
           }
         ]
@@ -149,18 +148,12 @@ export default {
             {
               label: this.allPlayersName[index],
               backgroundColor: 'transparent',
-              // backgroundColor: [this.allPlayersColor],
               fill: false,
               data: playerHistory.slice(playerHistory.length - 26),
-              // borderColor: this.allPlayersColor[index],
-              borderColor: this.allPlayersColor,
+              borderColor: ['rgba(218,64,30,1)', 'rgba(251,187,127,1)'],
               pointHoverRadius: 5,
               borderWidth: 2,
               hidden: index !== 0,
-              // scaleOverride: true,
-              // scaleSteps: 10,
-              // scaleStepWidth: 50,
-              // scaleStartValue: 1000,
               trendlineLinear: {
                 style: 'rgba(255,105,180, .8)',
                 lineStyle: 'dotted|solid',
