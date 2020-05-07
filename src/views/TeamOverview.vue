@@ -1,17 +1,30 @@
 <template>
   <div class="fifa-dashboard">
     <section class="section section-elo">
-      <line-chart v-if="loaded" :chart-data="eloHistoryDataCollection" :options="optionsLineChart"></line-chart>
-      <bar-chart v-if="loaded" :chart-data="eloDataCollection" :options="optionsBarChart"></bar-chart>
+      <article class="article">
+        <h2>ELO STATISTIC</h2>
+        <p class="text">This is a overview about the calculated ELO points per player</p>
+      </article>
+      <div class="stats">
+        <line-chart v-if="loaded" :chart-data="eloHistoryDataCollection" :options="optionsLineChart"></line-chart>
+        <user-podium :elo-stats="allPlayersCurrentElo" :user-names="allPlayersName" ></user-podium>
+        <bar-chart v-if="loaded" :chart-data="eloDataCollection" :options="optionsBarChart"></bar-chart>
+      </div>
     </section>
     <section class="section section-games">
-      <div class="graph-game-amount-total">
-        <pie-chart v-if="loaded" :chart-data="gamesAmountTotalDataCollection" :options="optionsDoughnutChart"></pie-chart>
-      </div>
-      <div class="graph-game-amount-splitted small-chart">
-        <horizontal-bar-chart v-if="loaded" :chart-data="gamesAmountVictoryDataCollection" :options="optionsBarChartGames"></horizontal-bar-chart>
-        <horizontal-bar-chart v-if="loaded" :chart-data="gamesAmountLostDataCollection" :options="optionsBarChartGames"></horizontal-bar-chart>
-        <horizontal-bar-chart v-if="loaded" :chart-data="gamesAmountDrawDataCollection" :options="optionsBarChartGames"></horizontal-bar-chart>
+      <article class="article">
+        <h2>GAME STATISTIC</h2>
+        <p class="text">This is a overview about the played games</p>
+      </article>
+      <div class="stats">
+        <div class="graph-game-amount-total">
+          <pie-chart v-if="loaded" :chart-data="gamesAmountTotalDataCollection" :options="optionsDoughnutChart"></pie-chart>
+        </div>
+        <div class="graph-game-amount-splitted small-chart">
+          <horizontal-bar-chart v-if="loaded" :chart-data="gamesAmountVictoryDataCollection" :options="optionsBarChartGames"></horizontal-bar-chart>
+          <horizontal-bar-chart v-if="loaded" :chart-data="gamesAmountLostDataCollection" :options="optionsBarChartGames"></horizontal-bar-chart>
+          <horizontal-bar-chart v-if="loaded" :chart-data="gamesAmountDrawDataCollection" :options="optionsBarChartGames"></horizontal-bar-chart>
+        </div>
       </div>
     </section>
     <section class="section section-goals"></section>
@@ -24,6 +37,7 @@ import BarChart from './../components/graphs/bar-chart'
 import HorizontalBarChart from './../components/graphs/horizontal-bar-chart'
 import DoughnutChart from './../components/graphs/doughnut-chart'
 import PieChart from './../components/graphs/pie-chart'
+import UserPodium from './../components/user-poduim'
 
 export default {
   name: 'TeamOverview',
@@ -35,6 +49,7 @@ export default {
     DoughnutChart,
     /* eslint-disable-next-line */
     PieChart,
+    UserPodium
   },
   props: {
     allData: Array,
@@ -219,7 +234,7 @@ export default {
                 var middleAngle = startAngle + ((endAngle - startAngle) / 2);
 
                 if (!arc.hidden) {
-                  ctx.fillText(data +' | '+ labels, (radius / 1.45) * Math.cos(middleAngle) + midX , (radius / 1.45) * Math.sin(middleAngle) + midY);
+                  ctx.fillText(data + ' | ' + labels, (radius / 1.45) * Math.cos(middleAngle) + midX, (radius / 1.45) * Math.sin(middleAngle) + midY);
                 }
               });
             });
@@ -237,22 +252,22 @@ export default {
   },
   computed: {
     allPlayersCurrentElo: function () {
-      return this.allData ? this.allData.map(players => Math.round(players.stats.elo.current)) : {}
+      return this.allData ? this.allData.map(players => Math.round(players.stats.elo.current)) : []
     },
     allPlayersName: function () {
-      return this.allData ? this.allData.map(players => players.user.name) : {}
+      return this.allData ? this.allData.map(players => players.user.name) : []
     },
     allPlayersGamesAmountTotal: function () {
-      return this.allData ? this.allData.map(players => players.stats.games.amount) : {}
+      return this.allData ? this.allData.map(players => players.stats.games.amount) : []
     },
     allPlayersGamesAmountVictory: function () {
-      return this.allData ? this.allData.map(players => players.stats.games.amount_won) : {}
+      return this.allData ? this.allData.map(players => players.stats.games.amount_won) : []
     },
     allPlayersGamesAmountLost: function () {
-      return this.allData ? this.allData.map(players => players.stats.games.amount_lost) : {}
+      return this.allData ? this.allData.map(players => players.stats.games.amount_lost) : []
     },
     allPlayersGamesAmountDraw: function () {
-      return this.allData ? this.allData.map(players => players.stats.games.amount_draw) : {}
+      return this.allData ? this.allData.map(players => players.stats.games.amount_draw) : []
     },
     allPlayersHistory: function () {
       return this.allData.map(players => players.stats.elo.history)
@@ -273,20 +288,20 @@ export default {
       let datasets = this.allPlayersHistory.map((playerHistory, index) => {
         return {
           label: this.allPlayersName[index],
-          backgroundColor: ['rgba(105,30,218,.25)', 'rgba(216,127,251,.25)'],
-          fill: false,
+          // fill: false,
+          backgroundColor: ['rgba(248, 54, 0, 0.2)', 'rgba(249, 212, 35, 0.2)'],
           data: playerHistory.slice(playerHistory.length - 26),
-          borderColor: ['rgba(105,30,218,1)', 'rgba(216,127,251,1)'],
+          borderColor: ['rgba(248, 54, 0, 1)', 'rgba(249, 212, 35, 1)'],
           pointHoverRadius: 5,
           pointRadius: 4,
-          pointBackgroundColor: ['rgba(105,30,218,1)', 'rgba(216,127,251,1)'],
+          pointBackgroundColor: ['rgba(248, 54, 0, 1)', 'rgba(249, 212, 35, 1)'],
           pointBorderColor: 'rgba(255,255,255)',
           borderWidth: 2,
           pointBorderWidth: 1,
           hidden: index !== 0,
           lineTension: 0,
           trendlineLinear: {
-            style: 'rgba(255,105,180, .8)',
+            style: 'rgba(248, 54, 0, 1)',
             lineStyle: 'dotted|solid',
             width: 2
           }
@@ -375,19 +390,42 @@ export default {
   section {
     flex: 1 1 100%;
     display: flex;
+    flex-direction: column;
     width: 100%;
 
+
+    h2 {
+      font-size: 30px;
+      position: relative;
+      display: inline-block;
+
+      &:after {
+        transition: all .35s ease;
+        content: "";
+        height: 15px;
+        width: 100%;
+        position: absolute;
+        z-index: -1;
+      }
+    }
+
     &.section-elo {
+      h2 {
+        &:after {
+          background-image: linear-gradient(to right, rgba(248, 54, 0, 1) 0%, rgba(249, 212, 35, 1) 100%);
+          /*background: linear-gradient(90deg, rgba(218,64,30,1) 0%, rgba(251,187,127,1) 100%);*/
+          bottom: 0px;
+          left: 35px;
+        }
+      }
+
       > div {
         flex: 1 1 calc(50% - 175px);
         width: 100%;
-        background-color: #fcfcfc;
         padding: 16px;
-        border-radius: 8px;
         max-width: calc(50% - (175px / 2));
         /*height: 350px;*/
         position: relative;
-        box-shadow: 10px 10px 16px -8px rgba(0, 0, 0, 0.4);
 
         &:nth-child(even) {
           margin-left: 24px;
@@ -401,11 +439,17 @@ export default {
 
 
     &.section-games {
-      flex-direction: column;
-
       .graph-game-amount-total {
         /*max-width: 50%;*/
         align-self: center;
+      }
+
+      h2 {
+        &:after {
+          background: linear-gradient(90deg, rgba(89, 30, 218, 1) 0%, rgba(127, 251, 197, 1) 100%);
+          bottom: 0px;
+          left: 35px;
+        }
       }
 
       .graph-game-amount-splitted {
