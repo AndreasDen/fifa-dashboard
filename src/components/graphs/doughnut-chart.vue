@@ -1,12 +1,11 @@
 <script>
 
-import {Bar, mixins} from 'vue-chartjs'
-import chartjsPluginAnnotation from "chartjs-plugin-annotation";
+import {Doughnut, mixins} from 'vue-chartjs'
 
 const {reactiveProp} = mixins
 
 export default {
-  extends: Bar,
+  extends: Doughnut,
   mixins: [reactiveProp],
   props: {
     chartData: {
@@ -27,7 +26,7 @@ export default {
   methods: {
     createGradient (color) {
       // create gradient with more datasets
-      let gradient = this.$refs.canvas.getContext('2d').createLinearGradient(0, 0, 450, 0)
+      let gradient = this.$refs.canvas.getContext('2d').createRadialGradient(175,575,575, 175,275,100)
       gradient.addColorStop(0, color[0]);
       gradient.addColorStop(1,  color[1]);
       return gradient
@@ -39,7 +38,6 @@ export default {
     }
   },
   mounted () {
-    this.addPlugin(chartjsPluginAnnotation);
     this.addGradient();
     this.renderChart(this.chartData, this.options)
   }

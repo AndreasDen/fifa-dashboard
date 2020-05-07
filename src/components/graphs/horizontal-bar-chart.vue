@@ -1,12 +1,11 @@
 <script>
 
-import {Bar, mixins} from 'vue-chartjs'
-import chartjsPluginAnnotation from "chartjs-plugin-annotation";
+import {HorizontalBar, mixins} from 'vue-chartjs'
 
 const {reactiveProp} = mixins
 
 export default {
-  extends: Bar,
+  extends: HorizontalBar,
   mixins: [reactiveProp],
   props: {
     chartData: {
@@ -39,7 +38,6 @@ export default {
     }
   },
   mounted () {
-    this.addPlugin(chartjsPluginAnnotation);
     this.addGradient();
     this.renderChart(this.chartData, this.options)
   }
@@ -47,6 +45,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-    canvas {
-    }
+canvas {
+}
 </style>
