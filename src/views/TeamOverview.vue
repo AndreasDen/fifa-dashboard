@@ -6,9 +6,11 @@
         <p class="text">This is a overview about the calculated ELO points per player</p>
       </article>
       <div class="stats">
-        <line-chart v-if="loaded" :chart-data="eloHistoryDataCollection" :options="optionsLineChart"></line-chart>
-        <user-podium :elo-stats="allPlayersCurrentElo" :user-names="allPlayersName" ></user-podium>
-        <bar-chart v-if="loaded" :chart-data="eloDataCollection" :options="optionsBarChart"></bar-chart>
+        <user-podium :elo-stats="allPlayersCurrentElo" :user-names="allPlayersName" :gradientColors="gradientOptions.redToYellow"></user-podium>
+        <div class="charts">
+          <line-chart v-if="loaded" :chart-data="eloHistoryDataCollection" :options="optionsLineChart"></line-chart>
+          <bar-chart v-if="loaded" :chart-data="eloDataCollection" :options="optionsBarChart"></bar-chart>
+        </div>
       </div>
     </section>
     <section class="section section-games">
@@ -248,6 +250,9 @@ export default {
           position: 'left'
         }
       },
+      gradientOptions: {
+        redToYellow: ['rgba(248, 54, 0, 1)', 'rgba(249, 212, 35, 1)']
+      }
     }
   },
   computed: {
@@ -277,7 +282,7 @@ export default {
         labels: this.allPlayersName,
         datasets: [
           {
-            backgroundColor: ['rgba(30,47,218,1)', 'rgba(127,236,251,1)'],
+            backgroundColor: ['rgba(218,64,30,1)', 'rgba(251,187,127,1)'],
             data: this.allPlayersCurrentElo,
             borderWidth: 2
           }
@@ -289,19 +294,19 @@ export default {
         return {
           label: this.allPlayersName[index],
           // fill: false,
-          backgroundColor: ['rgba(248, 54, 0, 0.2)', 'rgba(249, 212, 35, 0.2)'],
+          backgroundColor:  ['rgba(218,64,30,.2)', 'rgba(251,187,127,.2)'],
           data: playerHistory.slice(playerHistory.length - 26),
-          borderColor: ['rgba(248, 54, 0, 1)', 'rgba(249, 212, 35, 1)'],
+          borderColor:  ['rgba(218,64,30,1)', 'rgba(251,187,127,1)'],
           pointHoverRadius: 5,
           pointRadius: 4,
-          pointBackgroundColor: ['rgba(248, 54, 0, 1)', 'rgba(249, 212, 35, 1)'],
+          pointBackgroundColor:  ['rgba(218,64,30,1)', 'rgba(251,187,127,1)'],
           pointBorderColor: 'rgba(255,255,255)',
           borderWidth: 2,
           pointBorderWidth: 1,
           hidden: index !== 0,
           lineTension: 0,
           trendlineLinear: {
-            style: 'rgba(248, 54, 0, 1)',
+            style: 'rgba(218,64,30,1)',
             lineStyle: 'dotted|solid',
             width: 2
           }
@@ -395,6 +400,7 @@ export default {
 
 
     h2 {
+      font-family: Montserrat-Medium;
       font-size: 30px;
       position: relative;
       display: inline-block;
@@ -410,29 +416,32 @@ export default {
     }
 
     &.section-elo {
+
       h2 {
         &:after {
-          background-image: linear-gradient(to right, rgba(248, 54, 0, 1) 0%, rgba(249, 212, 35, 1) 100%);
-          /*background: linear-gradient(90deg, rgba(218,64,30,1) 0%, rgba(251,187,127,1) 100%);*/
+          background-image: linear-gradient(to right, rgba(218, 64, 30, 1) 0%, rgba(251, 187, 127, 1) 100%);
           bottom: 0px;
           left: 35px;
         }
       }
 
       > div {
-        flex: 1 1 calc(50% - 175px);
-        width: 100%;
-        padding: 16px;
-        max-width: calc(50% - (175px / 2));
-        /*height: 350px;*/
-        position: relative;
-
         &:nth-child(even) {
           margin-left: 24px;
         }
 
         &:nth-child(2n +3) {
           margin-top: 24px;
+        }
+      }
+
+      .charts {
+        display: flex;
+
+        > div {
+          flex: 1 1 50%;
+          width: 50%;
+          padding: 40px;
         }
       }
     }

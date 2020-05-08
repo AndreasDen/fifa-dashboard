@@ -1,9 +1,9 @@
 <template>
   <div class="user-podium">
-      <div class="user-elo-stat" v-for="(elo, index) in this.displayNumber" :key="elo">
-        <p class="user-name">{{userNames[index]}}</p>
-        <p class="user-elo">{{elo}}</p>
-      </div>
+    <div class="user-elo-stat" v-for="index in 3" :key="index">
+      <p class="user-elo" v-if="podiumArray.length > 0">{{countingNumber[index-1]}}</p><!--  index in v-for start with 1..      -->
+      <p class="user-name" v-if="podiumArray.length > 0">{{podiumArray[index-1][0]}}</p><!--  index in v-for start with 1..      -->
+    </div>
   </div>
 </template>
 
@@ -12,62 +12,101 @@ export default {
   name: "user-poduim",
   props: {
     eloStats: Array,
-    userNames: Array
+    userNames: Array,
+    gradientColors: Array
   },
   data: function () {
     return {
-      displayNumber: []
+      countingNumber: [],
+
+      //this is going to filled like [[userName, eloStats], [userName, eloStats], .....]
+      podiumArray: [],
     }
   },
   watch: {
-    eloStats: function(){
+    eloStats: function () {
 
-      //creates a array filled with 0 and same length than elo Array
-      this.displayNumber = Array.from(this.eloStats, (x,i) => 0 + i)
+      //creates a array filled with 0,1,2... and same length than elo Array
+      // needed to count up
+      this.countingNumber = Array.from(this.eloStats, (x, i) => 0 + i);
+
+      //set podiumArray to [[userName, eloStats], [userName, eloStats], .....]
+      this.podiumArray = this.sortedArray(this.userNames, this.eloStats)
 
       clearInterval(this.interval);
 
-      this.eloStats.map((elo,index) => {
+      //go through array an count up until elo point is reached
+      this.podiumArray.map((elo, index) => {
+        let elo_value = elo[1]
 
-        if(elo === this.displayNumber[index]){
+        if (elo_value === this.countingNumber[index]) {
           return;
         }
 
-        this.interval = window.setInterval(function(){
-
-          if(this.displayNumber[index] !== elo){
-            var change = (elo - this.displayNumber[index]) / 10;
+        this.interval = window.setInterval(function () {
+          if (this.countingNumber[index] !== elo_value) {
+            var change = (elo_value - this.countingNumber[index]) / 10;
             change = change >= 0 ? Math.ceil(change) : Math.floor(change);
-            this.displayNumber[index] = this.displayNumber[index] + change;
+
+            //set new Number to this.countingNumber array, this causes an update/rerender of this component
+            this.$set(this.countingNumber, index, this.countingNumber[index] + change)
           }
-
-          this.$set(this.displayNumber, index, this.displayNumber[index])
-
-        }.bind(this), 20);
-
+        }.bind(this), 50);
       })
     }
   },
   methods: {
-    animateNumber: function (nodes, start, end) {
-      console.log(nodes)
-      console.log(start)
-      console.log(end)
-      // nodes.map(node => {
-      //   var interval = setInterval(function() {
-      //     node.text(start);
-      //     if (start >= end) clearInterval(interval);
-      //     start++;
-      //   }, 30);
-      // })
-    }
-  },
-  mounted () {
+    sortedArray: function (arr1, arr2) {
+      //go through arr1 an return a sorted array in array structure
+      let list = arr1.map((arr1Value, index) => [arr1Value, arr2[index]])
+      list.sort(function (a, b) {
+        return ((a[1] > b[1]) ? -1 : ((a[1] === b[1]) ? 0 : 1));
+      })
 
+      //sort array like podium 2, 1, 3
+      let temp = list[0];
+      list[0] = list[1];
+      list[1] = temp;
+
+      return list
+    }
   }
 }
 </script>
 
 <style scoped lang="scss">
 
+.user-podium {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  margin: 32px 0;
+
+  .user-elo-stat {
+    font-size: 40px;
+
+    &:nth-child(2) {
+      font-size: 64px;
+      line-height: 1;
+      margin: 0 32px;
+    }
+  }
+  .user-name {
+    font-family: Montserrat-Black;
+    color: rgba(251,187,127,1);
+    margin: 0;
+    border-top: 3px solid #4f4f4f;
+  }
+
+  .user-elo {
+    margin: 0;
+    font-family: Montserrat-Black;
+    background-image: linear-gradient(to bottom, rgba(218,64,30,1), rgba(251,187,127,1));
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-background-clip: text;
+    -moz-text-fill-color: transparent;
+  }
+}
 </style>
