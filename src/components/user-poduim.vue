@@ -25,17 +25,27 @@ export default {
   },
   watch: {
     eloStats: function () {
+      this.animateNumbers()
+    }
+  },
+  methods: {
+    animateNumbers: function () {
 
       //creates a array filled with 0,1,2... and same length than elo Array
       // needed to count up
       this.countingNumber = Array.from(this.eloStats, (x, i) => 0 + i);
 
+      clearInterval(this.interval);
+
+      if(this.eloStats.length === 0) {
+        return;
+      }
+
       //set podiumArray to [[userName, eloStats], [userName, eloStats], .....]
       this.podiumArray = this.sortedArray(this.userNames, this.eloStats)
 
-      clearInterval(this.interval);
-
       //go through array an count up until elo point is reached
+
       this.podiumArray.map((elo, index) => {
         let elo_value = elo[1]
 
@@ -53,9 +63,7 @@ export default {
           }
         }.bind(this), 50);
       })
-    }
-  },
-  methods: {
+    },
     sortedArray: function (arr1, arr2) {
       //go through arr1 an return a sorted array in array structure
       let list = arr1.map((arr1Value, index) => [arr1Value, arr2[index]])
@@ -69,7 +77,14 @@ export default {
       list[1] = temp;
 
       return list
+    },
+    setPodiumsArray: function () {
+      //set podiumArray to [[userName, eloStats], [userName, eloStats], .....]
+      this.podiumArray = this.sortedArray(this.userNames, this.eloStats)
     }
+  },
+  mounted () {
+    this.animateNumbers()
   }
 }
 </script>
@@ -91,9 +106,10 @@ export default {
       margin: 0 32px;
     }
   }
+
   .user-name {
     font-family: Montserrat-Black;
-    color: rgba(251,187,127,1);
+    color: rgba(251, 187, 127, 1);
     margin: 0;
     border-top: 3px solid #4f4f4f;
   }
@@ -101,7 +117,7 @@ export default {
   .user-elo {
     margin: 0;
     font-family: Montserrat-Black;
-    background-image: linear-gradient(to bottom, rgba(218,64,30,1), rgba(251,187,127,1));
+    background-image: linear-gradient(to bottom, rgba(218, 64, 30, 1), rgba(251, 187, 127, 1));
 
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
