@@ -62,7 +62,9 @@ export default {
       optionsBarChart: {
         responsive: true,
         maintainAspectRatio: false,
-        legend: false,
+        legend: {
+          onClick: (e) => e.stopPropagation()
+        },
         scales: {
           yAxes: [{
             ticks: {
@@ -96,7 +98,7 @@ export default {
               var meta = chartInstance.controller.getDatasetMeta(i);
               meta.data.forEach(function (bar, index) {
                 var data = dataset.data[index];
-                ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                  ctx.fillText(data, bar._model.x, bar._model.y - 5);
               });
             });
           }
@@ -259,6 +261,12 @@ export default {
     allPlayersCurrentElo: function () {
       return this.allData ? this.allData.map(players => Math.round(players.stats.elo.current)) : []
     },
+    allPlayersLowestElo: function () {
+      return this.allData ? this.allData.map(players => Math.round(players.stats.elo.min)) : []
+    },
+    allPlayersHighestElo: function () {
+      return this.allData ? this.allData.map(players => Math.round(players.stats.elo.max)) : []
+    },
     allPlayersName: function () {
       return this.allData ? this.allData.map(players => players.user.name) : []
     },
@@ -282,9 +290,22 @@ export default {
         labels: this.allPlayersName,
         datasets: [
           {
+            backgroundColor: ['rgba(0,0,0,.1)', 'rgba(0,0,0,.1)'],
+            data: this.allPlayersLowestElo,
+            borderWidth: 2,
+            label: 'MIN'
+          },
+          {
             backgroundColor: ['rgba(218,64,30,1)', 'rgba(251,187,127,1)'],
             data: this.allPlayersCurrentElo,
-            borderWidth: 2
+            borderWidth: 2,
+            label: 'CURRENT'
+          },
+          {
+            backgroundColor: ['rgba(0,0,0,.1)', 'rgba(0,0,0,.1)'],
+            data: this.allPlayersHighestElo,
+            borderWidth: 2,
+            label: 'MAX'
           }
         ]
       }
