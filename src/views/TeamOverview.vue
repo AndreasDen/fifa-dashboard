@@ -19,13 +19,16 @@
         <p class="text">This is a overview about the played games</p>
       </article>
       <div class="stats">
-        <div class="graph-game-amount-total">
-          <pie-chart v-if="loaded" :chart-data="gamesAmountTotalDataCollection" :options="optionsDoughnutChart"></pie-chart>
-        </div>
-        <div class="graph-game-amount-splitted small-chart">
-          <horizontal-bar-chart v-if="loaded" :chart-data="gamesAmountVictoryDataCollection" :options="optionsBarChartGames"></horizontal-bar-chart>
-          <horizontal-bar-chart v-if="loaded" :chart-data="gamesAmountLostDataCollection" :options="optionsBarChartGames"></horizontal-bar-chart>
-          <horizontal-bar-chart v-if="loaded" :chart-data="gamesAmountDrawDataCollection" :options="optionsBarChartGames"></horizontal-bar-chart>
+        <user-podium :elo-stats="allPlayersGamesVictoryRate" :user-names="allPlayersName" :gradientColors="gradientOptions.purpleToTurquise"  :decimalPoint="true"></user-podium>
+        <div class="charts">
+          <div class="graph-game-amount-total">
+            <pie-chart v-if="loaded" :chart-data="gamesAmountTotalDataCollection" :options="optionsDoughnutChart"></pie-chart>
+          </div>
+          <div class="graph-game-amount-splitted small-chart">
+            <horizontal-bar-chart v-if="loaded" :chart-data="gamesAmountVictoryDataCollection" :options="optionsBarChartGames"></horizontal-bar-chart>
+            <horizontal-bar-chart v-if="loaded" :chart-data="gamesAmountLostDataCollection" :options="optionsBarChartGames"></horizontal-bar-chart>
+            <horizontal-bar-chart v-if="loaded" :chart-data="gamesAmountDrawDataCollection" :options="optionsBarChartGames"></horizontal-bar-chart>
+          </div>
         </div>
       </div>
     </section>
@@ -253,7 +256,8 @@ export default {
         }
       },
       gradientOptions: {
-        redToYellow: ['rgba(248, 54, 0, 1)', 'rgba(249, 212, 35, 1)']
+        redToYellow: ['rgba(218,64,30,1)', 'rgba(251,187,127,1)'],
+        purpleToTurquise: ['rgba(89,30,218,1)', 'rgba(127,251,197,1)']
       }
     }
   },
@@ -282,6 +286,9 @@ export default {
     allPlayersGamesAmountDraw: function () {
       return this.allData ? this.allData.map(players => players.stats.games.amount_draw) : []
     },
+    allPlayersGamesVictoryRate: function () {
+      return this.allData ? this.allData.map(players => Math.round(players.stats.games.amount_won/(players.stats.games.amount-players.stats.games.amount_won)*1000)) : []
+    },
     allPlayersHistory: function () {
       return this.allData.map(players => players.stats.elo.history)
     },
@@ -296,7 +303,7 @@ export default {
             label: 'MIN'
           },
           {
-            backgroundColor: ['rgba(218,64,30,1)', 'rgba(251,187,127,1)'],
+            backgroundColor: this.gradientOptions.redToYellow,
             data: this.allPlayersCurrentElo,
             borderWidth: 2,
             label: 'CURRENT'
@@ -317,17 +324,17 @@ export default {
           // fill: false,
           backgroundColor:  ['rgba(218,64,30,.2)', 'rgba(251,187,127,.2)'],
           data: playerHistory.slice(playerHistory.length - 26),
-          borderColor:  ['rgba(218,64,30,1)', 'rgba(251,187,127,1)'],
+          borderColor:  this.gradientOptions.redToYellow,
           pointHoverRadius: 5,
           pointRadius: 4,
-          pointBackgroundColor:  ['rgba(218,64,30,1)', 'rgba(251,187,127,1)'],
+          pointBackgroundColor: this.gradientOptions.redToYellow,
           pointBorderColor: 'rgba(255,255,255)',
           borderWidth: 2,
           pointBorderWidth: 1,
           hidden: index !== 0,
           lineTension: 0,
           trendlineLinear: {
-            style: 'rgba(218,64,30,1)',
+            style: this.gradientOptions.redToYellow[0],
             lineStyle: 'dotted|solid',
             width: 2
           }
@@ -342,7 +349,7 @@ export default {
         labels: this.allPlayersName,
         datasets: [
           {
-            backgroundColor: ['rgba(89,30,218,1)', 'rgba(127,251,197,1)'],
+            backgroundColor:this.gradientOptions.purpleToTurquise,
             data: this.allPlayersGamesAmountTotal,
             hoverBorderWidth: 12,
             // borderColor: 'transparent',
@@ -362,7 +369,7 @@ export default {
         labels: labels,
         datasets: [
           {
-            backgroundColor: ['rgba(89,30,218,1)', 'rgba(127,251,197,1)'],
+            backgroundColor: this.gradientOptions.purpleToTurquise,
             data: this.allPlayersGamesAmountVictory,
             borderWidth: 2,
             barPercentage: 0.4
@@ -379,7 +386,7 @@ export default {
         labels: labels,
         datasets: [
           {
-            backgroundColor: ['rgba(89,30,218,1)', 'rgba(127,251,197,1)'],
+            backgroundColor: this.gradientOptions.purpleToTurquise,
             data: this.allPlayersGamesAmountLost,
             borderWidth: 2,
             barPercentage: 0.4
@@ -396,7 +403,7 @@ export default {
         labels: labels,
         datasets: [
           {
-            backgroundColor: ['rgba(89,30,218,1)', 'rgba(127,251,197,1)'],
+            backgroundColor: this.gradientOptions.purpleToTurquise,
             data: this.allPlayersGamesAmountDraw,
             borderWidth: 2,
             barPercentage: 0.4
