@@ -3,7 +3,7 @@
     <div class="user-elo-stat" v-for="index in 3" :key="index">
       <p class="user-elo"
          v-if="podiumArray.length > 0"
-         :style="{'background-image':'linear-gradient(to bottom, '+gradientColors[0]+', '+gradientColors[1]+')'}">
+         :style="{'background-image':'linear-gradient(45deg, '+gradientColors[0]+', '+gradientColors[1]+')'}">
         {{decimalPoint ? (countingNumber[index-1]/1000).toFixed(2) : countingNumber[index-1]}}</p><!--  index in v-for start with 1..      -->
       <p class="user-name" v-if="podiumArray.length > 0">
 <!--         :style="{'color':gradientColors[1]}">-->
@@ -111,15 +111,12 @@ export default {
     font-size: 40px;
 
     &:nth-child(2) {
-      /*font-size: 64px;*/
-      /*line-height: 1;*/
       margin: 0 32px;
     }
   }
 
   .user-name {
     font-family: Montserrat-Medium;
-    /*color: rgba(251, 187, 127, 1);*/
     margin: 0;
     border-top: 3px solid #4f4f4f;
   }
@@ -127,8 +124,6 @@ export default {
   .user-elo {
     margin: 0;
     font-family: Montserrat-Black;
-    /*background-image: linear-gradient(to bottom, rgba(218, 64, 30, 1), rgba(251, 187, 127, 1));*/
-
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     -moz-background-clip: text;

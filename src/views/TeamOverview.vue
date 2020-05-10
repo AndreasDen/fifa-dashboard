@@ -19,7 +19,7 @@
         <p class="text">This is a overview about the played games</p>
       </article>
       <div class="stats">
-        <user-podium :elo-stats="allPlayersGamesVictoryRate" :user-names="allPlayersName" :gradientColors="gradientOptions.purpleToTurquise"  :decimalPoint="true"></user-podium>
+        <user-podium :elo-stats="allPlayersGamesVictoryRate" :user-names="allPlayersName" :gradientColors="gradientOptions.purpleToTurquise" :decimalPoint="true"></user-podium>
         <div class="charts">
           <div class="graph-game-amount-total">
             <pie-chart v-if="loaded" :chart-data="gamesAmountTotalDataCollection" :options="optionsDoughnutChart"></pie-chart>
@@ -32,7 +32,21 @@
         </div>
       </div>
     </section>
-    <section class="section section-goals"></section>
+    <section class="section section-goals">
+      <article class="article">
+        <h2>GOAL STATISTIC</h2>
+        <p class="text">This is a overview about the calculated ELO points per player</p>
+      </article>
+      <div class="stats">
+        <user-podium :elo-stats="allPlayersGoalsScoredRate" :user-names="allPlayersName" :gradientColors="gradientOptions.greenToYellow" :decimal-point="true"></user-podium>
+        <div class="charts">
+          <div class="graph-goal-amount small-chart">
+            <horizontal-bar-chart v-if="loaded" :chart-data="goalsAmountScoredDataCollection" :options="optionsBarChartGames"></horizontal-bar-chart>
+            <horizontal-bar-chart v-if="loaded" :chart-data="goalsAmountConcededDataCollection" :options="optionsBarChartGames"></horizontal-bar-chart>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -101,7 +115,7 @@ export default {
               var meta = chartInstance.controller.getDatasetMeta(i);
               meta.data.forEach(function (bar, index) {
                 var data = dataset.data[index];
-                  ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                ctx.fillText(data, bar._model.x, bar._model.y - 5);
               });
             });
           }
@@ -256,8 +270,10 @@ export default {
         }
       },
       gradientOptions: {
-        redToYellow: ['rgba(218,64,30,1)', 'rgba(251,187,127,1)'],
-        purpleToTurquise: ['rgba(89,30,218,1)', 'rgba(127,251,197,1)']
+        redToYellow: ['rgba(0, 219, 222, 1)','rgba(252, 0, 255, 1)'],
+        redToYellowTransparent: ['rgba(0, 219, 222, .2)','rgba(252, 0, 255, .2)'],
+        purpleToTurquise: ['rgba(255, 0, 128, 1)', 'rgba(255, 140, 0, 1)'],
+        greenToYellow: ['rgba(51, 51, 153, 1)', 'rgba(255, 0, 204, 1)']
       }
     }
   },
@@ -287,7 +303,19 @@ export default {
       return this.allData ? this.allData.map(players => players.stats.games.amount_draw) : []
     },
     allPlayersGamesVictoryRate: function () {
-      return this.allData ? this.allData.map(players => Math.round(players.stats.games.amount_won/(players.stats.games.amount-players.stats.games.amount_won)*1000)) : []
+      return this.allData ? this.allData.map(players => Math.round(players.stats.games.amount_won / (players.stats.games.amount - players.stats.games.amount_won) * 1000)) : []
+    },
+    allPlayersGoalsScoredRate: function () {
+      return this.allData ? this.allData.map(players => Math.round(players.stats.goals.scored_average*1000)) : []
+    },
+    allPlayersGoalsConcededRate: function () {
+      return this.allData ? this.allData.map(players => players.stats.goals.conceded_average) : []
+    },
+    allPlayersGoalsConcededAmount: function () {
+      return this.allData ? this.allData.map(players => players.stats.goals.conceded_amount) : []
+    },
+    allPlayersGoalsScoredAmount: function () {
+      return this.allData ? this.allData.map(players => players.stats.goals.scored_amount) : []
     },
     allPlayersHistory: function () {
       return this.allData.map(players => players.stats.elo.history)
@@ -322,9 +350,9 @@ export default {
         return {
           label: this.allPlayersName[index],
           // fill: false,
-          backgroundColor:  ['rgba(218,64,30,.2)', 'rgba(251,187,127,.2)'],
+          backgroundColor: this.gradientOptions.redToYellowTransparent,
           data: playerHistory.slice(playerHistory.length - 26),
-          borderColor:  this.gradientOptions.redToYellow,
+          borderColor: this.gradientOptions.redToYellow,
           pointHoverRadius: 5,
           pointRadius: 4,
           pointBackgroundColor: this.gradientOptions.redToYellow,
@@ -349,7 +377,7 @@ export default {
         labels: this.allPlayersName,
         datasets: [
           {
-            backgroundColor:this.gradientOptions.purpleToTurquise,
+            backgroundColor: this.gradientOptions.purpleToTurquise,
             data: this.allPlayersGamesAmountTotal,
             hoverBorderWidth: 12,
             // borderColor: 'transparent',
@@ -411,11 +439,47 @@ export default {
         ]
       }
     },
+    goalsAmountScoredDataCollection: function () {
+      let labels = this.allPlayersName.map((user, index) => {
+        return user + ': ' + this.allPlayersGoalsScoredAmount[index]
+      })
+
+      return {
+        labels: labels,
+        datasets: [
+          {
+            backgroundColor: this.gradientOptions.greenToYellow,
+            data: this.allPlayersGoalsScoredAmount,
+            borderWidth: 2,
+            barPercentage: 0.4
+          }
+        ]
+      }
+    },
+    goalsAmountConcededDataCollection: function () {
+      let labels = this.allPlayersName.map((user, index) => {
+        return user + ': ' + this.allPlayersGoalsConcededAmount[index]
+      })
+
+      return {
+        labels: labels,
+        datasets: [
+          {
+            backgroundColor: this.gradientOptions.greenToYellow,
+            data: this.allPlayersGoalsConcededAmount,
+            borderWidth: 2,
+            barPercentage: 0.4
+          }
+        ]
+      }
+    }
   }
 }
 </script>
 
 <style scoped lang="scss">
+@import '../scss/variables';
+
 .fifa-dashboard {
   display: flex;
   flex-wrap: wrap;
@@ -447,7 +511,7 @@ export default {
 
       h2 {
         &:after {
-          background-image: linear-gradient(to right, rgba(218, 64, 30, 1) 0%, rgba(251, 187, 127, 1) 100%);
+          background-image: $gradient-blue-to-green;
           bottom: 0px;
           left: 35px;
         }
@@ -483,7 +547,7 @@ export default {
 
       h2 {
         &:after {
-          background: linear-gradient(90deg, rgba(89, 30, 218, 1) 0%, rgba(127, 251, 197, 1) 100%);
+          background: $gradient-pink-to-orange;
           bottom: 0px;
           left: 35px;
         }
@@ -495,6 +559,16 @@ export default {
         > div {
           height: 150px;
           width: 50%;
+        }
+      }
+    }
+
+    &.section-goals {
+      h2 {
+        &:after {
+          background: $gradient-purple-to-pink;
+          bottom: 0px;
+          left: 35px;
         }
       }
     }
