@@ -235,7 +235,60 @@ export default {
               display: false,
             }
           }]
+        },
+        tooltips: {
+          // Disable the on-canvas tooltip
+          enabled: false,
+
+          custom: function (tooltipModel) {
+            // Tooltip Element
+            var tooltipEl = document.getElementById('chartjs-tooltip');
+
+            // Create element on first render
+            if (!tooltipEl) {
+              tooltipEl = document.createElement('div');
+              tooltipEl.id = 'chartjs-tooltip';
+              tooltipEl.innerHTML = '<div class="custom-legend"></div>';
+              document.body.appendChild(tooltipEl);
+            }
+
+            // Hide if no tooltip
+            if (tooltipModel.opacity === 0) {
+              tooltipEl.style.opacity = 0;
+              return;
+            }
+
+            function getBody (bodyItem) {
+              return bodyItem.lines;
+            }
+
+            // Set Text
+            if (tooltipModel.body) {
+              var bodyLines = tooltipModel.body.map(getBody);
+              var innerHtml = '<p>';
+
+              bodyLines.forEach(function (body) {
+                var reg = RegExp('\\d+')
+                innerHtml +=  reg.exec(body);
+              });
+              innerHtml += '</p>';
+
+              var tableRoot = tooltipEl.querySelector('.custom-legend');
+              tableRoot.innerHTML = innerHtml;
+            }
+
+            // `this` will be the overall tooltip
+            var position = this._chart.canvas.getBoundingClientRect();
+
+            // Display, position, and set styles for font
+            tooltipEl.style.opacity = 1;
+            tooltipEl.style.position = 'absolute';
+            tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.caretX + 'px';
+            tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY + 'px';
+            tooltipEl.style.pointerEvents = 'none';
+          }
         }
+
       },
       optionsDoughnutChart: {
         responsive: true,
@@ -364,14 +417,13 @@ export default {
       let datasets = this.allPlayersHistory.map((playerHistory, index) => {
         return {
           label: this.allPlayersName[index],
-          // fill: false,
           backgroundColor: this.gradientOptions.blueToTurquiseTransparent,
-          data: playerHistory.slice(playerHistory.length - 26),
+          data: playerHistory.slice(playerHistory.length - 26).map(x => Math.round(x)),
           borderColor: this.gradientOptions.blueToTurquise,
           pointHoverRadius: 5,
           pointRadius: 4,
           pointBackgroundColor: this.gradientOptions.blueToTurquise,
-          pointBorderColor: 'rgba(255,255,255)',
+          pointBorderColor: this.gradientOptions.blueToTurquise[0],
           borderWidth: 2,
           pointBorderWidth: 1,
           hidden: index !== 0,
@@ -380,7 +432,7 @@ export default {
             style: this.gradientOptions.blueToTurquise[0],
             lineStyle: 'dotted|solid',
             width: 2
-          }
+          },
         }
       });
       let labels = [...Array(26).keys()];
@@ -485,7 +537,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
 .fifa-dashboard {
   display: flex;
   flex-wrap: wrap;

@@ -1,11 +1,23 @@
-@-webkit-keyframes pulse {
+@import "variables";
+
+@keyframes pulse {
   from   {
     background: -webkit-radial-gradient(center, ellipse cover, rgba(30, 218, 171, 1) 0%,rgba(30, 218, 171, 0) 50%);
-    opacity:0;
   }
   to {
     background: -webkit-radial-gradient(center, ellipse cover, rgba(30, 218, 171, 1) 0%,rgba(30, 218, 171, 0) 50%);
-    opacity:1;
     transform: scale(1.3);
+  }
+}
+
+@keyframes pulse-box-shadow {
+  0% {
+    -webkit-box-shadow: 0 0 0 0 $color-blue-transparent-4;
+  }
+  70% {
+    -webkit-box-shadow: 0 0 0 10px $color-blue-transparent-0;
+  }
+  100% {
+    -webkit-box-shadow: 0 0 0 0 $color-blue-transparent-0;
   }
 }
