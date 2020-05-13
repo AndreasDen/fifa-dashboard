@@ -1,14 +1,18 @@
 <template>
   <div class="user-podium">
-    <div class="user-elo-stat" v-for="index in 3" :key="index">
-      <p class="user-elo"
-         v-if="podiumArray.length > 0"
-         :style="{'background-image':'linear-gradient(45deg, '+gradientColors[0]+', '+gradientColors[1]+')'}">
-        {{decimalPoint ? (countingNumber[index-1]/1000).toFixed(2) : countingNumber[index-1]}}</p><!--  index in v-for start with 1..      -->
-      <p class="user-name" v-if="podiumArray.length > 0">
-<!--         :style="{'color':gradientColors[1]}">-->
-        {{podiumArray[index-1][0]}}</p><!--  index in v-for start with 1..      -->
+    <p class="badge">Top 3 - Elo</p>
+    <div class="user-podium-numbers">
+      <div class="user-elo-stat" :class="index === 2 ? 'leader' : ''" v-for="index in 3" :key="index">
+        <font-awesome-icon v-if="index===2" icon="crown" />
+        <p class="user-elo"
+           v-if="podiumArray.length > 0">
+          <!--         :style="{'background-image':'linear-gradient(45deg, '+gradientColors[0]+', '+gradientColors[1]+')'}">-->
+          {{decimalPoint ? (countingNumber[index-1]/1000).toFixed(2) : countingNumber[index-1]}}</p><!--  index in v-for start with 1..      -->
+        <p class="user-name" v-if="podiumArray.length > 0">
+          <!--         :style="{'color':gradientColors[1]}">-->
+          {{podiumArray[index-1][0]}}</p><!--  index in v-for start with 1..      -->
 
+      </div>
     </div>
   </div>
 </template>
@@ -19,7 +23,6 @@ export default {
   props: {
     eloStats: Array,
     userNames: Array,
-    gradientColors: Array,
     decimalPoint: {
       default: false,
       type: Boolean
@@ -51,11 +54,10 @@ export default {
         return;
       }
 
-      //set podiumArray to [[userName, eloStats], [userName, eloStats], .....]
+      //fill podiumArray to [[userName, eloStats], [userName, eloStats], .....]
       this.podiumArray = this.sortedArray(this.userNames, this.eloStats)
 
       //go through array an count up until elo point is reached
-
       this.podiumArray.map((elo, index) => {
         let elo_value = elo[1]
 
@@ -87,10 +89,6 @@ export default {
       list[1] = temp;
 
       return list
-    },
-    setPodiumsArray: function () {
-      //set podiumArray to [[userName, eloStats], [userName, eloStats], .....]
-      this.podiumArray = this.sortedArray(this.userNames, this.eloStats)
     }
   },
   mounted () {
@@ -100,34 +98,54 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
 .user-podium {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  margin: 32px 0;
+  width: 280px;
+  position: relative;
+
+  .user-podium-numbers {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    background: linear-gradient(90deg, rgba(30, 218, 171, 1) 0%, rgba(127, 251, 159, 1) 100%);
+    padding: 24px;
+    border-radius: 8px;
+    position: relative;
+    color: #0F0E1E;
+  }
+
+  .badge {
+    /*background: linear-gradient(90deg, rgba(30, 218, 171, 1) 0%, rgba(127, 251, 159, 1) 100%);*/
+    /*-webkit-background-clip: text;*/
+    /*-webkit-text-fill-color: transparent;*/
+    /*-moz-background-clip: text;*/
+    /*-moz-text-fill-color: transparent;*/
+    font-family: Montserrat-Black;
+    font-size: 14px;
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    color: #0F0E1E;
+    z-index: 1;
+    margin: 0;
+  }
+
 
   .user-elo-stat {
-    font-size: 40px;
+    position: relative;
 
-    &:nth-child(2) {
+    &.leader {
       margin: 0 32px;
     }
   }
 
   .user-name {
-    font-family: Montserrat-Medium;
+    font-family: Montserrat-Black;
     margin: 0;
-    border-top: 3px solid #4f4f4f;
   }
 
   .user-elo {
     margin: 0;
-    font-family: Montserrat-Black;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-background-clip: text;
-    -moz-text-fill-color: transparent;
+    font-size: 18px;
   }
 }
 </style>

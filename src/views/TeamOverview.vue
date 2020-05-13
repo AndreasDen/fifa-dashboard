@@ -1,49 +1,73 @@
 <template>
   <div class="fifa-dashboard">
     <section class="section section-elo">
-      <article class="article">
-        <h2>ELO STATISTIC</h2>
-        <p class="text">This is a overview about the calculated ELO points per player</p>
-      </article>
-      <div class="stats">
-        <user-podium :elo-stats="allPlayersCurrentElo" :user-names="allPlayersName" :gradientColors="gradientOptions.redToYellow"></user-podium>
-        <div class="charts">
-          <line-chart v-if="loaded" :chart-data="eloHistoryDataCollection" :options="optionsLineChart"></line-chart>
-          <bar-chart v-if="loaded" :chart-data="eloDataCollection" :options="optionsBarChart"></bar-chart>
+      <div class="overview">
+        <div class="copy">
+          <h2>ELO STATISTIC</h2>
+          <p class="text">This is a overview about the calculated ELO points per player</p>
         </div>
+        <user-podium :elo-stats="allPlayersCurrentElo" :user-names="allPlayersName"></user-podium>
+      </div>
+      <div class="charts">
+        <div class="chart">
+          <line-chart v-if="loaded" :chart-data="eloHistoryDataCollection" :options="optionsLineChart"></line-chart>
+          <h4>This chart is shows .....</h4>
+        </div>
+        <div class="chart">
+          <bar-chart v-if="loaded" :chart-data="eloDataCollection" :options="optionsBarChart"></bar-chart>
+          <h4>This chart is shows .....</h4>
+        </div>
+
       </div>
     </section>
     <section class="section section-games">
-      <article class="article">
-        <h2>GAME STATISTIC</h2>
-        <p class="text">This is a overview about the played games</p>
-      </article>
-      <div class="stats">
-        <user-podium :elo-stats="allPlayersGamesVictoryRate" :user-names="allPlayersName" :gradientColors="gradientOptions.purpleToTurquise" :decimalPoint="true"></user-podium>
-        <div class="charts">
-          <div class="graph-game-amount-total">
-            <pie-chart v-if="loaded" :chart-data="gamesAmountTotalDataCollection" :options="optionsDoughnutChart"></pie-chart>
-          </div>
-          <div class="graph-game-amount-splitted small-chart">
+      <div class="overview">
+        <div class="copy">
+          <h2>GAME STATISTIC</h2>
+          <p class="text">This is a overview about the played games</p>
+        </div>
+        <user-podium
+            :elo-stats="allPlayersGamesVictoryRate"
+            :user-names="allPlayersName"
+            :decimalPoint="true">
+        </user-podium>
+      </div>
+      <div class="charts">
+        <div class="chart">
+          <pie-chart v-if="loaded" :chart-data="gamesAmountTotalDataCollection" :options="optionsDoughnutChart"></pie-chart>
+          <h4>This chart is shows .....</h4>
+        </div>
+        <div class="chart">
+          <div class="small-charts">
             <horizontal-bar-chart v-if="loaded" :chart-data="gamesAmountVictoryDataCollection" :options="optionsBarChartGames"></horizontal-bar-chart>
             <horizontal-bar-chart v-if="loaded" :chart-data="gamesAmountLostDataCollection" :options="optionsBarChartGames"></horizontal-bar-chart>
             <horizontal-bar-chart v-if="loaded" :chart-data="gamesAmountDrawDataCollection" :options="optionsBarChartGames"></horizontal-bar-chart>
           </div>
+          <h4>This chart is shows .....</h4>
         </div>
       </div>
     </section>
     <section class="section section-goals">
-      <article class="article">
-        <h2>GOAL STATISTIC</h2>
-        <p class="text">This is a overview about the calculated ELO points per player</p>
-      </article>
-      <div class="stats">
-        <user-podium :elo-stats="allPlayersGoalsScoredRate" :user-names="allPlayersName" :gradientColors="gradientOptions.greenToYellow" :decimal-point="true"></user-podium>
-        <div class="charts">
-          <div class="graph-goal-amount small-chart">
-            <horizontal-bar-chart v-if="loaded" :chart-data="goalsAmountScoredDataCollection" :options="optionsBarChartGames"></horizontal-bar-chart>
-            <horizontal-bar-chart v-if="loaded" :chart-data="goalsAmountConcededDataCollection" :options="optionsBarChartGames"></horizontal-bar-chart>
-          </div>
+      <div class="overview">
+        <div class="copy">
+          <h2>GOAL STATISTIC</h2>
+          <p class="text">This is a overview about the calculated ELO points per player</p>
+        </div>
+        <user-podium
+            :elo-stats="allPlayersGoalsScoredRate"
+            :user-names="allPlayersName"
+            :decimal-point="true">
+        </user-podium>
+      </div>
+      <div class="charts">
+        <div class="chart">
+          <doughnut-chart v-if="loaded" :chart-data="goalsAmountScoredDataCollection" :options="optionsBarChartGames"></doughnut-chart>
+
+          <h4>This chart is shows .....</h4>
+        </div>
+        <div class="chart">
+          <doughnut-chart v-if="loaded" :chart-data="goalsAmountConcededDataCollection" :options="optionsBarChartGames"></doughnut-chart>
+          <h4>This chart is shows .....</h4>
         </div>
       </div>
     </section>
@@ -64,9 +88,7 @@ export default {
     LineChart,
     BarChart,
     HorizontalBarChart,
-    /* eslint-disable-next-line */
     DoughnutChart,
-    /* eslint-disable-next-line */
     PieChart,
     UserPodium
   },
@@ -166,9 +188,6 @@ export default {
           }]
         },
         legend: false,
-        tooltips: {
-          // enabled: false
-        },
         animation: {
           easing: 'easeInOutCubic',
           duration: 1000,// general animation time,
@@ -199,12 +218,6 @@ export default {
         maintainAspectRatio: false,
         legend: {
           position: 'left',
-          // labels: {
-          //   fontFamiliy: "Comfortaa-Bold",
-          //   fontColor: '#4f4f4f',
-          //   padding: 16,
-          //   fontSize: 14
-          // },
         },
         scales: {
           yAxes: [{
@@ -270,10 +283,12 @@ export default {
         }
       },
       gradientOptions: {
-        redToYellow: ['rgba(0, 219, 222, 1)','rgba(252, 0, 255, 1)'],
-        redToYellowTransparent: ['rgba(0, 219, 222, .2)','rgba(252, 0, 255, .2)'],
+        redToYellow: ['rgba(0, 219, 222, 1)', 'rgba(252, 0, 255, 1)'],
+        redToYellowTransparent: ['rgba(0, 219, 222, .2)', 'rgba(252, 0, 255, .2)'],
         purpleToTurquise: ['rgba(255, 0, 128, 1)', 'rgba(255, 140, 0, 1)'],
-        greenToYellow: ['rgba(51, 51, 153, 1)', 'rgba(255, 0, 204, 1)']
+        greenToYellow: ['rgba(51, 51, 153, 1)', 'rgba(255, 0, 204, 1)'],
+        blueToTurquise: ['rgba(30, 218, 171, 1)', 'rgba(127, 251, 159, 1)'],
+        blueToTurquiseTransparent: ['rgba(30, 218, 171, .1)', 'rgba(127, 251, 159, .1)'],
       }
     }
   },
@@ -306,7 +321,7 @@ export default {
       return this.allData ? this.allData.map(players => Math.round(players.stats.games.amount_won / (players.stats.games.amount - players.stats.games.amount_won) * 1000)) : []
     },
     allPlayersGoalsScoredRate: function () {
-      return this.allData ? this.allData.map(players => Math.round(players.stats.goals.scored_average*1000)) : []
+      return this.allData ? this.allData.map(players => Math.round(players.stats.goals.scored_average * 1000)) : []
     },
     allPlayersGoalsConcededRate: function () {
       return this.allData ? this.allData.map(players => players.stats.goals.conceded_average) : []
@@ -331,7 +346,7 @@ export default {
             label: 'MIN'
           },
           {
-            backgroundColor: this.gradientOptions.redToYellow,
+            backgroundColor: this.gradientOptions.blueToTurquise,
             data: this.allPlayersCurrentElo,
             borderWidth: 2,
             label: 'CURRENT'
@@ -350,19 +365,19 @@ export default {
         return {
           label: this.allPlayersName[index],
           // fill: false,
-          backgroundColor: this.gradientOptions.redToYellowTransparent,
+          backgroundColor: this.gradientOptions.blueToTurquiseTransparent,
           data: playerHistory.slice(playerHistory.length - 26),
-          borderColor: this.gradientOptions.redToYellow,
+          borderColor: this.gradientOptions.blueToTurquise,
           pointHoverRadius: 5,
           pointRadius: 4,
-          pointBackgroundColor: this.gradientOptions.redToYellow,
+          pointBackgroundColor: this.gradientOptions.blueToTurquise,
           pointBorderColor: 'rgba(255,255,255)',
           borderWidth: 2,
           pointBorderWidth: 1,
           hidden: index !== 0,
           lineTension: 0,
           trendlineLinear: {
-            style: this.gradientOptions.redToYellow[0],
+            style: this.gradientOptions.blueToTurquise[0],
             lineStyle: 'dotted|solid',
             width: 2
           }
@@ -377,7 +392,7 @@ export default {
         labels: this.allPlayersName,
         datasets: [
           {
-            backgroundColor: this.gradientOptions.purpleToTurquise,
+            backgroundColor: this.gradientOptions.blueToTurquise,
             data: this.allPlayersGamesAmountTotal,
             hoverBorderWidth: 12,
             // borderColor: 'transparent',
@@ -397,7 +412,7 @@ export default {
         labels: labels,
         datasets: [
           {
-            backgroundColor: this.gradientOptions.purpleToTurquise,
+            backgroundColor: this.gradientOptions.blueToTurquise,
             data: this.allPlayersGamesAmountVictory,
             borderWidth: 2,
             barPercentage: 0.4
@@ -414,7 +429,7 @@ export default {
         labels: labels,
         datasets: [
           {
-            backgroundColor: this.gradientOptions.purpleToTurquise,
+            backgroundColor: this.gradientOptions.blueToTurquise,
             data: this.allPlayersGamesAmountLost,
             borderWidth: 2,
             barPercentage: 0.4
@@ -431,7 +446,7 @@ export default {
         labels: labels,
         datasets: [
           {
-            backgroundColor: this.gradientOptions.purpleToTurquise,
+            backgroundColor: this.gradientOptions.blueToTurquise,
             data: this.allPlayersGamesAmountDraw,
             borderWidth: 2,
             barPercentage: 0.4
@@ -440,15 +455,11 @@ export default {
       }
     },
     goalsAmountScoredDataCollection: function () {
-      let labels = this.allPlayersName.map((user, index) => {
-        return user + ': ' + this.allPlayersGoalsScoredAmount[index]
-      })
-
       return {
-        labels: labels,
+        labels: this.allPlayersName,
         datasets: [
           {
-            backgroundColor: this.gradientOptions.greenToYellow,
+            backgroundColor: this.gradientOptions.blueToTurquise,
             data: this.allPlayersGoalsScoredAmount,
             borderWidth: 2,
             barPercentage: 0.4
@@ -457,15 +468,11 @@ export default {
       }
     },
     goalsAmountConcededDataCollection: function () {
-      let labels = this.allPlayersName.map((user, index) => {
-        return user + ': ' + this.allPlayersGoalsConcededAmount[index]
-      })
-
       return {
-        labels: labels,
+        labels: this.allPlayersName,
         datasets: [
           {
-            backgroundColor: this.gradientOptions.greenToYellow,
+            backgroundColor: this.gradientOptions.blueToTurquise,
             data: this.allPlayersGoalsConcededAmount,
             borderWidth: 2,
             barPercentage: 0.4
@@ -478,7 +485,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../scss/variables';
 
 .fifa-dashboard {
   display: flex;
@@ -489,13 +495,45 @@ export default {
     display: flex;
     flex-direction: column;
     width: 100%;
+    padding: 16px;
 
+    .overview {
+      display: flex;
+      margin-bottom: 16px;
+
+      .copy {
+        flex: 1 1 auto;
+        text-align: left;
+      }
+    }
+
+    .charts {
+      display: flex;
+
+      .chart {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 50%;
+
+        &:not(:first-child) {
+          margin-left: 16px
+        }
+
+        > div {
+          background: rgba(72, 72, 123, 0.1);
+          border-radius: 8px;
+          padding: 16px;
+          height: 250px;
+        }
+      }
+    }
 
     h2 {
-      font-family: Montserrat-Medium;
+      font-family: Montserrat-Black;
       font-size: 30px;
       position: relative;
       display: inline-block;
+      margin: 0;
 
       &:after {
         transition: all .35s ease;
@@ -507,73 +545,27 @@ export default {
       }
     }
 
-    &.section-elo {
-
-      h2 {
-        &:after {
-          background-image: $gradient-blue-to-green;
-          bottom: 0px;
-          left: 35px;
-        }
-      }
+    .small-charts {
+      display: flex;
 
       > div {
-        &:nth-child(even) {
-          margin-left: 24px;
-        }
-
-        &:nth-child(2n +3) {
-          margin-top: 24px;
-        }
-      }
-
-      .charts {
-        display: flex;
-
-        > div {
-          flex: 1 1 50%;
-          width: 50%;
-          padding: 40px;
-        }
+        width: 50%;
       }
     }
 
+    &.section-elo {
+
+    }
 
     &.section-games {
-      .graph-game-amount-total {
-        /*max-width: 50%;*/
-        align-self: center;
+      .charts {
+        flex-direction: column;
       }
 
-      h2 {
-        &:after {
-          background: $gradient-pink-to-orange;
-          bottom: 0px;
-          left: 35px;
-        }
-      }
-
-      .graph-game-amount-splitted {
-        display: flex;
-
-        > div {
-          height: 150px;
-          width: 50%;
-        }
-      }
     }
 
     &.section-goals {
-      h2 {
-        &:after {
-          background: $gradient-purple-to-pink;
-          bottom: 0px;
-          left: 35px;
-        }
-      }
     }
   }
-
-
 }
 </style>
