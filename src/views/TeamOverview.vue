@@ -33,7 +33,7 @@
         </user-podium>
       </div>
       <div class="charts">
-        <div class="chart">
+        <div class="chart chart-single">
           <pie-chart v-if="loaded" :chart-data="gamesAmountTotalDataCollection" :options="optionsDoughnutChart"></pie-chart>
           <h4>This chart is shows .....</h4>
         </div>
@@ -81,6 +81,8 @@ import HorizontalBarChart from './../components/graphs/horizontal-bar-chart'
 import DoughnutChart from './../components/graphs/doughnut-chart'
 import PieChart from './../components/graphs/pie-chart'
 import UserPodium from './../components/user-poduim'
+import pattern from 'patternomaly'
+
 
 export default {
   name: 'TeamOverview',
@@ -90,7 +92,7 @@ export default {
     HorizontalBarChart,
     DoughnutChart,
     PieChart,
-    UserPodium
+    UserPodium,
   },
   props: {
     allData: Array,
@@ -102,12 +104,17 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
         legend: {
-          onClick: (e) => e.stopPropagation()
+          onClick: (e) => e.stopPropagation(),
+          position: 'bottom',
+          labels: {
+            fontColor: '#fff'
+          },
         },
         scales: {
           yAxes: [{
+            display: false,
             ticks: {
-              beginAtZero: false
+              beginAtZero: false,
             },
             gridLines: {
               display: false,
@@ -115,7 +122,11 @@ export default {
           }],
           xAxes: [{
             ticks: {
+              fontColor: '#fff',
               beginAtZero: true
+            },
+            gridLines: {
+              display: false,
             }
           }]
         },
@@ -129,9 +140,9 @@ export default {
             var chartInstance = this.chart,
                 ctx = chartInstance.ctx;
             ctx.textAlign = 'center';
-            ctx.fillStyle = "#4f4f4f";
+            ctx.fillStyle = "#fff";
             ctx.textBaseline = 'bottom';
-            ctx.font = '16px Comfortaa-Bold';
+            ctx.font = '12px Montserrat-Medium';
 
             this.data.datasets.forEach(function (dataset, i) {
               var meta = chartInstance.controller.getDatasetMeta(i);
@@ -181,7 +192,6 @@ export default {
           }],
           xAxes: [{
             stacked: true,
-
             ticks: {
               beginAtZero: true
             }
@@ -217,18 +227,25 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
         legend: {
-          position: 'left',
+          position: 'bottom',
+          labels: {
+            fontColor: '#fff'
+          },
         },
         scales: {
           yAxes: [{
             ticks: {
-              fontSize: 12,
+              fontColor: '#fff',
+              stepSize: 20,
               beginAtZero: false
             },
+            gridLines: {
+              display: false,
+            }
           }],
           xAxes: [{
+            display: false,
             ticks: {
-              fontSize: 12,
               beginAtZero: true
             },
             gridLines: {
@@ -267,6 +284,8 @@ export default {
               var bodyLines = tooltipModel.body.map(getBody);
               var innerHtml = '<p>';
 
+              console.log(tooltipModel)
+
               bodyLines.forEach(function (body) {
                 var reg = RegExp('\\d+')
                 innerHtml +=  reg.exec(body);
@@ -283,8 +302,8 @@ export default {
             // Display, position, and set styles for font
             tooltipEl.style.opacity = 1;
             tooltipEl.style.position = 'absolute';
-            tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.caretX + 'px';
-            tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY + 'px';
+            tooltipEl.style.left = position.left +10+ window.pageXOffset + tooltipModel.caretX + 'px';
+            tooltipEl.style.top = position.top +10+ window.pageYOffset + tooltipModel.caretY + 'px';
             tooltipEl.style.pointerEvents = 'none';
           }
         }
@@ -293,7 +312,9 @@ export default {
       optionsDoughnutChart: {
         responsive: true,
         maintainAspectRatio: false,
-        legend: false,
+        legend: {
+          position: 'left'
+        },
         tooltips: {
           enabled: false
         },
@@ -303,7 +324,7 @@ export default {
             let ctx = chartInstance.ctx;
 
             ctx.fillStyle = "#fff";
-            ctx.font = "14px Comfortaa-Bold";
+            ctx.font = "12px Montserrat-Medium";
             ctx.textBaseline = 'middle';
             ctx.textAlign = 'center';
 
@@ -312,19 +333,27 @@ export default {
               var midX = meta.controller.chart.width / 2;
               var midY = meta.controller.chart.height / 2;
               var radius = meta.controller.outerRadius;
+              var legend_width = meta.controller.chart.legend.width / 2
+
+              console.log(radius)
 
               meta.data.forEach(function (arc, index) {
                 var data = dataset.data[index];
-                var labels = arc._model.label.toUpperCase();
                 var startAngle = arc._model.startAngle;
                 var endAngle = arc._model.endAngle;
                 var middleAngle = startAngle + ((endAngle - startAngle) / 2);
 
                 if (!arc.hidden) {
-                  ctx.fillText(data + ' | ' + labels, (radius / 1.45) * Math.cos(middleAngle) + midX, (radius / 1.45) * Math.sin(middleAngle) + midY);
+                  ctx.fillText(data, (radius / 0.9) * Math.cos(middleAngle) + midX + legend_width, (radius / 0.9) * Math.sin(middleAngle) + midY);
                 }
               });
             });
+          }
+        },
+        layout: {
+          padding: {
+            top: 20,
+            bottom: 20
           }
         }
       },
@@ -393,22 +422,25 @@ export default {
         labels: this.allPlayersName,
         datasets: [
           {
-            backgroundColor: ['rgba(0,0,0,.1)', 'rgba(0,0,0,.1)'],
+            backgroundColor: this.gradientOptions.blueToTurquiseTransparent,
             data: this.allPlayersLowestElo,
             borderWidth: 2,
-            label: 'MIN'
+            label: 'MIN',
+            barPercentage: 0.1
           },
           {
             backgroundColor: this.gradientOptions.blueToTurquise,
             data: this.allPlayersCurrentElo,
             borderWidth: 2,
-            label: 'CURRENT'
+            label: 'CURRENT',
+            barPercentage: 0.5
           },
           {
-            backgroundColor: ['rgba(0,0,0,.1)', 'rgba(0,0,0,.1)'],
+            backgroundColor: this.gradientOptions.blueToTurquiseTransparent,
             data: this.allPlayersHighestElo,
             borderWidth: 2,
-            label: 'MAX'
+            label: 'MAX',
+            barPercentage: 0.1
           }
         ]
       }
@@ -429,7 +461,7 @@ export default {
           hidden: index !== 0,
           lineTension: 0,
           trendlineLinear: {
-            style: this.gradientOptions.blueToTurquise[0],
+            style: '#fff',
             lineStyle: 'dotted|solid',
             width: 2
           },
@@ -444,13 +476,22 @@ export default {
         labels: this.allPlayersName,
         datasets: [
           {
-            backgroundColor: this.gradientOptions.blueToTurquise,
+            backgroundColor: [
+              // this.gradientOptions.blueToTurquise, this was the default color without pattern
+              // pattern.generate(['#1f77b4', '#1f77b4', '#1f77b4' ,'#1f77b4' ,'#1f77b4'])
+                //TODO: check why pattern.genereat does not work. This is not a dynamic solution
+              pattern.draw('zigzag', this.gradientOptions.blueToTurquise[0], '#0F0E1E'),
+              pattern.draw('triangle', this.gradientOptions.blueToTurquise[0], '#0F0E1E'),
+              pattern.draw('diamond-box', this.gradientOptions.blueToTurquise[0], '#0F0E1E'),
+              pattern.draw('weave', this.gradientOptions.blueToTurquise[0], '#0F0E1E'),
+              pattern.draw('dot-dash', this.gradientOptions.blueToTurquise[0], '#0F0E1E'),
+            ],
+
             data: this.allPlayersGamesAmountTotal,
-            hoverBorderWidth: 12,
-            // borderColor: 'transparent',
+            hoverBorderWidth: 8,
             borderWidth: 4,
-            borderColor: '#f4f4f4',
-            hoverBorderColor: '#f4f4f4'
+            borderColor: '#141428', //TODO:make it global
+            hoverBorderColor: '#141428'//TODO:make it global
           }
         ]
       }
@@ -565,6 +606,10 @@ export default {
         display: flex;
         flex-direction: column;
         flex: 1 1 50%;
+
+        &.chart-single {
+          max-width: 400px;
+        }
 
         &:not(:first-child) {
           margin-left: 16px

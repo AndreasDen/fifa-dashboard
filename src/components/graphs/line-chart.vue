@@ -45,6 +45,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-canvas {
-}
+
 </style>
