@@ -38,7 +38,7 @@ export default {
     }
   },
   mounted () {
-    this.addGradient();
+    // this.addGradient();
     this.renderChart(this.chartData, this.options)
   }
 }

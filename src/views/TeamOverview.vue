@@ -256,6 +256,7 @@ export default {
         tooltips: {
           // Disable the on-canvas tooltip
           enabled: false,
+          mode: 'x',
 
           custom: function (tooltipModel) {
             // Tooltip Element
@@ -282,15 +283,15 @@ export default {
             // Set Text
             if (tooltipModel.body) {
               var bodyLines = tooltipModel.body.map(getBody);
-              var innerHtml = '<p>';
-
-              console.log(tooltipModel)
+              var innerHtml = '<div>';
 
               bodyLines.forEach(function (body) {
-                var reg = RegExp('\\d+')
-                innerHtml +=  reg.exec(body);
+                var reg = RegExp('([^\\d]+)(\\d+)')
+                var name = reg.exec(body)[1];
+                var elo = reg.exec(body)[2];
+                innerHtml +=  '<p><span>'+name+'</span><span>'+elo+'</span></p>';
               });
-              innerHtml += '</p>';
+              innerHtml += '</div>';
 
               var tableRoot = tooltipEl.querySelector('.custom-legend');
               tableRoot.innerHTML = innerHtml;
@@ -335,8 +336,6 @@ export default {
               var radius = meta.controller.outerRadius;
               var legend_width = meta.controller.chart.legend.width / 2
 
-              console.log(radius)
-
               meta.data.forEach(function (arc, index) {
                 var data = dataset.data[index];
                 var startAngle = arc._model.startAngle;
@@ -371,7 +370,30 @@ export default {
         greenToYellow: ['rgba(51, 51, 153, 1)', 'rgba(255, 0, 204, 1)'],
         blueToTurquise: ['rgba(30, 218, 171, 1)', 'rgba(127, 251, 159, 1)'],
         blueToTurquiseTransparent: ['rgba(30, 218, 171, .1)', 'rgba(127, 251, 159, .1)'],
-      }
+      },
+      pattern: [
+        'plus',
+        'ring',
+        'dot',
+        'zigzag',
+        'dash',
+        'weave',
+        'box',
+        'diagonal',
+        'cross-dash',
+        'cross',
+        'disc',
+        'line',
+        'line-vertical',
+        'dot-dash',
+        'zigzag-vertical',
+        'diagonal-right-left',
+        'square',
+        'triangle',
+        'triangle-inverted',
+        'diamond',
+        'diamond-box'
+      ]
     }
   },
   computed: {
@@ -429,7 +451,7 @@ export default {
             barPercentage: 0.1
           },
           {
-            backgroundColor: this.gradientOptions.blueToTurquise,
+            backgroundColor: this.getPatternToAllUser(),
             data: this.allPlayersCurrentElo,
             borderWidth: 2,
             label: 'CURRENT',
@@ -449,7 +471,7 @@ export default {
       let datasets = this.allPlayersHistory.map((playerHistory, index) => {
         return {
           label: this.allPlayersName[index],
-          backgroundColor: this.gradientOptions.blueToTurquiseTransparent,
+          backgroundColor: this.getPatternToSingleUser(index),
           data: playerHistory.slice(playerHistory.length - 26).map(x => Math.round(x)),
           borderColor: this.gradientOptions.blueToTurquise,
           pointHoverRadius: 5,
@@ -462,7 +484,7 @@ export default {
           lineTension: 0,
           trendlineLinear: {
             style: '#fff',
-            lineStyle: 'dotted|solid',
+            lineStyle: 'line',
             width: 2
           },
         }
@@ -476,17 +498,7 @@ export default {
         labels: this.allPlayersName,
         datasets: [
           {
-            backgroundColor: [
-              // this.gradientOptions.blueToTurquise, this was the default color without pattern
-              // pattern.generate(['#1f77b4', '#1f77b4', '#1f77b4' ,'#1f77b4' ,'#1f77b4'])
-                //TODO: check why pattern.genereat does not work. This is not a dynamic solution
-              pattern.draw('zigzag', this.gradientOptions.blueToTurquise[0], '#0F0E1E'),
-              pattern.draw('triangle', this.gradientOptions.blueToTurquise[0], '#0F0E1E'),
-              pattern.draw('diamond-box', this.gradientOptions.blueToTurquise[0], '#0F0E1E'),
-              pattern.draw('weave', this.gradientOptions.blueToTurquise[0], '#0F0E1E'),
-              pattern.draw('dot-dash', this.gradientOptions.blueToTurquise[0], '#0F0E1E'),
-            ],
-
+            backgroundColor: this.getPatternToAllUser(),
             data: this.allPlayersGamesAmountTotal,
             hoverBorderWidth: 8,
             borderWidth: 4,
@@ -505,7 +517,7 @@ export default {
         labels: labels,
         datasets: [
           {
-            backgroundColor: this.gradientOptions.blueToTurquise,
+            backgroundColor: this.getPatternToAllUser(),
             data: this.allPlayersGamesAmountVictory,
             borderWidth: 2,
             barPercentage: 0.4
@@ -522,7 +534,7 @@ export default {
         labels: labels,
         datasets: [
           {
-            backgroundColor: this.gradientOptions.blueToTurquise,
+            backgroundColor: this.getPatternToAllUser(),
             data: this.allPlayersGamesAmountLost,
             borderWidth: 2,
             barPercentage: 0.4
@@ -539,7 +551,7 @@ export default {
         labels: labels,
         datasets: [
           {
-            backgroundColor: this.gradientOptions.blueToTurquise,
+            backgroundColor: this.getPatternToAllUser(),
             data: this.allPlayersGamesAmountDraw,
             borderWidth: 2,
             barPercentage: 0.4
@@ -552,7 +564,7 @@ export default {
         labels: this.allPlayersName,
         datasets: [
           {
-            backgroundColor: this.gradientOptions.blueToTurquise,
+            backgroundColor: this.getPatternToAllUser(),
             data: this.allPlayersGoalsScoredAmount,
             borderWidth: 2,
             barPercentage: 0.4
@@ -565,13 +577,21 @@ export default {
         labels: this.allPlayersName,
         datasets: [
           {
-            backgroundColor: this.gradientOptions.blueToTurquise,
+            backgroundColor: this.getPatternToAllUser(),
             data: this.allPlayersGoalsConcededAmount,
             borderWidth: 2,
             barPercentage: 0.4
           }
         ]
       }
+    }
+  },
+  methods: {
+    getPatternToAllUser: function () {
+      return this.allPlayersName.map((player, index)=> pattern.draw(this.pattern[index], this.gradientOptions.blueToTurquise[0], '#0F0E1E'))
+    },
+    getPatternToSingleUser: function (index) {
+      return pattern.draw(this.pattern[index], this.gradientOptions.blueToTurquiseTransparent[0], '#0F0E1E')
     }
   }
 }

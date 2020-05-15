@@ -131,25 +131,34 @@ body {
 
 }
 
+#chartjs-tooltip {
+  transition: all .25s ease;
 
-.custom-legend {
-  color: #fff;
-  position: relative;
-  animation:  pulse-box-shadow 2s infinite;
-  box-shadow: 0 0 0 $color-blue-transparent-4;
-  border-radius: 4px;
-  border: 1px solid $color-blue;
-  background: $color-blue-transparent-8;
-  height: 20px;
-  width: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  .custom-legend {
+    min-width: 80px;
+    padding: 8px;
+    color: #fff;
+    position: relative;
+    animation:  pulse-box-shadow 2s infinite;
+    box-shadow: 0 0 0 $color-blue-transparent-4;
+    border-radius: 4px;
+    border: 1px solid $color-blue;
+    background: $color-blue-transparent-8;
+    height: auto;
+    width: auto;
 
-  > p {
-    font-family: Montserrat-Medium;
-    margin: 0;
-    /*padding: 32px;*/
+    div {
+
+      > p {
+        display: flex;
+        justify-content: space-between;
+        font-family: Montserrat-Medium;
+        margin: 0;
+        font-size: 12px;
+        /*padding: 32px;*/
+      }
+    }
   }
 }
+
 </style>

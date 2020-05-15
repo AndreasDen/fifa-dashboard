@@ -19,7 +19,7 @@ export default {
   },
   watch: {
     chartData: function () {
-      this.addGradient()
+      // this.addGradient()
       this.renderChart(this.chartData, this.options)
     }
   },
@@ -38,7 +38,7 @@ export default {
     }
   },
   mounted () {
-    this.addGradient();
+    // this.addGradient();
     this.renderChart(this.chartData, this.options)
   }
 }
