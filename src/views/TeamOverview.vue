@@ -6,7 +6,6 @@
           <h2>ELO STATISTIC</h2>
           <p class="text">This is a overview about the calculated ELO points per player</p>
         </div>
-        <user-podium v-if="loaded" :elo-stats="this.getAllPlayersCurrentElo()" :user-names="this.getAllPlayersName()"></user-podium>
       </div>
       <div class="charts" v-if="loaded">
         <div class="chart">
@@ -14,6 +13,7 @@
           <h4>This chart is shows .....</h4>
         </div>
         <div class="chart">
+          <leader-badge :leaderData="[this.getAllPlayersCurrentElo()]" :user-names="this.getAllPlayersName()"></leader-badge>
           <bar-chart :chart-data="this.getEloDataCollection()" :options="optionsBarChart"></bar-chart>
           <h4>This chart is shows .....</h4>
         </div>
@@ -25,23 +25,20 @@
           <h2>GAME STATISTIC</h2>
           <p class="text">This is a overview about the played games</p>
         </div>
-        <user-podium
-            v-if="loaded"
-            :elo-stats="this.getAllPlayersGamesVictoryRate()"
-            :user-names="this.getAllPlayersName()"
-            :decimalPoint="true">
-        </user-podium>
       </div>
       <div class="charts" v-if="loaded">
         <div class="chart">
+          <leader-badge :leaderData="[this.getAllPlayersGamesAmountTotal()]" :user-names="this.getAllPlayersName()"></leader-badge>
           <pie-chart :chart-data="this.getGamesAmountTotalDataCollection()" :options="optionsDoughnutAndPieChart"></pie-chart>
           <h4>This chart is shows .....</h4>
         </div>
         <div class="chart">
+          <leader-badge :leaderData="[this.getAllPlayersGamesVictoryRate()]" :user-names="this.getAllPlayersName()" :decimal-point="true"></leader-badge>
           <radar-chart :chart-data="this.getGamesAmountWinRateDataCollection()" :options="optionsRadarChart"></radar-chart>
           <h4>This chart is shows .....</h4>
         </div>
         <div class="chart">
+          <leader-badge :leaderData="[this.getAllPlayersGamesAmountVictory(), this.getAllPlayersGamesAmountLost(), this.getAllPlayersGamesAmountDraw()]" :user-names="this.getAllPlayersName()"></leader-badge>
           <bar-chart :chart-data="this.getGamesAmountSplittedDataCollection()" :options="optionsBarChart"></bar-chart>
           <h4>This chart is shows .....</h4>
         </div>
@@ -53,27 +50,25 @@
           <h2>GOAL STATISTIC</h2>
           <p class="text">This is a overview about the calculated ELO points per player</p>
         </div>
-        <user-podium
-            v-if="loaded"
-            :elo-stats="this.getAllPlayersGoalsScoredRate()"
-            :user-names="this.getAllPlayersName()"
-            :decimal-point="true">
-        </user-podium>
       </div>
       <div class="charts" v-if="loaded">
         <div class="chart">
+          <leader-badge :leaderData="[this.getAllPlayersGoalsScoredAmount()]" :user-names="this.getAllPlayersName()"></leader-badge>
           <doughnut-chart  :chart-data="this.getGoalsAmountScoredDataCollection()" :options="optionsDoughnutAndPieChart"></doughnut-chart>
           <h4>This chart is shows .....</h4>
         </div>
         <div class="chart">
+          <leader-badge :leaderData="[this.getAllPlayersGoalsConcededAmount()]" :user-names="this.getAllPlayersName()"></leader-badge>
           <doughnut-chart :chart-data="this.getGoalsAmountConcededDataCollection()" :options="optionsDoughnutAndPieChart"></doughnut-chart>
           <h4>This chart is shows .....</h4>
         </div>
         <div class="chart">
+          <leader-badge :leaderData="[this.getAllPlayersGoalsScoredRate()]" :user-names="this.getAllPlayersName()" :decimal-point="true"></leader-badge>
           <radar-chart :chart-data="this.getGoalsAmountScoredRateDataCollection()" :options="optionsRadarChart"></radar-chart>
           <h4>This chart is shows .....</h4>
         </div>
         <div class="chart">
+          <leader-badge :leaderData="[this.getAllPlayersGoalsConcededRate()]" :user-names="this.getAllPlayersName()" :decimal-point="true"></leader-badge>
           <radar-chart :chart-data="this.getGoalsAmountConcededRateDataCollection()" :options="optionsRadarChart"></radar-chart>
           <h4>This chart is shows .....</h4>
         </div>
@@ -89,7 +84,8 @@ import HorizontalBarChart from './../components/graphs/horizontal-bar-chart'
 import DoughnutChart from './../components/graphs/doughnut-chart'
 import PieChart from './../components/graphs/pie-chart'
 import RadarChart from './../components/graphs/radar-chart'
-import UserPodium from './../components/user-poduim'
+// import UserPodium from './../components/user-poduim'
+import LeaderBadge from './../components/leader-badge'
 import pattern from 'patternomaly'
 
 
@@ -103,7 +99,8 @@ export default {
     DoughnutChart,
     PieChart,
     RadarChart,
-    UserPodium,
+    // UserPodium,
+    LeaderBadge
   },
   props: {
     allData: Array,
@@ -796,6 +793,7 @@ export default {
         display: flex;
         flex-direction: column;
         flex: 1 1 50%;
+        position: relative;
 
         &.chart-single {
           max-width: 400px;
@@ -805,7 +803,7 @@ export default {
           margin-left: 16px
         }
 
-        > div {
+        > div:not(.leader-badge) {
           background: rgba(72, 72, 123, 0.1);
           border-radius: 8px;
           padding: 16px;
