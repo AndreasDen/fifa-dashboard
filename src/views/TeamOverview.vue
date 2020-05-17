@@ -306,7 +306,7 @@ export default {
               tooltipEl = document.createElement('div');
               tooltipEl.id = 'chartjs-tooltip';
               tooltipEl.innerHTML = '<div class="custom-legend"></div>';
-              document.body.appendChild(tooltipEl);
+              document.body.querySelector('#app').appendChild(tooltipEl);
             }
 
             // Hide if no tooltip
@@ -425,13 +425,15 @@ export default {
             // Tooltip Element
             var tooltipEl = document.getElementById('chartjs-tooltip');
 
-            // Create element on first render
-            if (!tooltipEl) {
-              tooltipEl = document.createElement('div');
-              tooltipEl.id = 'chartjs-tooltip';
-              tooltipEl.innerHTML = '<div class="custom-legend custom-legend-radar"></div>';
-              document.body.appendChild(tooltipEl);
+            if (tooltipEl) {
+              tooltipEl.remove()
             }
+
+            // Create element
+            tooltipEl = document.createElement('div');
+            tooltipEl.id = 'chartjs-tooltip';
+            tooltipEl.innerHTML = '<div class="custom-legend custom-legend-radar"></div>';
+            document.body.querySelector('#app').appendChild(tooltipEl);
 
             // Hide if no tooltip
             if (tooltipModel.opacity === 0) {
@@ -454,6 +456,7 @@ export default {
               innerHtml += '</div>';
 
               var tableRoot = tooltipEl.querySelector('.custom-legend-radar');
+              console.log(tableRoot)
               tableRoot.innerHTML = innerHtml;
             }
 
