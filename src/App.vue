@@ -1,13 +1,15 @@
 <template>
   <div id="app">
     <div id="top">
-      <div class="nav">
-        <router-link to='/team-overview'>DASHBOARD</router-link>
-        <router-link to="/player-comparison">TABLE</router-link>
-        <router-link to="/player-overview">PLAYER STATS</router-link>
-        <router-link to="/new-game-form">NEW GAME</router-link>
-        <router-link to="/new-game-form">PROFILE</router-link>
-      </div>
+      <navigation></navigation>
+<!--      <div class="nav">-->
+
+<!--&lt;!&ndash;        <router-link to='/team-overview'>DASHBOARD</router-link>&ndash;&gt;-->
+<!--&lt;!&ndash;        <router-link to="/player-comparison">TABLE</router-link>&ndash;&gt;-->
+<!--&lt;!&ndash;        <router-link to="/player-overview">PLAYER STATS</router-link>&ndash;&gt;-->
+<!--&lt;!&ndash;        <router-link to="/new-game-form">NEW GAME</router-link>&ndash;&gt;-->
+<!--&lt;!&ndash;        <router-link to="/new-game-form">PROFILE</router-link>&ndash;&gt;-->
+<!--      </div>-->
     </div>
     <div id="content">
       <router-view :allData=allData :loaded="loaded"></router-view>
@@ -16,8 +18,13 @@
 </template>
 <script>
 
+import Navigation from '../src/components/navigation'
+
 export default {
   name: 'App',
+  components: {
+    Navigation
+  },
   data () {
     return {
       loaded: false,
@@ -80,47 +87,47 @@ body {
 
   #top {
     /*padding: 24px;*/
-    border-right: 1px solid #989898;
-    position: fixed;
-    height: 100vh;
+    /*border-right: 1px solid #989898;*/
+    /*position: fixed;*/
+    /*height: 100vh;*/
   }
 
   #content {
-    margin-left: 175px;
+    margin-left: 50px;
     width: 100%;
   }
 
   .nav {
-    display: flex;
-    flex-direction: column;
+    /*display: flex;*/
+    /*flex-direction: column;*/
 
     a {
-      text-align: left;
-      text-decoration: none;
-      color: #fff;
-      padding: 16px;
-      position: relative;
-      background: transparent;
+      /*text-align: left;*/
+      /*text-decoration: none;*/
+      /*color: #fff;*/
+      /*padding: 16px;*/
+      /*position: relative;*/
+      /*background: transparent;*/
 
       &:after {
-        content: "";
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-        background: $gradient-blue-to-turquise;
-        transition: all .35s ease;
-        position: absolute;
-        left: 0;
-        top: 0;
-        z-index: -1;
+        /*<!--content: "";-->*/
+        /*<!--width: 100%;-->*/
+        /*<!--height: 100%;-->*/
+        /*<!--opacity: 0;-->*/
+        /*<!--background: $gradient-blue-to-turquise;-->*/
+        /*<!--transition: all .35s ease;-->*/
+        /*<!--position: absolute;-->*/
+        /*<!--left: 0;-->*/
+        /*<!--top: 0;-->*/
+        /*<!--z-index: -1;-->*/
       }
 
       &:hover, &.router-link-active {
 
         &:after {
-          background: $gradient-blue-to-turquise;
-          opacity: 1;
-          transition: all 0s ease;
+          /*<!--background: $gradient-blue-to-turquise;-->*/
+          /*<!--opacity: 1;-->*/
+          /*<!--transition: all 0s ease;-->*/
         }
 
       }
@@ -133,6 +140,7 @@ body {
 
 #chartjs-tooltip {
   transition: all .25s ease;
+  position: absolute;
 
   .custom-legend {
     min-width: 80px;
@@ -156,6 +164,17 @@ body {
         margin: 0;
         font-size: 12px;
         /*padding: 32px;*/
+      }
+    }
+
+    &.custom-legend-radar {
+      min-width: 40px;
+      text-align: center;
+
+      div {
+        > p {
+          justify-content: center;
+        }
       }
     }
   }

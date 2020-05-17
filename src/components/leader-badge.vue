@@ -3,7 +3,7 @@
     <p class="badge" v-for="(number, index) in countingNumber" :key="index">
       <span>{{number[0]}}: </span><span>{{decimalPoint ? (number[1]/1000).toFixed(2) : number[1]}}</span>
     </p>
-    <font-awesome-icon icon="crown" />
+    <font-awesome-icon icon="crown"/>
   </div>
 </template>
 
@@ -99,7 +99,7 @@ export default {
   right: 0;
   height: auto;
   background: $color-blue;
-  padding: 8px;
+  padding: 4px 8px;
   color: #0F0E1E;
   display: flex;
   border-radius: 0px 8px;
