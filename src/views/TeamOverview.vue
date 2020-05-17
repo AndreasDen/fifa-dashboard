@@ -8,13 +8,13 @@
         </div>
         <user-podium v-if="loaded" :elo-stats="this.getAllPlayersCurrentElo()" :user-names="this.getAllPlayersName()"></user-podium>
       </div>
-      <div class="charts">
+      <div class="charts" v-if="loaded">
         <div class="chart">
-          <line-chart v-if="loaded" :chart-data="this.getEloHistoryDataCollection()" :options="optionsLineChart"></line-chart>
+          <line-chart  :chart-data="this.getEloHistoryDataCollection()" :options="optionsLineChart"></line-chart>
           <h4>This chart is shows .....</h4>
         </div>
         <div class="chart">
-          <bar-chart v-if="loaded" :chart-data="this.getEloDataCollection()" :options="optionsBarChart"></bar-chart>
+          <bar-chart :chart-data="this.getEloDataCollection()" :options="optionsBarChart"></bar-chart>
           <h4>This chart is shows .....</h4>
         </div>
       </div>
@@ -32,17 +32,17 @@
             :decimalPoint="true">
         </user-podium>
       </div>
-      <div class="charts">
+      <div class="charts" v-if="loaded">
         <div class="chart">
-          <pie-chart v-if="loaded" :chart-data="this.getGamesAmountTotalDataCollection()" :options="optionsDoughnutAndPieChart"></pie-chart>
+          <pie-chart :chart-data="this.getGamesAmountTotalDataCollection()" :options="optionsDoughnutAndPieChart"></pie-chart>
           <h4>This chart is shows .....</h4>
         </div>
         <div class="chart">
-          <radar-chart v-if="loaded" :chart-data="this.getGamesAmountWinRateDataCollection()" :options="optionsRadarChart"></radar-chart>
+          <radar-chart :chart-data="this.getGamesAmountWinRateDataCollection()" :options="optionsRadarChart"></radar-chart>
           <h4>This chart is shows .....</h4>
         </div>
         <div class="chart">
-          <bar-chart v-if="loaded" :chart-data="this.getGamesAmountSplittedDataCollection()" :options="optionsBarChart"></bar-chart>
+          <bar-chart :chart-data="this.getGamesAmountSplittedDataCollection()" :options="optionsBarChart"></bar-chart>
           <h4>This chart is shows .....</h4>
         </div>
       </div>
@@ -60,21 +60,21 @@
             :decimal-point="true">
         </user-podium>
       </div>
-      <div class="charts">
+      <div class="charts" v-if="loaded">
         <div class="chart">
-          <doughnut-chart v-if="loaded" :chart-data="this.getGoalsAmountScoredDataCollection()" :options="optionsDoughnutAndPieChart"></doughnut-chart>
+          <doughnut-chart  :chart-data="this.getGoalsAmountScoredDataCollection()" :options="optionsDoughnutAndPieChart"></doughnut-chart>
           <h4>This chart is shows .....</h4>
         </div>
         <div class="chart">
-          <doughnut-chart v-if="loaded" :chart-data="this.getGoalsAmountConcededDataCollection()" :options="optionsDoughnutAndPieChart"></doughnut-chart>
+          <doughnut-chart :chart-data="this.getGoalsAmountConcededDataCollection()" :options="optionsDoughnutAndPieChart"></doughnut-chart>
           <h4>This chart is shows .....</h4>
         </div>
         <div class="chart">
-          <radar-chart v-if="loaded" :chart-data="this.getGoalsAmountScoredRateDataCollection()" :options="optionsRadarChart"></radar-chart>
+          <radar-chart :chart-data="this.getGoalsAmountScoredRateDataCollection()" :options="optionsRadarChart"></radar-chart>
           <h4>This chart is shows .....</h4>
         </div>
         <div class="chart">
-          <radar-chart v-if="loaded" :chart-data="this.getGoalsAmountConcededRateDataCollection()" :options="optionsRadarChart"></radar-chart>
+          <radar-chart :chart-data="this.getGoalsAmountConcededRateDataCollection()" :options="optionsRadarChart"></radar-chart>
           <h4>This chart is shows .....</h4>
         </div>
       </div>
