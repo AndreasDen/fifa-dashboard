@@ -52,6 +52,7 @@ export default {
 .navigation-icon {
   display: flex;
   padding: 16px;
+  cursor: pointer;
 
   .bullet {
     background: $color-blue;
@@ -79,16 +80,13 @@ export default {
   a {
     text-decoration: none;
     color: #fff;
-    padding: 16px;
+    padding: 8px;
     text-align: left;
     background: transparent;
     position: relative;
     font-family: Montserrat-Medium;
     z-index: 1;
-
-    &:not(:last-child) {
-      /*border-bottom: 1px solid #989898;*/
-    }
+    margin: 4px;
 
     &:after {
       content: "";
@@ -118,9 +116,19 @@ export default {
     bottom: 40px;
     transform: translateX(-50%);
     left: 50%;
-    font-size: 40px;
+    font-size: 24px;
+    line-height: 26px;
+    width: 30px;
+    height: 30px;
+    border: 1px solid;
     font-family: Montserrat-Medium;
-    border-radius: 100%;
+    border-radius: 8px;
+    cursor: pointer;
+
+    &:hover {
+      color: #0F0E1E;
+      background: $color-blue;
+    }
   }
 
 }
@@ -132,7 +140,6 @@ export default {
 
 .slide-enter-active {
   transition: all .5s ease .2s;
-  /*transition: transform .5s cubic-bezier(.21,.51,.6,1.25) .2s, width .5s ease .2s;*/
 }
 
 .slide-enter-to {
@@ -141,7 +148,6 @@ export default {
 }
 
 .slide-leave, {
-  /*opacity: 0;*/
 }
 
 .slide-leave-active {
