@@ -37,12 +37,12 @@
           <pie-chart v-if="loaded" :chart-data="gamesAmountTotalDataCollection" :options="optionsDoughnutChart"></pie-chart>
           <h4>This chart is shows .....</h4>
         </div>
+        <div class="chart chart-single">
+          <radar-chart v-if="loaded" :chart-data="gamesAmountWinRateDataCollection" :options="optionsRadarChart"></radar-chart>
+          <h4>This chart is shows .....</h4>
+        </div>
         <div class="chart">
-          <div class="small-charts">
-            <horizontal-bar-chart v-if="loaded" :chart-data="gamesAmountVictoryDataCollection" :options="optionsBarChartGames"></horizontal-bar-chart>
-            <horizontal-bar-chart v-if="loaded" :chart-data="gamesAmountLostDataCollection" :options="optionsBarChartGames"></horizontal-bar-chart>
-            <horizontal-bar-chart v-if="loaded" :chart-data="gamesAmountDrawDataCollection" :options="optionsBarChartGames"></horizontal-bar-chart>
-          </div>
+          <bar-chart v-if="loaded" :chart-data="gamesAmountSplittedDataCollection" :options="optionsBarChart"></bar-chart>
           <h4>This chart is shows .....</h4>
         </div>
       </div>
@@ -61,12 +61,19 @@
       </div>
       <div class="charts">
         <div class="chart">
-          <doughnut-chart v-if="loaded" :chart-data="goalsAmountScoredDataCollection" :options="optionsBarChartGames"></doughnut-chart>
-
+          <doughnut-chart v-if="loaded" :chart-data="goalsAmountScoredDataCollection" :options="optionsDoughnutChart"></doughnut-chart>
           <h4>This chart is shows .....</h4>
         </div>
         <div class="chart">
-          <doughnut-chart v-if="loaded" :chart-data="goalsAmountConcededDataCollection" :options="optionsBarChartGames"></doughnut-chart>
+          <doughnut-chart v-if="loaded" :chart-data="goalsAmountConcededDataCollection" :options="optionsDoughnutChart"></doughnut-chart>
+          <h4>This chart is shows .....</h4>
+        </div>
+        <div class="chart">
+          <radar-chart v-if="loaded" :chart-data="goalsAmountScoredRateDataCollection" :options="optionsRadarChart"></radar-chart>
+          <h4>This chart is shows .....</h4>
+        </div>
+        <div class="chart">
+          <radar-chart v-if="loaded" :chart-data="goalsAmountConcededRateDataCollection" :options="optionsRadarChart"></radar-chart>
           <h4>This chart is shows .....</h4>
         </div>
       </div>
@@ -80,6 +87,7 @@ import BarChart from './../components/graphs/bar-chart'
 import HorizontalBarChart from './../components/graphs/horizontal-bar-chart'
 import DoughnutChart from './../components/graphs/doughnut-chart'
 import PieChart from './../components/graphs/pie-chart'
+import RadarChart from './../components/graphs/radar-chart'
 import UserPodium from './../components/user-poduim'
 import pattern from 'patternomaly'
 
@@ -89,9 +97,11 @@ export default {
   components: {
     LineChart,
     BarChart,
+    // eslint-disable-next-line vue/no-unused-components
     HorizontalBarChart,
     DoughnutChart,
     PieChart,
+    RadarChart,
     UserPodium,
   },
   props: {
@@ -184,6 +194,7 @@ export default {
         scales: {
           yAxes: [{
             ticks: {
+              fontColor: '#fff',
               beginAtZero: false
             },
             gridLines: {
@@ -191,30 +202,38 @@ export default {
             }
           }],
           xAxes: [{
-            stacked: true,
+            display: false,
             ticks: {
               beginAtZero: true
+            },
+            gridLines: {
+              display: false,
             }
           }]
         },
-        legend: false,
+        legend: {
+          position: 'left',
+          onClick: (e) => e.stopPropagation(),
+          labels: {
+            fontColor: '#fff'
+          },
+        },
         animation: {
           easing: 'easeInOutCubic',
           duration: 1000,// general animation time,
           onComplete: function () {
-            var chartInstance = this.chart,
-                ctx = chartInstance.ctx;
+            var chartInstance = this.chart;
+            var ctx = chartInstance.ctx;
+
             ctx.textAlign = 'center';
-            ctx.fillStyle = "#4f4f4f";
+            ctx.fillStyle = "#fff";
             ctx.textBaseline = 'bottom';
-            // ctx.fontFace = '16px';
-            ctx.font = '20px';
 
             this.data.datasets.forEach(function (dataset, i) {
               var meta = chartInstance.controller.getDatasetMeta(i);
               meta.data.forEach(function (bar, index) {
                 var data = dataset.data[index];
-                ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                ctx.fillText(data, bar._model.x + 15, bar._model.y +6);
               });
             });
           }
@@ -229,7 +248,26 @@ export default {
         legend: {
           position: 'bottom',
           labels: {
-            fontColor: '#fff'
+            fontColor: '#fff',
+            boxWidth: 20,
+            // generateLabels: function (chart) {
+            //   const datasets = chart.data.datasets;
+            //   const options = chart.options.legend || {};
+            //   const usePointStyle = options.labels && options.labels.usePointStyle;
+            //
+            //   return chart._getSortedDatasetMetas().map((meta) => {
+            //     // eslint-disable-next-line no-unused-vars
+            //     const style = meta.controller.getStyle(usePointStyle ? 0 : undefined);
+            //
+            //     return {
+            //       text: datasets[meta.index].label,
+            //       fillStyle: this.getPatternToSingleUser(meta.index, this.gradientOptions.blueToTurquise[0]),
+            //       hidden: meta.hidden !== null,
+            //       lineWidth: 0,
+            //       datasetIndex: meta.index
+            //     };
+            //   });
+            // }.bind(this)
           },
         },
         scales: {
@@ -289,7 +327,7 @@ export default {
                 var reg = RegExp('([^\\d]+)(\\d+)')
                 var name = reg.exec(body)[1];
                 var elo = reg.exec(body)[2];
-                innerHtml +=  '<p><span>'+name+'</span><span>'+elo+'</span></p>';
+                innerHtml += '<p><span>' + name + '</span><span>' + elo + '</span></p>';
               });
               innerHtml += '</div>';
 
@@ -303,12 +341,11 @@ export default {
             // Display, position, and set styles for font
             tooltipEl.style.opacity = 1;
             tooltipEl.style.position = 'absolute';
-            tooltipEl.style.left = position.left +10+ window.pageXOffset + tooltipModel.caretX + 'px';
-            tooltipEl.style.top = position.top +10+ window.pageYOffset + tooltipModel.caretY + 'px';
+            tooltipEl.style.left = position.left + 10 + window.pageXOffset + tooltipModel.caretX + 'px';
+            tooltipEl.style.top = position.top + 10 + window.pageYOffset + tooltipModel.caretY + 'px';
             tooltipEl.style.pointerEvents = 'none';
           }
         }
-
       },
       optionsDoughnutChart: {
         responsive: true,
@@ -363,6 +400,81 @@ export default {
           position: 'left'
         }
       },
+      optionsRadarChart: {
+        responsive: true,
+        maintainAspectRatio: false,
+        legend: {
+          display: false,
+        },
+        scale: {
+          ticks: {
+            beginAtZero: true,
+            fontColor: 'white', // labels such as 10, 20, etc
+            showLabelBackdrop: false // hide square behind text
+          },
+          pointLabels: {
+            fontColor: 'white' // labels around the edge like 'Running'
+          },
+          gridLines: {
+            color: 'rgba(255, 255, 255, .25)'
+          },
+          angleLines: {
+            color: 'rgba(255, 255, 255, .25)'// lines radiating from the center
+          }
+        },
+        tooltips: {
+          // Disable the on-canvas tooltip
+          enabled: false,
+          mode: 'point',
+
+          custom: function (tooltipModel) {
+            // Tooltip Element
+            var tooltipEl = document.getElementById('chartjs-tooltip');
+
+            // Create element on first render
+            if (!tooltipEl) {
+              tooltipEl = document.createElement('div');
+              tooltipEl.id = 'chartjs-tooltip';
+              tooltipEl.innerHTML = '<div class="custom-legend custom-legend-radar"></div>';
+              document.body.appendChild(tooltipEl);
+            }
+
+            // Hide if no tooltip
+            if (tooltipModel.opacity === 0) {
+              tooltipEl.style.opacity = 0;
+              return;
+            }
+
+            function getBody (bodyItem) {
+              return bodyItem.lines;
+            }
+
+            // Set Text
+            if (tooltipModel.body) {
+              var bodyLines = tooltipModel.body.map(getBody);
+              var innerHtml = '<div>';
+
+              bodyLines.forEach(function (body) {
+                innerHtml += '<p><span>' + body + '</span></p>';
+              });
+              innerHtml += '</div>';
+
+              var tableRoot = tooltipEl.querySelector('.custom-legend-radar');
+              tableRoot.innerHTML = innerHtml;
+            }
+
+            // `this` will be the overall tooltip
+            var position = this._chart.canvas.getBoundingClientRect();
+
+            // Display, position, and set styles for font
+            tooltipEl.style.opacity = 1;
+            tooltipEl.style.position = 'absolute';
+            tooltipEl.style.left = position.left + 10 + window.pageXOffset + tooltipModel.caretX + 'px';
+            tooltipEl.style.top = position.top + 10 + window.pageYOffset + tooltipModel.caretY + 'px';
+            tooltipEl.style.pointerEvents = 'none';
+          }
+        }
+      },
       gradientOptions: {
         redToYellow: ['rgba(0, 219, 222, 1)', 'rgba(252, 0, 255, 1)'],
         redToYellowTransparent: ['rgba(0, 219, 222, .2)', 'rgba(252, 0, 255, .2)'],
@@ -395,7 +507,8 @@ export default {
         'diamond-box'
       ]
     }
-  },
+  }
+  ,
   computed: {
     allPlayersCurrentElo: function () {
       return this.allData ? this.allData.map(players => Math.round(players.stats.elo.current)) : []
@@ -428,7 +541,7 @@ export default {
       return this.allData ? this.allData.map(players => Math.round(players.stats.goals.scored_average * 1000)) : []
     },
     allPlayersGoalsConcededRate: function () {
-      return this.allData ? this.allData.map(players => players.stats.goals.conceded_average) : []
+      return this.allData ? this.allData.map(players => Math.round(players.stats.goals.conceded_average * 1000)) : []
     },
     allPlayersGoalsConcededAmount: function () {
       return this.allData ? this.allData.map(players => players.stats.goals.conceded_amount) : []
@@ -471,15 +584,15 @@ export default {
       let datasets = this.allPlayersHistory.map((playerHistory, index) => {
         return {
           label: this.allPlayersName[index],
-          backgroundColor: this.getPatternToSingleUser(index),
+          backgroundColor: this.gradientOptions.blueToTurquiseTransparent[0],
           data: playerHistory.slice(playerHistory.length - 26).map(x => Math.round(x)),
           borderColor: this.gradientOptions.blueToTurquise,
           pointHoverRadius: 5,
           pointRadius: 4,
-          pointBackgroundColor: this.gradientOptions.blueToTurquise,
+          pointBackgroundColor: this.gradientOptions.blueToTurquise[0],
           pointBorderColor: this.gradientOptions.blueToTurquise[0],
           borderWidth: 2,
-          pointBorderWidth: 1,
+          pointBorderWidth: 4,
           hidden: index !== 0,
           lineTension: 0,
           trendlineLinear: {
@@ -508,53 +621,43 @@ export default {
         ]
       }
     },
-    gamesAmountVictoryDataCollection: function () {
-      let labels = this.allPlayersName.map((user, index) => {
-        return user + ': ' + this.allPlayersGamesAmountVictory[index]
-      });
-
+    gamesAmountSplittedDataCollection: function () {
       return {
-        labels: labels,
+        labels: this.allPlayersName,
         datasets: [
           {
+            label: 'Victory',
             backgroundColor: this.getPatternToAllUser(),
             data: this.allPlayersGamesAmountVictory,
             borderWidth: 2,
-            barPercentage: 0.4
-          }
-        ]
-      }
-    },
-    gamesAmountLostDataCollection: function () {
-      let labels = this.allPlayersName.map((user, index) => {
-        return user + ': ' + this.allPlayersGamesAmountLost[index]
-      })
-
-      return {
-        labels: labels,
-        datasets: [
+            barPercentage: 0.4,
+          },
           {
+            label: 'Lost',
             backgroundColor: this.getPatternToAllUser(),
             data: this.allPlayersGamesAmountLost,
             borderWidth: 2,
-            barPercentage: 0.4
+            barPercentage: 0.4,
+          },
+          {
+            label: 'Draw',
+            backgroundColor: this.getPatternToAllUser(),
+            data: this.allPlayersGamesAmountDraw,
+            borderWidth: 2,
+            barPercentage: 0.4,
           }
         ]
       }
     },
-    gamesAmountDrawDataCollection: function () {
-      let labels = this.allPlayersName.map((user, index) => {
-        return user + ': ' + this.allPlayersGamesAmountDraw[index]
-      })
-
+    gamesAmountWinRateDataCollection: function () {
       return {
-        labels: labels,
+        labels: this.allPlayersName,
         datasets: [
           {
-            backgroundColor: this.getPatternToAllUser(),
-            data: this.allPlayersGamesAmountDraw,
-            borderWidth: 2,
-            barPercentage: 0.4
+            backgroundColor: this.gradientOptions.blueToTurquiseTransparent[0],
+            data: this.allPlayersGamesVictoryRate.map(rate => rate/1000),
+            borderColor: this.gradientOptions.blueToTurquise[0],
+            pointBackgroundColor: this.gradientOptions.blueToTurquise[0]
           }
         ]
       }
@@ -584,14 +687,42 @@ export default {
           }
         ]
       }
+    },
+    goalsAmountScoredRateDataCollection: function () {
+      return {
+        labels: this.allPlayersName,
+        datasets: [
+          {
+            backgroundColor: this.gradientOptions.blueToTurquiseTransparent[0],
+            borderColor: this.gradientOptions.blueToTurquise[0],
+            pointBackgroundColor: this.gradientOptions.blueToTurquise[0],
+            data: this.allPlayersGoalsScoredRate.map(rate => rate/1000),
+          }
+        ]
+      }
+    },
+    goalsAmountConcededRateDataCollection: function () {
+      return {
+        labels: this.allPlayersName,
+        datasets: [
+          {
+            backgroundColor: this.gradientOptions.blueToTurquiseTransparent[0],
+            borderColor: this.gradientOptions.blueToTurquise[0],
+            pointBackgroundColor: this.gradientOptions.blueToTurquise[0],
+            data: this.allPlayersGoalsConcededRate.map(rate => rate/1000),
+          }
+        ]
+      }
     }
-  },
+  }
+  ,
   methods: {
     getPatternToAllUser: function () {
-      return this.allPlayersName.map((player, index)=> pattern.draw(this.pattern[index], this.gradientOptions.blueToTurquise[0], '#0F0E1E'))
-    },
-    getPatternToSingleUser: function (index) {
-      return pattern.draw(this.pattern[index], this.gradientOptions.blueToTurquiseTransparent[0], '#0F0E1E')
+      return this.allPlayersName.map((player, index) => pattern.draw(this.pattern[index], this.gradientOptions.blueToTurquise[0], '#0F0E1E'))
+    }
+    ,
+    getPatternToSingleUser: function (index, color) {
+      return pattern.draw(this.pattern[index], color, '#0F0E1E')
     }
   }
 }
@@ -675,12 +806,18 @@ export default {
 
     &.section-games {
       .charts {
-        flex-direction: column;
       }
 
     }
 
     &.section-goals {
+      .charts {
+        flex-wrap: wrap;
+
+        > .chart {
+          max-width: calc(50% - 16px);
+        }
+      }
     }
   }
 }
