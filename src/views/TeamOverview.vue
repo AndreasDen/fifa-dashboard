@@ -6,15 +6,15 @@
           <h2>ELO STATISTIC</h2>
           <p class="text">This is a overview about the calculated ELO points per player</p>
         </div>
-        <user-podium v-if="loaded" :elo-stats="this.allPlayersCurrentElo()" :user-names="this.allPlayersName()"></user-podium>
+        <user-podium v-if="loaded" :elo-stats="this.getAllPlayersCurrentElo()" :user-names="this.getAllPlayersName()"></user-podium>
       </div>
       <div class="charts">
         <div class="chart">
-          <line-chart v-if="loaded" :chart-data="this.eloHistoryDataCollection()" :options="optionsLineChart"></line-chart>
+          <line-chart v-if="loaded" :chart-data="this.getEloHistoryDataCollection()" :options="optionsLineChart"></line-chart>
           <h4>This chart is shows .....</h4>
         </div>
         <div class="chart">
-          <bar-chart v-if="loaded" :chart-data="this.eloDataCollection()" :options="optionsBarChart"></bar-chart>
+          <bar-chart v-if="loaded" :chart-data="this.getEloDataCollection()" :options="optionsBarChart"></bar-chart>
           <h4>This chart is shows .....</h4>
         </div>
       </div>
@@ -27,22 +27,22 @@
         </div>
         <user-podium
             v-if="loaded"
-            :elo-stats="this.allPlayersGamesVictoryRate()"
-            :user-names="this.allPlayersName()"
+            :elo-stats="this.getAllPlayersGamesVictoryRate()"
+            :user-names="this.getAllPlayersName()"
             :decimalPoint="true">
         </user-podium>
       </div>
       <div class="charts">
         <div class="chart">
-          <pie-chart v-if="loaded" :chart-data="this.gamesAmountTotalDataCollection()" :options="optionsDoughnutChart"></pie-chart>
+          <pie-chart v-if="loaded" :chart-data="this.getGamesAmountTotalDataCollection()" :options="optionsDoughnutAndPieChart"></pie-chart>
           <h4>This chart is shows .....</h4>
         </div>
         <div class="chart">
-          <radar-chart v-if="loaded" :chart-data="this.gamesAmountWinRateDataCollection()" :options="optionsRadarChart"></radar-chart>
+          <radar-chart v-if="loaded" :chart-data="this.getGamesAmountWinRateDataCollection()" :options="optionsRadarChart"></radar-chart>
           <h4>This chart is shows .....</h4>
         </div>
         <div class="chart">
-          <bar-chart v-if="loaded" :chart-data="this.gamesAmountSplittedDataCollection()" :options="optionsBarChart"></bar-chart>
+          <bar-chart v-if="loaded" :chart-data="this.getGamesAmountSplittedDataCollection()" :options="optionsBarChart"></bar-chart>
           <h4>This chart is shows .....</h4>
         </div>
       </div>
@@ -55,26 +55,26 @@
         </div>
         <user-podium
             v-if="loaded"
-            :elo-stats="this.allPlayersGoalsScoredRate()"
-            :user-names="this.allPlayersName()"
+            :elo-stats="this.getAllPlayersGoalsScoredRate()"
+            :user-names="this.getAllPlayersName()"
             :decimal-point="true">
         </user-podium>
       </div>
       <div class="charts">
         <div class="chart">
-          <doughnut-chart v-if="loaded" :chart-data="this.goalsAmountScoredDataCollection()" :options="optionsDoughnutChart"></doughnut-chart>
+          <doughnut-chart v-if="loaded" :chart-data="this.getGoalsAmountScoredDataCollection()" :options="optionsDoughnutAndPieChart"></doughnut-chart>
           <h4>This chart is shows .....</h4>
         </div>
         <div class="chart">
-          <doughnut-chart v-if="loaded" :chart-data="this.goalsAmountConcededDataCollection()" :options="optionsDoughnutChart"></doughnut-chart>
+          <doughnut-chart v-if="loaded" :chart-data="this.getGoalsAmountConcededDataCollection()" :options="optionsDoughnutAndPieChart"></doughnut-chart>
           <h4>This chart is shows .....</h4>
         </div>
         <div class="chart">
-          <radar-chart v-if="loaded" :chart-data="this.goalsAmountScoredRateDataCollection()" :options="optionsRadarChart"></radar-chart>
+          <radar-chart v-if="loaded" :chart-data="this.getGoalsAmountScoredRateDataCollection()" :options="optionsRadarChart"></radar-chart>
           <h4>This chart is shows .....</h4>
         </div>
         <div class="chart">
-          <radar-chart v-if="loaded" :chart-data="this.goalsAmountConcededRateDataCollection()" :options="optionsRadarChart"></radar-chart>
+          <radar-chart v-if="loaded" :chart-data="this.getGoalsAmountConcededRateDataCollection()" :options="optionsRadarChart"></radar-chart>
           <h4>This chart is shows .....</h4>
         </div>
       </div>
@@ -234,7 +234,7 @@ export default {
               var meta = chartInstance.controller.getDatasetMeta(i);
               meta.data.forEach(function (bar, index) {
                 var data = dataset.data[index];
-                ctx.fillText(data, bar._model.x + 15, bar._model.y +6);
+                ctx.fillText(data, bar._model.x + 15, bar._model.y + 6);
               });
             });
           }
@@ -348,7 +348,7 @@ export default {
           }
         }
       },
-      optionsDoughnutChart: {
+      optionsDoughnutAndPieChart: {
         responsive: true,
         maintainAspectRatio: false,
         legend: {
@@ -392,13 +392,6 @@ export default {
             top: 20,
             bottom: 20
           }
-        }
-      },
-      optionsPieChart: {
-        responsive: true,
-        maintainAspectRatio: false,
-        legend: {
-          position: 'left'
         }
       },
       optionsRadarChart: {
@@ -484,7 +477,7 @@ export default {
         blueToTurquise: ['rgba(30, 218, 171, 1)', 'rgba(127, 251, 159, 1)'],
         blueToTurquiseTransparent: ['rgba(30, 218, 171, .1)', 'rgba(127, 251, 159, .1)'],
       },
-      pattern: [
+      SVGpattern: [
         'plus',
         'ring',
         'dot',
@@ -511,55 +504,112 @@ export default {
   },
   watch: {
     allData: function () {
-      this.allPlayersName()
-      this.allPlayersCurrentElo()
-      this.allPlayersLowestElo()
-      this.allPlayersHighestElo()
-      this.allPlayersEloHistory()
-      this.allPlayersGamesAmountTotal()
-      this.allPlayersGamesAmountVictory()
-      this.allPlayersGamesAmountLost()
-      this.allPlayersGamesAmountDraw()
-      this.allPlayersGamesVictoryRate()
-      this.allPlayersGoalsScoredRate()
-      this.allPlayersGoalsConcededRate()
-      this.allPlayersGoalsConcededAmount()
-      this.allPlayersGoalsScoredAmount()
+      this.getAllPlayersName()
+      this.getAllPlayersCurrentElo()
+      this.getAllPlayersLowestElo()
+      this.getAllPlayersHighestElo()
+      this.getAllPlayersEloHistory()
+      this.getAllPlayersGamesAmountTotal()
+      this.getAllPlayersGamesAmountVictory()
+      this.getAllPlayersGamesAmountLost()
+      this.getAllPlayersGamesAmountDraw()
+      this.getAllPlayersGamesVictoryRate()
+      this.getAllPlayersGoalsScoredRate()
+      this.getAllPlayersGoalsConcededRate()
+      this.getAllPlayersGoalsConcededAmount()
+      this.getAllPlayersGoalsScoredAmount()
     }
   },
   methods: {
+    //||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
+    //get data from API splitted in smaller parts
+    //---- generall data ----
+    getAllPlayersName: function () {
+      return this.allData.map(players => players.user.name)
+    },
+    //---- Elo data ----
+    getAllPlayersCurrentElo: function () {
+      return this.allData.map(players => Math.round(players.stats.elo.current))
+    },
+    getAllPlayersLowestElo: function () {
+      return this.allData.map(players => Math.round(players.stats.elo.min))
+    },
+    getAllPlayersHighestElo: function () {
+      return this.allData.map(players => Math.round(players.stats.elo.max))
+    },
+    getAllPlayersEloHistory: function () {
+      return this.allData.map(players => players.stats.elo.history)
+    },
+    //---- Game data ----
+    getAllPlayersGamesAmountTotal: function () {
+      return this.allData.map(players => players.stats.games.amount)
+    },
+    getAllPlayersGamesAmountVictory: function () {
+      return this.allData.map(players => players.stats.games.amount_won)
+    },
+    getAllPlayersGamesAmountLost: function () {
+      return this.allData.map(players => players.stats.games.amount_lost)
+    },
+    getAllPlayersGamesAmountDraw: function () {
+      return this.allData.map(players => players.stats.games.amount_draw)
+    },
+    getAllPlayersGamesVictoryRate: function () {
+      return this.allData.map(players => Math.round(players.stats.games.amount_won / (players.stats.games.amount - players.stats.games.amount_won) * 1000))
+    },
+    //---- Goal data ----
+    getAllPlayersGoalsScoredRate: function () {
+      return this.allData.map(players => Math.round(players.stats.goals.scored_average * 1000))
+    },
+    getAllPlayersGoalsConcededRate: function () {
+      return this.allData.map(players => Math.round(players.stats.goals.conceded_average * 1000))
+    },
+    getAllPlayersGoalsConcededAmount: function () {
+      return this.allData.map(players => players.stats.goals.conceded_amount)
+    },
+    getAllPlayersGoalsScoredAmount: function () {
+      return this.allData.map(players => players.stats.goals.scored_amount)
+    },
+    //||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
+
+    //-----------------------------------------------------------
+
+    //||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
     //get svg pattern for all users chart segment
     getPatternToAllUser: function () {
-      return this.allPlayersName().map((player, index) => pattern.draw(this.pattern[index], this.gradientOptions.blueToTurquise[0], '#0F0E1E'))
+      return this.getAllPlayersName().map((player, index) => pattern.draw(this.SVGpattern[index], this.gradientOptions.blueToTurquise[0], '#0F0E1E'))
     },
     //get svg pattern for one users chart segment, needed because of some chart structure
     getPatternToSingleUser: function (index, color) {
-      return pattern.draw(this.pattern[index], color, '#0F0E1E')
+      return pattern.draw(this.SVGpattern[index], color, '#0F0E1E')
     },
+    //||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
 
+    //-----------------------------------------------------------
+
+    // ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
     //all data collections for charts
     //---- Elo Data Collections ----
-    eloDataCollection: function () {
+    getEloDataCollection: function () {
       return {
-        labels: this.allPlayersName(),
+        labels: this.getAllPlayersName(),
         datasets: [
           {
-            backgroundColor: this.gradientOptions.blueToTurquiseTransparent,
-            data: this.allPlayersLowestElo(),
+            backgroundColor: this.gradientOptions.blueToTurquiseTransparent[0],
+            data: this.getAllPlayersLowestElo(),
             borderWidth: 2,
             label: 'MIN',
             barPercentage: 0.1
           },
           {
             backgroundColor: this.getPatternToAllUser(),
-            data: this.allPlayersCurrentElo(),
+            data: this.getAllPlayersCurrentElo(),
             borderWidth: 2,
             label: 'CURRENT',
             barPercentage: 0.5
           },
           {
-            backgroundColor: this.gradientOptions.blueToTurquiseTransparent,
-            data: this.allPlayersHighestElo(),
+            backgroundColor: this.gradientOptions.blueToTurquiseTransparent[0],
+            data: this.getAllPlayersHighestElo(),
             borderWidth: 2,
             label: 'MAX',
             barPercentage: 0.1
@@ -567,10 +617,10 @@ export default {
         ]
       }
     },
-    eloHistoryDataCollection: function () {
-      let datasets = this.allPlayersEloHistory().map((playerHistory, index) => {
+    getEloHistoryDataCollection: function () {
+      let datasets = this.getAllPlayersEloHistory().map((playerHistory, index) => {
         return {
-          label: this.allPlayersName()[index],
+          label: this.getAllPlayersName()[index],
           backgroundColor: this.gradientOptions.blueToTurquiseTransparent[0],
           data: playerHistory.slice(playerHistory.length - 26).map(x => Math.round(x)),
           borderColor: this.gradientOptions.blueToTurquise,
@@ -579,7 +629,7 @@ export default {
           pointBackgroundColor: this.gradientOptions.blueToTurquise[0],
           pointBorderColor: this.gradientOptions.blueToTurquise[0],
           borderWidth: 2,
-          pointBorderWidth: 4,
+          pointBorderWidth: 2,
           hidden: index !== 0,
           lineTension: 0,
           trendlineLinear: {
@@ -595,13 +645,13 @@ export default {
     },
 
     //---- Games Data Collections ----
-    gamesAmountTotalDataCollection: function () {
+    getGamesAmountTotalDataCollection: function () {
       return {
-        labels: this.allPlayersName(),
+        labels: this.getAllPlayersName(),
         datasets: [
           {
             backgroundColor: this.getPatternToAllUser(),
-            data: this.allPlayersGamesAmountTotal(),
+            data: this.getAllPlayersGamesAmountTotal(),
             hoverBorderWidth: 8,
             borderWidth: 4,
             borderColor: '#141428', //TODO:make it global
@@ -610,41 +660,41 @@ export default {
         ]
       }
     },
-    gamesAmountSplittedDataCollection: function () {
+    getGamesAmountSplittedDataCollection: function () {
       return {
-        labels: this.allPlayersName(),
+        labels: this.getAllPlayersName(),
         datasets: [
           {
             label: 'Victory',
             backgroundColor: this.getPatternToAllUser(),
-            data: this.allPlayersGamesAmountVictory(),
+            data: this.getAllPlayersGamesAmountVictory(),
             borderWidth: 2,
             barPercentage: 0.4,
           },
           {
             label: 'Lost',
             backgroundColor: this.getPatternToAllUser(),
-            data: this.allPlayersGamesAmountLost(),
+            data: this.getAllPlayersGamesAmountLost(),
             borderWidth: 2,
             barPercentage: 0.4,
           },
           {
             label: 'Draw',
             backgroundColor: this.getPatternToAllUser(),
-            data: this.allPlayersGamesAmountDraw(),
+            data: this.getAllPlayersGamesAmountDraw(),
             borderWidth: 2,
             barPercentage: 0.4,
           }
         ]
       }
     },
-    gamesAmountWinRateDataCollection: function () {
+    getGamesAmountWinRateDataCollection: function () {
       return {
-        labels: this.allPlayersName(),
+        labels: this.getAllPlayersName(),
         datasets: [
           {
             backgroundColor: this.gradientOptions.blueToTurquiseTransparent[0],
-            data: this.allPlayersGamesVictoryRate().map(rate => rate/1000),
+            data: this.getAllPlayersGamesVictoryRate().map(rate => rate / 1000),
             borderColor: this.gradientOptions.blueToTurquise[0],
             pointBackgroundColor: this.gradientOptions.blueToTurquise[0]
           }
@@ -653,106 +703,63 @@ export default {
     },
 
     //---- Goals Data Collections ----
-    goalsAmountScoredDataCollection: function () {
+    getGoalsAmountScoredDataCollection: function () {
       return {
-        labels: this.allPlayersName(),
+        labels: this.getAllPlayersName(),
         datasets: [
           {
             backgroundColor: this.getPatternToAllUser(),
-            data: this.allPlayersGoalsScoredAmount(),
-            borderWidth: 2,
-            barPercentage: 0.4
+            data: this.getAllPlayersGoalsScoredAmount(),
+            hoverBorderWidth: 8,
+            borderWidth: 4,
+            borderColor: '#141428', //TODO:make it global
+            hoverBorderColor: '#141428'//TODO:make it global
           }
         ]
       }
     },
-    goalsAmountConcededDataCollection: function () {
+    getGoalsAmountConcededDataCollection: function () {
       return {
-        labels: this.allPlayersName(),
+        labels: this.getAllPlayersName(),
         datasets: [
           {
             backgroundColor: this.getPatternToAllUser(),
-            data: this.allPlayersGoalsConcededAmount(),
-            borderWidth: 2,
-            barPercentage: 0.4
+            data: this.getAllPlayersGoalsConcededAmount(),
+            hoverBorderWidth: 8,
+            borderWidth: 4,
+            borderColor: '#141428', //TODO:make it global
+            hoverBorderColor: '#141428'//TODO:make it global
           }
         ]
       }
     },
-    goalsAmountScoredRateDataCollection: function () {
+    getGoalsAmountScoredRateDataCollection: function () {
       return {
-        labels: this.allPlayersName(),
+        labels: this.getAllPlayersName(),
         datasets: [
           {
             backgroundColor: this.gradientOptions.blueToTurquiseTransparent[0],
             borderColor: this.gradientOptions.blueToTurquise[0],
             pointBackgroundColor: this.gradientOptions.blueToTurquise[0],
-            data: this.allPlayersGoalsScoredRate().map(rate => rate/1000),
+            data: this.getAllPlayersGoalsScoredRate().map(rate => rate / 1000),
           }
         ]
       }
     },
-    goalsAmountConcededRateDataCollection: function () {
+    getGoalsAmountConcededRateDataCollection: function () {
       return {
-        labels: this.allPlayersName(),
+        labels: this.getAllPlayersName(),
         datasets: [
           {
             backgroundColor: this.gradientOptions.blueToTurquiseTransparent[0],
             borderColor: this.gradientOptions.blueToTurquise[0],
             pointBackgroundColor: this.gradientOptions.blueToTurquise[0],
-            data: this.allPlayersGoalsConcededRate().map(rate => rate/1000),
+            data: this.getAllPlayersGoalsConcededRate().map(rate => rate / 1000),
           }
         ]
       }
     },
-
-    //data from API splitted in smaller parts
-    //---- generall data ----
-    allPlayersName: function () {
-      return this.allData.map(players => players.user.name)
-    },
-    //---- Elo data ----
-    allPlayersCurrentElo: function () {
-      return this.allData.map(players => Math.round(players.stats.elo.current))
-    },
-    allPlayersLowestElo: function () {
-      return this.allData.map(players => Math.round(players.stats.elo.min))
-    },
-    allPlayersHighestElo: function () {
-      return this.allData.map(players => Math.round(players.stats.elo.max))
-    },
-    allPlayersEloHistory: function () {
-      return this.allData.map(players => players.stats.elo.history)
-    },
-    //---- Game data ----
-    allPlayersGamesAmountTotal: function () {
-      return this.allData.map(players => players.stats.games.amount)
-    },
-    allPlayersGamesAmountVictory: function () {
-      return this.allData.map(players => players.stats.games.amount_won)
-    },
-    allPlayersGamesAmountLost: function () {
-      return this.allData.map(players => players.stats.games.amount_lost)
-    },
-    allPlayersGamesAmountDraw: function () {
-      return this.allData.map(players => players.stats.games.amount_draw)
-    },
-    allPlayersGamesVictoryRate: function () {
-      return this.allData.map(players => Math.round(players.stats.games.amount_won / (players.stats.games.amount - players.stats.games.amount_won) * 1000))
-    },
-    //---- Goal data ----
-    allPlayersGoalsScoredRate: function () {
-      return this.allData.map(players => Math.round(players.stats.goals.scored_average * 1000))
-    },
-    allPlayersGoalsConcededRate: function () {
-      return this.allData.map(players => Math.round(players.stats.goals.conceded_average * 1000))
-    },
-    allPlayersGoalsConcededAmount: function () {
-      return this.allData.map(players => players.stats.goals.conceded_amount)
-    },
-    allPlayersGoalsScoredAmount: function () {
-      return this.allData.map(players => players.stats.goals.scored_amount)
-    },
+    //||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
   }
 }
 </script>
