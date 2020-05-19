@@ -53,6 +53,7 @@ export default {
   justify-content: center;
   width: 100%;
   background: #0F0E1E;
+  border-bottom: 1px solid #fff;
 }
 
 .navigation-icon {
@@ -129,10 +130,9 @@ export default {
 
   .close {
     color: $color-blue;
-    position: absolute;
-    bottom: 32px;
-    transform: translateX(-50%);
-    left: 50%;
+    align-self: center;
+    margin-top: auto;
+    margin-bottom: 32px;
     font-size: 24px;
     line-height: 26px;
     width: 30px;
@@ -160,6 +160,9 @@ export default {
 
 }
 
+
+//----Transition-----
+//---- slide-enter effects .navigation-routes on entering screen ---
 .slide-enter {
   transform: translateX(-100%);
 
@@ -196,6 +199,7 @@ export default {
   }
 }
 
+//---- slide-leave effects .navigation-icon on leaving screen ---
 .slide-leave, {
   transform: translateY(0);
 
@@ -216,6 +220,7 @@ export default {
   }
 }
 
+//---- hide-enter effects .navigation-icon on entering screen ---
 .hide-enter {
   @media (min-width: 768px) {
     transform: translateX(-100%);
@@ -234,9 +239,14 @@ export default {
   }
 }
 
+//---- hide-leave effects .navigation-routes on leave screen ---
 .hide-leave, {
   transform: translateY(0);
   opacity: 1;
+
+  .close {
+    transform: translateY(0);
+  }
 
   @media (min-width: 768px) {
     transform: translateX(100%);
@@ -250,6 +260,10 @@ export default {
 .hide-leave-active {
   transition: transform .5s ease, opacity .5s ease .5s;
 
+  .close {
+    transition: transform .5s ease;
+  }
+
   @media (min-width: 768px) {
     transition: transform .5s ease .5s, opacity .5s ease .5s;
 
@@ -260,8 +274,12 @@ export default {
 }
 
 .hide-leave-to {
-  transform: translateY(calc(-100% + 80px));
+  transform: translateY(calc(-100% + 64px));
   opacity: 0;
+
+  .close {
+    transform: translateY(16px);
+  }
 
   @media (min-width: 768px) {
     opacity: 1;
