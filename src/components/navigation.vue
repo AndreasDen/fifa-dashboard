@@ -1,10 +1,12 @@
 <template>
   <div class="navigation nav">
-    <transition name="slide">
-      <div class="navigation-icon" @click="toggleMenu()" v-if="!open" key="icon">
+    <transition name="hide" v-if="!open">
+      <div class="navigation-icon" @click="toggleMenu()" key="icon">
         <span class="bullet"></span>
       </div>
-      <div class="navigation-routes" v-else key="routes">
+    </transition>
+    <transition name="slide" v-else>
+      <div class="navigation-routes" key="routes">
         <router-link to='/team-overview' @click.native="toggleMenu()">Dashboard</router-link>
         <router-link to="/player-comparison" @click.native="toggleMenu()">Table</router-link>
         <router-link to="/player-overview" @click.native="toggleMenu()">Player</router-link>
@@ -44,15 +46,23 @@ export default {
 @import "src/scss/variables";
 
 .navigation {
-
   position: fixed;
-  z-index: 100;
+  display: flex;
+  z-index: 1;
+  min-height: 64px;
+  justify-content: center;
+  width: 100%;
+  background: #0F0E1E;
 }
 
 .navigation-icon {
   display: flex;
   padding: 16px;
   cursor: pointer;
+
+  @media (min-width: 768px) {
+    width: 100%;
+  }
 
   .bullet {
     background: $color-blue;
@@ -64,6 +74,7 @@ export default {
 }
 
 .navigation-routes {
+  position: absolute;
   display: flex;
   flex-direction: column;
   min-width: 100vw;
@@ -71,9 +82,11 @@ export default {
   background: #0F0E1E;
 
   @media (min-width: 768px) {
-    min-width: 10vw;
-    max-width: 200px;
-    border-right: 1px solid $color-blue;
+    flex-direction: row;
+    height: auto;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 16px;
   }
 
 
@@ -87,6 +100,10 @@ export default {
     font-family: Montserrat-Medium;
     z-index: 1;
     margin: 4px;
+
+    @media (min-width: 768px) {
+      line-height: 24px;
+    }
 
     &:after {
       content: "";
@@ -113,7 +130,7 @@ export default {
   .close {
     color: $color-blue;
     position: absolute;
-    bottom: 40px;
+    bottom: 32px;
     transform: translateX(-50%);
     left: 50%;
     font-size: 24px;
@@ -124,6 +141,16 @@ export default {
     font-family: Montserrat-Medium;
     border-radius: 8px;
     cursor: pointer;
+    text-align: center;
+
+    @media (min-width: 768px) {
+      position: relative;
+      transform: none;
+      left: 0;
+      bottom: 0;
+      margin: 8px;
+      order: -1;
+    }
 
     &:hover {
       color: #0F0E1E;
@@ -134,20 +161,47 @@ export default {
 }
 
 .slide-enter {
-  transform: translateX(-100vw);
-  width: 0;
+  transform: translateX(-100%);
+
+  @media (min-width: 768px) {
+    transform: translateY(-100%);
+
+    .close {
+      transform: translateX(calc(-100% - 16px));
+    }
+  }
 }
 
 .slide-enter-active {
-  transition: all .5s ease .2s;
+  transition: all .5s ease .5s;
+
+  @media (min-width: 768px) {
+    transition: transform .5s ease .5s, opacity 1.5s ease;
+
+    .close {
+      transition: transform .5s ease 1s;
+    }
+  }
 }
 
 .slide-enter-to {
   transform: translateX(0);
-  width: 100%;
+
+  @media (min-width: 768px) {
+    transform: translateY(0);
+
+    .close {
+      transform: translateX(0);
+    }
+  }
 }
 
 .slide-leave, {
+  transform: translateY(0);
+
+  @media (min-width: 768px) {
+    transform: translateX(0);
+  }
 }
 
 .slide-leave-active {
@@ -155,7 +209,68 @@ export default {
 }
 
 .slide-leave-to {
-  transform: translateX(-100%);
+  transform: translateY(-100%);
+
+  @media (min-width: 768px) {
+    transform: translateX(100%);
+  }
+}
+
+.hide-enter {
+  @media (min-width: 768px) {
+    transform: translateX(-100%);
+  }
+}
+
+.hide-enter-to {
+  @media (min-width: 768px) {
+    transform: translateX(0);
+  }
+}
+
+.hide-enter-active {
+  @media (min-width: 768px) {
+    transition: all .5s ease .5s;
+  }
+}
+
+.hide-leave, {
+  transform: translateY(0);
+  opacity: 1;
+
+  @media (min-width: 768px) {
+    transform: translateX(100%);
+
+    .close {
+      transform: translateX(0);
+    }
+  }
+}
+
+.hide-leave-active {
+  transition: transform .5s ease, opacity .5s ease .5s;
+
+  @media (min-width: 768px) {
+    transition: transform .5s ease .5s, opacity .5s ease .5s;
+
+    .close {
+      transition: transform ease .5s;
+    }
+  }
+}
+
+.hide-leave-to {
+  transform: translateY(calc(-100% + 80px));
+  opacity: 0;
+
+  @media (min-width: 768px) {
+    opacity: 1;
+    transform: translateY(-100%);
+
+    .close {
+      transform: translateX(calc(-100% - 16px));
+    }
+  }
 }
 
 

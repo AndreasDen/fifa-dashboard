@@ -3,13 +3,13 @@
     <section class="section section-elo">
       <div class="overview">
         <div class="copy">
-          <h2>ELO STATISTIC</h2>
-          <p class="text">This is a overview about the calculated ELO points per player</p>
+<!--          <h2>ELO STATISTIC</h2>-->
+<!--          <p class="text">This is a overview about the calculated ELO points per player</p>-->
         </div>
       </div>
       <div class="charts" v-if="loaded">
         <div class="chart">
-          <line-chart  :chart-data="this.getEloHistoryDataCollection()" :options="optionsLineChart"></line-chart>
+          <line-chart :chart-data="this.getEloHistoryDataCollection()" :options="optionsLineChart"></line-chart>
           <h4>This chart is shows .....</h4>
         </div>
         <div class="chart">
@@ -22,8 +22,8 @@
     <section class="section section-games">
       <div class="overview">
         <div class="copy">
-          <h2>GAME STATISTIC</h2>
-          <p class="text">This is a overview about the played games</p>
+<!--          <h2>GAME STATISTIC</h2>-->
+<!--          <p class="text">This is a overview about the played games</p>-->
         </div>
       </div>
       <div class="charts" v-if="loaded">
@@ -47,30 +47,30 @@
     <section class="section section-goals">
       <div class="overview">
         <div class="copy">
-          <h2>GOAL STATISTIC</h2>
-          <p class="text">This is a overview about the calculated ELO points per player</p>
+<!--          <h2>GOAL STATISTIC</h2>-->
+<!--          <p class="text">This is a overview about the calculated ELO points per player</p>-->
         </div>
       </div>
       <div class="charts" v-if="loaded">
         <div class="chart">
           <leader-badge :leaderData="[this.getAllPlayersGoalsScoredAmount()]" :user-names="this.getAllPlayersName()"></leader-badge>
-          <doughnut-chart  :chart-data="this.getGoalsAmountScoredDataCollection()" :options="optionsDoughnutAndPieChart"></doughnut-chart>
-          <h4>This chart is shows .....</h4>
+          <doughnut-chart :chart-data="this.getGoalsAmountScoredDataCollection()" :options="optionsDoughnutAndPieChart"></doughnut-chart>
+<!--          <h4>This chart is shows .....</h4>-->
         </div>
         <div class="chart">
           <leader-badge :leaderData="[this.getAllPlayersGoalsConcededAmount()]" :user-names="this.getAllPlayersName()"></leader-badge>
           <doughnut-chart :chart-data="this.getGoalsAmountConcededDataCollection()" :options="optionsDoughnutAndPieChart"></doughnut-chart>
-          <h4>This chart is shows .....</h4>
+<!--          <h4>This chart is shows .....</h4>-->
         </div>
         <div class="chart">
           <leader-badge :leaderData="[this.getAllPlayersGoalsScoredRate()]" :user-names="this.getAllPlayersName()" :decimal-point="true"></leader-badge>
           <radar-chart :chart-data="this.getGoalsAmountScoredRateDataCollection()" :options="optionsRadarChart"></radar-chart>
-          <h4>This chart is shows .....</h4>
+<!--          <h4>This chart is shows .....</h4>-->
         </div>
         <div class="chart">
           <leader-badge :leaderData="[this.getAllPlayersGoalsConcededRate()]" :user-names="this.getAllPlayersName()" :decimal-point="true"></leader-badge>
           <radar-chart :chart-data="this.getGoalsAmountConcededRateDataCollection()" :options="optionsRadarChart"></radar-chart>
-          <h4>This chart is shows .....</h4>
+<!--          <h4>This chart is shows .....</h4>-->
         </div>
       </div>
     </section>
@@ -164,6 +164,14 @@ export default {
         hover: {
           animationDuration: 0,
         },
+        layout: {
+          padding: {
+            top: 16,
+            bottom: 16,
+            left: 16,
+right: 16
+          }
+        }
         // annotation: {
         //   drawTime: "afterDraw",
         //   annotations: [
@@ -210,7 +218,7 @@ export default {
           }]
         },
         legend: {
-          position: 'left',
+          position: 'bottom',
           onClick: (e) => e.stopPropagation(),
           labels: {
             fontColor: '#fff'
@@ -238,6 +246,14 @@ export default {
         },
         hover: {
           animationDuration: 0,
+        },
+        layout: {
+          padding: {
+            top: 16,
+            bottom: 16,
+            left: 16,
+right: 16
+          }
         }
       },
       optionsLineChart: {
@@ -343,13 +359,21 @@ export default {
             tooltipEl.style.top = position.top + 10 + window.pageYOffset + tooltipModel.caretY + 'px';
             tooltipEl.style.pointerEvents = 'none';
           }
+        },
+        layout: {
+          padding: {
+            top: 16,
+            bottom: 16,
+            left: 16,
+            right: 16
+          }
         }
       },
       optionsDoughnutAndPieChart: {
         responsive: true,
         maintainAspectRatio: false,
         legend: {
-          position: 'left'
+          position: 'bottom'
         },
         tooltips: {
           enabled: false
@@ -369,7 +393,7 @@ export default {
               var midX = meta.controller.chart.width / 2;
               var midY = meta.controller.chart.height / 2;
               var radius = meta.controller.outerRadius;
-              var legend_width = meta.controller.chart.legend.width / 2
+              var legend_height = meta.controller.chart.legend.height / 2
 
               meta.data.forEach(function (arc, index) {
                 var data = dataset.data[index];
@@ -378,7 +402,7 @@ export default {
                 var middleAngle = startAngle + ((endAngle - startAngle) / 2);
 
                 if (!arc.hidden) {
-                  ctx.fillText(data, (radius / 0.9) * Math.cos(middleAngle) + midX + legend_width, (radius / 0.9) * Math.sin(middleAngle) + midY);
+                  ctx.fillText(data, (radius / 0.9) * Math.cos(middleAngle) + midX, (radius / 0.9) * Math.sin(middleAngle) + midY - legend_height);
                 }
               });
             });
@@ -386,8 +410,10 @@ export default {
         },
         layout: {
           padding: {
-            top: 20,
-            bottom: 20
+            top: 16,
+            bottom: 16,
+            left: 16,
+right: 16
           }
         }
       },
@@ -466,6 +492,14 @@ export default {
             tooltipEl.style.left = position.left + 10 + window.pageXOffset + tooltipModel.caretX + 'px';
             tooltipEl.style.top = position.top + 10 + window.pageYOffset + tooltipModel.caretY + 'px';
             tooltipEl.style.pointerEvents = 'none';
+          }
+        },
+        layout: {
+          padding: {
+            top: 16,
+            bottom: 16,
+            left: 16,
+            right: 16
           }
         }
       },
@@ -767,73 +801,74 @@ export default {
 <style scoped lang="scss">
 .fifa-dashboard {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  /*flex-wrap: wrap;*/
 
   section {
-    flex: 1 1 100%;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    padding: 16px;
+    /*flex: 1 1 100%;*/
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    /*width: 100%;*/
+    /*padding: 16px;*/
 
     .overview {
-      display: flex;
-      margin-bottom: 16px;
+      /*display: flex;*/
+      /*margin-bottom: 16px;*/
 
       .copy {
-        flex: 1 1 auto;
-        text-align: left;
+        /*flex: 1 1 auto;*/
+        /*text-align: left;*/
       }
     }
 
     .charts {
-      display: flex;
+      /*display: flex;*/
 
       .chart {
-        display: flex;
-        flex-direction: column;
-        flex: 1 1 50%;
-        position: relative;
+        /*display: flex;*/
+        /*flex-direction: column;*/
+        /*flex: 1 1 50%;*/
+        /*position: relative;*/
 
         &.chart-single {
-          max-width: 400px;
+          /*max-width: 400px;*/
         }
 
         &:not(:first-child) {
-          margin-left: 16px
+          /*margin-left: 16px*/
         }
 
         > div:not(.leader-badge) {
-          background: rgba(72, 72, 123, 0.1);
-          border-radius: 8px;
-          padding: 16px;
-          height: 250px;
+          /*background: rgba(72, 72, 123, 0.1);*/
+          /*border-radius: 8px;*/
+          /*padding: 16px;*/
+          /*height: 250px;*/
         }
       }
     }
 
     h2 {
-      font-family: Montserrat-Black;
-      font-size: 30px;
-      position: relative;
-      display: inline-block;
-      margin: 0;
+      /*font-family: Montserrat-Black;*/
+      /*font-size: 30px;*/
+      /*position: relative;*/
+      /*display: inline-block;*/
+      /*margin: 0;*/
 
       &:after {
-        transition: all .35s ease;
-        content: "";
-        height: 15px;
-        width: 100%;
-        position: absolute;
-        z-index: -1;
+        /*<!--transition: all .35s ease;-->*/
+        /*<!--content: "";-->*/
+        /*<!--height: 15px;-->*/
+        /*<!--width: 100%;-->*/
+        /*<!--position: absolute;-->*/
+        /*<!--z-index: -1;-->*/
       }
     }
 
     .small-charts {
-      display: flex;
+      /*display: flex;*/
 
       > div {
-        width: 50%;
+        /*width: 50%;*/
       }
     }
 
@@ -849,10 +884,10 @@ export default {
 
     &.section-goals {
       .charts {
-        flex-wrap: wrap;
+        /*flex-wrap: wrap;*/
 
         > .chart {
-          max-width: calc(50% - 16px);
+          /*max-width: calc(50% - 16px);*/
         }
       }
     }
