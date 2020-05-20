@@ -49,11 +49,10 @@ export default {
   position: fixed;
   display: flex;
   z-index: 1;
-  min-height: 64px;
+  min-height: 60px;
   justify-content: center;
   width: 100%;
   background: #0F0E1E;
-  border-bottom: 1px solid #fff;
 }
 
 .navigation-icon {
@@ -67,9 +66,9 @@ export default {
 
   .bullet {
     background: $color-blue;
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
     animation: 2s pulse-box-shadow infinite;
   }
 }
@@ -78,16 +77,17 @@ export default {
   position: absolute;
   display: flex;
   flex-direction: column;
-  min-width: 100vw;
+  min-width: 100%;
   height: 100vh;
   background: #0F0E1E;
 
   @media (min-width: 768px) {
     flex-direction: row;
-    height: auto;
     padding-top: 8px;
+    height: auto;
     padding-bottom: 8px;
     padding-left: 16px;
+    align-items: center;
   }
 
 
@@ -102,10 +102,6 @@ export default {
     z-index: 1;
     margin: 4px;
 
-    @media (min-width: 768px) {
-      line-height: 24px;
-    }
-
     &:after {
       content: "";
       width: 100%;
@@ -117,6 +113,7 @@ export default {
       left: 0;
       top: 0;
       z-index: -1;
+      border-radius: 4px;
     }
 
     &:hover, &.router-link-active {
@@ -134,12 +131,12 @@ export default {
     margin-top: auto;
     margin-bottom: 32px;
     font-size: 24px;
-    line-height: 26px;
-    width: 30px;
-    height: 30px;
+    line-height: 24px;
+    width: 28px;
+    height: 28px;
     border: 1px solid;
     font-family: Montserrat-Medium;
-    border-radius: 8px;
+    border-radius: 4px;
     cursor: pointer;
     text-align: center;
 
@@ -274,7 +271,7 @@ export default {
 }
 
 .hide-leave-to {
-  transform: translateY(calc(-100% + 64px));
+  transform: translateY(calc(-100% + 60px));
   opacity: 0;
 
   .close {

@@ -3,74 +3,78 @@
     <section class="section section-elo">
       <div class="overview">
         <div class="copy">
-<!--          <h2>ELO STATISTIC</h2>-->
-<!--          <p class="text">This is a overview about the calculated ELO points per player</p>-->
+          <h2>Elo</h2>
+          <p class="text">
+            This section is an overview about die current point each player has.
+            It is based on the Elo rating system, which is a method for calculating the relative skill levels.
+            There is also shown a excerpt from the history plus a trendline of the last 25 played games.
+          </p>
         </div>
       </div>
       <div class="charts" v-if="loaded">
         <div class="chart">
           <line-chart :chart-data="this.getEloHistoryDataCollection()" :options="optionsLineChart"></line-chart>
-          <h4>This chart is shows .....</h4>
+          <p class="chart-information">shows elo history of last 25 games and the calculated trendline<sup>*</sup></p>
         </div>
         <div class="chart">
           <leader-badge :leaderData="[this.getAllPlayersCurrentElo()]" :user-names="this.getAllPlayersName()"></leader-badge>
           <bar-chart :chart-data="this.getEloDataCollection()" :options="optionsBarChart"></bar-chart>
-          <h4>This chart is shows .....</h4>
+          <p class="chart-information">shows total elo points based on all games. minimum owned, currently own and maximum owned.<sup>*</sup></p>
         </div>
       </div>
     </section>
     <section class="section section-games">
       <div class="overview">
         <div class="copy">
-<!--          <h2>GAME STATISTIC</h2>-->
-<!--          <p class="text">This is a overview about the played games</p>-->
+          <h2>Games</h2>
+          <p class="text">This area visualize all relevant data about completed games. Additional to the total games there is also displayed how often the player won, lost or had a draw. But the most crucial value is the win/(lost+draw) rate which is shown in the radar-chart.</p>
         </div>
       </div>
-      <div class="charts" v-if="loaded">
+      <div class="charts charts-odd" v-if="loaded">
         <div class="chart">
           <leader-badge :leaderData="[this.getAllPlayersGamesAmountTotal()]" :user-names="this.getAllPlayersName()"></leader-badge>
           <pie-chart :chart-data="this.getGamesAmountTotalDataCollection()" :options="optionsDoughnutAndPieChart"></pie-chart>
-          <h4>This chart is shows .....</h4>
+          <p class="chart-information">shows total played games<sup>*</sup></p>
         </div>
         <div class="chart">
           <leader-badge :leaderData="[this.getAllPlayersGamesVictoryRate()]" :user-names="this.getAllPlayersName()" :decimal-point="true"></leader-badge>
           <radar-chart :chart-data="this.getGamesAmountWinRateDataCollection()" :options="optionsRadarChart"></radar-chart>
-          <h4>This chart is shows .....</h4>
+          <p class="chart-information">shows rate of won/(lost+draw) games<sup>*</sup></p>
         </div>
         <div class="chart">
           <leader-badge :leaderData="[this.getAllPlayersGamesAmountVictory(), this.getAllPlayersGamesAmountLost(), this.getAllPlayersGamesAmountDraw()]" :user-names="this.getAllPlayersName()"></leader-badge>
           <bar-chart :chart-data="this.getGamesAmountSplittedDataCollection()" :options="optionsBarChart"></bar-chart>
-          <h4>This chart is shows .....</h4>
+          <p class="chart-information">shows total value of played games divided in won, lost and draw.<sup>*</sup></p>
         </div>
       </div>
     </section>
     <section class="section section-goals">
       <div class="overview">
         <div class="copy">
-<!--          <h2>GOAL STATISTIC</h2>-->
-<!--          <p class="text">This is a overview about the calculated ELO points per player</p>-->
+          <h2>Goals</h2>
+          <p class="text">In this field it is all about Goals. The sum of scored and conceded goals in all completed games, but also the average rate of scored and conceded goals per game</p>
         </div>
       </div>
       <div class="charts" v-if="loaded">
         <div class="chart">
           <leader-badge :leaderData="[this.getAllPlayersGoalsScoredAmount()]" :user-names="this.getAllPlayersName()"></leader-badge>
           <doughnut-chart :chart-data="this.getGoalsAmountScoredDataCollection()" :options="optionsDoughnutAndPieChart"></doughnut-chart>
-<!--          <h4>This chart is shows .....</h4>-->
+          <p class="chart-information">shows total value scored goals<sup>*</sup></p>
         </div>
         <div class="chart">
           <leader-badge :leaderData="[this.getAllPlayersGoalsConcededAmount()]" :user-names="this.getAllPlayersName()"></leader-badge>
           <doughnut-chart :chart-data="this.getGoalsAmountConcededDataCollection()" :options="optionsDoughnutAndPieChart"></doughnut-chart>
-<!--          <h4>This chart is shows .....</h4>-->
+          <p class="chart-information">shows total value conceded goals<sup>*</sup></p>
         </div>
         <div class="chart">
           <leader-badge :leaderData="[this.getAllPlayersGoalsScoredRate()]" :user-names="this.getAllPlayersName()" :decimal-point="true"></leader-badge>
           <radar-chart :chart-data="this.getGoalsAmountScoredRateDataCollection()" :options="optionsRadarChart"></radar-chart>
-<!--          <h4>This chart is shows .....</h4>-->
+          <p class="chart-information">shows rate of average scored goals per game<sup>*</sup></p>
         </div>
         <div class="chart">
           <leader-badge :leaderData="[this.getAllPlayersGoalsConcededRate()]" :user-names="this.getAllPlayersName()" :decimal-point="true"></leader-badge>
           <radar-chart :chart-data="this.getGoalsAmountConcededRateDataCollection()" :options="optionsRadarChart"></radar-chart>
-<!--          <h4>This chart is shows .....</h4>-->
+          <p class="chart-information">shows rate of average conceded goals per game<sup>*</sup></p>
         </div>
       </div>
     </section>
@@ -169,7 +173,7 @@ export default {
             top: 16,
             bottom: 16,
             left: 16,
-right: 16
+            right: 16
           }
         }
         // annotation: {
@@ -252,7 +256,7 @@ right: 16
             top: 16,
             bottom: 16,
             left: 16,
-right: 16
+            right: 16
           }
         }
       },
@@ -413,7 +417,7 @@ right: 16
             top: 16,
             bottom: 16,
             left: 16,
-right: 16
+            right: 16
           }
         }
       },
@@ -557,6 +561,8 @@ right: 16
   methods: {
     //||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
     //get data from API splitted in smaller parts
+    //||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
+
     //---- generall data ----
     getAllPlayersName: function () {
       return this.allData.map(players => players.user.name)
@@ -603,12 +609,11 @@ right: 16
     getAllPlayersGoalsScoredAmount: function () {
       return this.allData.map(players => players.stats.goals.scored_amount)
     },
-    //||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
-
-    //-----------------------------------------------------------
 
     //||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
     //get svg pattern for all users chart segment
+    //||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
+
     getPatternToAllUser: function () {
       return this.getAllPlayersName().map((player, index) => pattern.draw(this.SVGpattern[index], this.gradientOptions.blueToTurquise[0], '#0F0E1E'))
     },
@@ -616,12 +621,11 @@ right: 16
     getPatternToSingleUser: function (index, color) {
       return pattern.draw(this.SVGpattern[index], color, '#0F0E1E')
     },
-    //||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
-
-    //-----------------------------------------------------------
 
     // ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
     //all data collections for charts
+    //||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
+
     //---- Elo Data Collections ----
     getEloDataCollection: function () {
       return {
@@ -658,13 +662,13 @@ right: 16
           backgroundColor: this.gradientOptions.blueToTurquiseTransparent[0],
           data: playerHistory.slice(playerHistory.length - 26).map(x => Math.round(x)),
           borderColor: this.gradientOptions.blueToTurquise,
-          pointHoverRadius: 5,
-          pointRadius: 4,
+          pointHoverRadius: 4,
+          pointRadius: 2,
           pointBackgroundColor: this.gradientOptions.blueToTurquise[0],
           pointBorderColor: this.gradientOptions.blueToTurquise[0],
           borderWidth: 2,
           pointBorderWidth: 2,
-          hidden: index !== 0,
+          // hidden: index !== 0,
           lineTension: 0,
           trendlineLinear: {
             style: '#fff',
@@ -793,92 +797,145 @@ right: 16
         ]
       }
     },
-    //||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
   }
 }
 </script>
 
 <style scoped lang="scss">
+@import "src/scss/variables";
+
+$padding-chart: 16px;
+
 .fifa-dashboard {
   display: flex;
   flex-direction: column;
-  /*flex-wrap: wrap;*/
 
   section {
-    /*flex: 1 1 100%;*/
-    /*display: flex;*/
-    /*flex-direction: column;*/
-    /*width: 100%;*/
-    /*padding: 16px;*/
+    padding: 16px;
+
+    ~ section {
+      margin-top: 32px;
+    }
+
+    @media (min-width: 992px) {
+      display: flex;
+    }
+
 
     .overview {
-      /*display: flex;*/
-      /*margin-bottom: 16px;*/
+      margin-bottom: 32px;
+      padding-bottom: 16px;
+      border-bottom: 1px dashed $color-blue;
+      text-align: center;
 
-      .copy {
-        /*flex: 1 1 auto;*/
-        /*text-align: left;*/
+      @media (min-width: 992px) {
+        flex: 1 1 25%;
+        margin-right: 16px;
+        padding-right: 16px;
+        border-right: 1px dashed $color-blue;
+        border-bottom: 0;
+        display: flex;
+        align-items: center;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+
+      @media (min-width: 1300px) {
+        flex: 1 1 15%;
+      }
+
+      h2 {
+        text-align: center;
+        font-size: 28px;
+        font-family: Sedgwick;
+        color: $color-blue;
+        margin: 0 0 16px 0;
+        transform: rotate(-7deg);
+      }
+
+      .text {
+        margin: 0;
       }
     }
 
     .charts {
-      /*display: flex;*/
+      @media (min-width: 768px) {
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      @media (min-width: 992px) {
+        flex: 1 1 75%;
+      }
+
+      @media (min-width: 1300px) {
+        flex: 1 1 85%;
+      }
 
       .chart {
-        /*display: flex;*/
-        /*flex-direction: column;*/
-        /*flex: 1 1 50%;*/
-        /*position: relative;*/
+        position: relative;
 
-        &.chart-single {
-          /*max-width: 400px;*/
+        ~ .chart {
+          margin-top: 16px;
+
+          @media (min-width: 768px) {
+            margin-top: 0;
+          }
         }
 
-        &:not(:first-child) {
-          /*margin-left: 16px*/
+        @media (min-width: 768px) {
+          flex: 1 1 50%;
+          max-width: calc(50% - #{$padding-chart});
+
+
+          &:nth-child(even) {
+            margin-left: $padding-chart;
+          }
+
+          &:nth-child(n+3) {
+            margin-top: $padding-chart;
+          }
         }
 
         > div:not(.leader-badge) {
-          /*background: rgba(72, 72, 123, 0.1);*/
-          /*border-radius: 8px;*/
-          /*padding: 16px;*/
-          /*height: 250px;*/
+          background: rgba(72, 72, 123, 0.1);
+          border-radius: 4px;
+          height: 250px;
+
+          @media (min-width: 768px) {
+            padding: 16px;
+          }
+        }
+
+        .chart-information {
+          text-align: right;
+          font-size: 10px;
+
+          @media (min-width: 768px) {
+            position: absolute;
+            right: 16px;
+            bottom: 0;
+          }
+
         }
       }
-    }
 
-    h2 {
-      /*font-family: Montserrat-Black;*/
-      /*font-size: 30px;*/
-      /*position: relative;*/
-      /*display: inline-block;*/
-      /*margin: 0;*/
-
-      &:after {
-        /*<!--transition: all .35s ease;-->*/
-        /*<!--content: "";-->*/
-        /*<!--height: 15px;-->*/
-        /*<!--width: 100%;-->*/
-        /*<!--position: absolute;-->*/
-        /*<!--z-index: -1;-->*/
-      }
-    }
-
-    .small-charts {
-      /*display: flex;*/
-
-      > div {
-        /*width: 50%;*/
+      &.charts-odd {
+        .chart {
+          &:last-child {
+            max-width: calc(100% - #{$padding-chart});
+          }
+        }
       }
     }
 
     &.section-elo {
-
+      //specific styling for section elo goes here
     }
 
     &.section-games {
-      .charts {
-      }
+      //specific styling for section elo goes here
+
 
     }
 
