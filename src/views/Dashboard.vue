@@ -1,16 +1,13 @@
 <template>
-  <div class="fifa-dashboard">
+  <div class="dashboard">
     <section class="section section-elo">
-      <div class="overview">
-        <div class="copy">
-          <h2>Elo</h2>
-          <p class="text">
-            This section is an overview about current points each player has.
-            It is based on the elo rating system, which is a method for calculating the relative skill levels.
-            There is also shown a excerpt from the history plus a trendline of the last 25 played games.
-          </p>
-        </div>
-      </div>
+      <description>
+        <h2 slot="headline">Elo</h2>
+        <p slot="text" class="=text">
+          This section is an overview about current points each player has.
+          It is based on the elo rating system, which is a method for calculating the relative skill levels.
+          There is also shown a excerpt from the history plus a trendline of the last 25 played games.</p>
+      </description>
       <div class="charts" v-if="loaded">
         <div class="chart">
           <line-chart :chart-data="this.getEloHistoryDataCollection()" :options="optionsLineChart"></line-chart>
@@ -24,12 +21,11 @@
       </div>
     </section>
     <section class="section section-games">
-      <div class="overview">
-        <div class="copy">
-          <h2>Games</h2>
-          <p class="text">This area visualize all relevant data about completed games. Additional to the total games there is also displayed how often the player won, lost or had a draw. But the most crucial value is the win/(lost+draw) rate which is shown in the radar-chart.</p>
-        </div>
-      </div>
+      <description>
+        <h2 slot="headline">Games</h2>
+        <p slot="text" class="text">
+          This area visualize all relevant data about completed games. Additional to the total games there is also displayed how often the player won, lost or had a draw. But the most crucial value is the win/(lost+draw) rate which is shown in the radar-chart.</p>
+      </description>
       <div class="charts charts-odd" v-if="loaded">
         <div class="chart">
           <leader-badge :leaderData="[this.getAllPlayersGamesAmountTotal()]" :user-names="this.getAllPlayersName()"></leader-badge>
@@ -49,12 +45,11 @@
       </div>
     </section>
     <section class="section section-goals">
-      <div class="overview">
-        <div class="copy">
-          <h2>Goals</h2>
-          <p class="text">In this field it is all about Goals. The sum of scored and conceded goals in all completed games, but also the average rate of scored and conceded goals per game</p>
-        </div>
-      </div>
+      <description>
+        <h2 slot="headline">Goals</h2>
+        <p slot="text" class="text">
+          In this field it is all about Goals. The sum of scored and conceded goals in all completed games, but also the average rate of scored and conceded goals per game</p>
+      </description>
       <div class="charts" v-if="loaded">
         <div class="chart">
           <leader-badge :leaderData="[this.getAllPlayersGoalsScoredAmount()]" :user-names="this.getAllPlayersName()"></leader-badge>
@@ -88,7 +83,7 @@ import HorizontalBarChart from './../components/graphs/horizontal-bar-chart'
 import DoughnutChart from './../components/graphs/doughnut-chart'
 import PieChart from './../components/graphs/pie-chart'
 import RadarChart from './../components/graphs/radar-chart'
-// import UserPodium from './../components/user-poduim'
+import Description from './../components/description-block'
 import LeaderBadge from './../components/leader-badge'
 import pattern from 'patternomaly'
 
@@ -103,11 +98,12 @@ export default {
     DoughnutChart,
     PieChart,
     RadarChart,
-    // UserPodium,
+    Description,
     LeaderBadge
   },
   props: {
-    allData: Array,
+    dataDashboard: Array,
+    dataScore: Array,
     loaded: Boolean
   },
   data () {
@@ -541,7 +537,7 @@ export default {
     }
   },
   watch: {
-    allData: function () {
+    dataDashboard: function () {
       this.getAllPlayersName()
       this.getAllPlayersCurrentElo()
       this.getAllPlayersLowestElo()
@@ -565,49 +561,49 @@ export default {
 
     //---- generall data ----
     getAllPlayersName: function () {
-      return this.allData.map(players => players.user.name)
+      return this.dataDashboard.map(players => players.user.name)
     },
     //---- Elo data ----
     getAllPlayersCurrentElo: function () {
-      return this.allData.map(players => Math.round(players.stats.elo.current))
+      return this.dataDashboard.map(players => Math.round(players.stats.elo.current))
     },
     getAllPlayersLowestElo: function () {
-      return this.allData.map(players => Math.round(players.stats.elo.min))
+      return this.dataDashboard.map(players => Math.round(players.stats.elo.min))
     },
     getAllPlayersHighestElo: function () {
-      return this.allData.map(players => Math.round(players.stats.elo.max))
+      return this.dataDashboard.map(players => Math.round(players.stats.elo.max))
     },
     getAllPlayersEloHistory: function () {
-      return this.allData.map(players => players.stats.elo.history)
+      return this.dataDashboard.map(players => players.stats.elo.history)
     },
     //---- Game data ----
     getAllPlayersGamesAmountTotal: function () {
-      return this.allData.map(players => players.stats.games.amount)
+      return this.dataDashboard.map(players => players.stats.games.amount)
     },
     getAllPlayersGamesAmountVictory: function () {
-      return this.allData.map(players => players.stats.games.amount_won)
+      return this.dataDashboard.map(players => players.stats.games.amount_won)
     },
     getAllPlayersGamesAmountLost: function () {
-      return this.allData.map(players => players.stats.games.amount_lost)
+      return this.dataDashboard.map(players => players.stats.games.amount_lost)
     },
     getAllPlayersGamesAmountDraw: function () {
-      return this.allData.map(players => players.stats.games.amount_draw)
+      return this.dataDashboard.map(players => players.stats.games.amount_draw)
     },
     getAllPlayersGamesVictoryRate: function () {
-      return this.allData.map(players => Math.round(players.stats.games.amount_won / (players.stats.games.amount - players.stats.games.amount_won) * 1000))
+      return this.dataDashboard.map(players => Math.round(players.stats.games.amount_won / (players.stats.games.amount - players.stats.games.amount_won) * 1000))
     },
     //---- Goal data ----
     getAllPlayersGoalsScoredRate: function () {
-      return this.allData.map(players => Math.round(players.stats.goals.scored_average * 1000))
+      return this.dataDashboard.map(players => Math.round(players.stats.goals.scored_average * 1000))
     },
     getAllPlayersGoalsConcededRate: function () {
-      return this.allData.map(players => Math.round(players.stats.goals.conceded_average * 1000))
+      return this.dataDashboard.map(players => Math.round(players.stats.goals.conceded_average * 1000))
     },
     getAllPlayersGoalsConcededAmount: function () {
-      return this.allData.map(players => players.stats.goals.conceded_amount)
+      return this.dataDashboard.map(players => players.stats.goals.conceded_amount)
     },
     getAllPlayersGoalsScoredAmount: function () {
-      return this.allData.map(players => players.stats.goals.scored_amount)
+      return this.dataDashboard.map(players => players.stats.goals.scored_amount)
     },
 
     //||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\\
@@ -806,7 +802,7 @@ export default {
 
 $padding-chart: 16px;
 
-.fifa-dashboard {
+.dashboard {
   display: flex;
   flex-direction: column;
 

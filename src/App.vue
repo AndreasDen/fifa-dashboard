@@ -5,7 +5,12 @@
     </div>
     <div id="content">
       <transition name="fade">
-        <router-view :allData=allData v-if='showContent' :loaded="dataLoaded"></router-view>
+        <router-view
+            :dataDashboard=dataDashboard
+            :dataScore=dataScore
+            v-if='showContent'
+            :loaded="dataLoaded">
+        </router-view>
         <div class="overlay" v-else>
           <div class="loading">
             <div class="loading-pulse loading-pulse-1"></div>
@@ -32,13 +37,14 @@ export default {
       dataLoaded: false,
       endOfAnimation: false,
       showContent: false,
-      allData: null,
+      dataDashboard: null,
+      dataScore: null,
       serverPrefix: null,
-      serverPath: null
+      serverPathDashboard: null
     }
   },
   watch: {
-    allData: function () {
+    dataDashboard: function () {
       this.dataLoaded = true
       this.showContent = this.endOfAnimation
     },
@@ -48,8 +54,11 @@ export default {
   },
   beforeCreate () {
     this.serverPrefix= window.btoa('trvmp-prod');
-    this.serverPath= window.btoa('player_stats');
-    this.$axios.get('https://'+window.atob(this.serverPrefix)+'.herokuapp.com/'+window.atob(this.serverPath)).then(response => (this.allData = response.data.players))
+    this.serverPathDashboard= window.btoa('player_stats');
+    this.serverPathScore= window.btoa('games?amount=15');
+
+    this.$axios.get('https://'+window.atob(this.serverPrefix)+'.herokuapp.com/'+window.atob(this.serverPathDashboard)).then(response => (this.dataDashboard = response.data.players))
+    this.$axios.get('https://'+window.atob(this.serverPrefix)+'.herokuapp.com/'+window.atob(this.serverPathScore)).then(response => (this.dataScore = response.data))
   },
   mounted () {
     setTimeout(function () {

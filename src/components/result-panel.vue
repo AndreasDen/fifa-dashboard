@@ -1,0 +1,155 @@
+<template>
+  <div class="result-panel">
+    <p class="index">{{index +1}}</p>
+    <div class="player-home">
+      <div class="player-home-linup">
+        <p class="player-home-name">{{game.home_player.user.name}}</p>
+        <p class="player-home-team">{{game.home_team.name}}</p>
+      </div>
+      <div class="player-home-goals">
+        {{game.home_goals_end}}
+      </div>
+    </div>
+    <div class="player-away">
+      <div class="player-away-linup">
+        <p class="player-away-name">{{game.away_player.user.name}}</p>
+        <p class="player-away-team">{{game.away_team.name}}</p>
+      </div>
+      <div class="player-away-goals">
+        {{game.away_goals_end}}
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "result-panel",
+  props: {
+    game: Object,
+    index: Number
+  }
+}
+</script>
+
+<style lang="scss">
+@import "src/scss/variables";
+
+.result-panel {
+  display: flex;
+  padding: 16px 0;
+  position: relative;
+
+  p {
+    margin: 0;
+  }
+
+  &:nth-child(even) {
+    background: $color-blue;
+    border-radius: 4px;
+
+    p {
+      color: $color-dark-blue;
+    }
+
+    .player-home-goals, .player-away-goals {
+      color: $color-dark-blue;
+    }
+
+    .player-home {
+      &:after {
+        color: $color-dark-blue;
+      }
+    }
+  }
+
+  > div {
+    &:nth-child(3) {
+      flex-direction: row-reverse;
+      text-align: left;
+    }
+  }
+
+  .index {
+    position: absolute;
+    line-height: 30px;
+    top: 0;
+    left: 8px;
+
+    @media (min-width: 768px) {
+      top: auto;
+      left: 16px
+    }
+  }
+
+  .player-home, .player-away {
+    flex: 1;
+    display: flex;
+    position: relative;
+  }
+
+  .player-home {
+    &:after {
+      position: absolute;
+      content: ":";
+      font-size: 32px;
+      color: #fff;
+      font-family: Sedgwick;
+      top: 0;
+      right: -4px;
+      line-height: 1;
+    }
+  }
+
+  .player-home-linup {
+    text-align: right;
+
+    @media (min-width: 768px) {
+      flex-direction: row-reverse;
+    }
+  }
+
+  .player-away-linup {
+    text-align: left
+  }
+
+  .player-home-linup, .player-away-linup {
+    flex: 1;
+
+    @media (min-width: 768px) {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .player-home-goals, .player-away-goals {
+    font-size: 30px;
+    font-family: Sedgwick;
+    margin: 0 16px;
+    color: #fff;
+    transform: rotate(-7deg);
+    line-height: 1;
+  }
+
+  .player-away-name, .player-home-name {
+    font-family: Montserrat-Black;
+  }
+
+  .player-home-name {
+    @media (min-width: 768px) {
+      margin-left: 16px;
+      padding-left: 16px;
+      border-left: 1px solid;
+    }
+  }
+
+  .player-away-name {
+    @media (min-width: 768px) {
+      margin-right: 16px;
+      padding-right: 16px;
+      border-right: 1px solid;
+    }
+  }
+}
+
+</style>
