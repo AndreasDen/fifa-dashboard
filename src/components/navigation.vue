@@ -1,5 +1,5 @@
 <template>
-  <div class="navigation nav">
+  <div class="navigation">
     <transition name="hide" v-if="!open">
       <div class="navigation-icon" @click="toggleMenu()" key="icon">
         <span class="bullet"></span>

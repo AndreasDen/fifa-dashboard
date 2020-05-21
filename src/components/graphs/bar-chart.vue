@@ -25,7 +25,9 @@ export default {
   },
   mounted () {
     this.addPlugin(chartjsPluginAnnotation);
-    this.renderChart(this.chartData, this.options)
+    setTimeout(function () {
+      this.renderChart(this.chartData, this.options)
+    }.bind(this), 500)
   }
 }
 </script>

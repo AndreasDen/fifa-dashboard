@@ -23,7 +23,9 @@ export default {
     }
   },
   mounted () {
-    this.renderChart(this.chartData, this.options)
+    setTimeout(function () {
+      this.renderChart(this.chartData, this.options)
+    }.bind(this), 500)
   }
 }
 </script>

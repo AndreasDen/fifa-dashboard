@@ -1,18 +1,20 @@
 <template>
   <div id="app">
-    <div id="top">
+    <div id="top" :class="{'visible': showContent}">
       <navigation></navigation>
-<!--      <div class="nav">-->
-
-<!--&lt;!&ndash;        <router-link to='/team-overview'>DASHBOARD</router-link>&ndash;&gt;-->
-<!--&lt;!&ndash;        <router-link to="/player-comparison">TABLE</router-link>&ndash;&gt;-->
-<!--&lt;!&ndash;        <router-link to="/player-overview">PLAYER STATS</router-link>&ndash;&gt;-->
-<!--&lt;!&ndash;        <router-link to="/new-game-form">NEW GAME</router-link>&ndash;&gt;-->
-<!--&lt;!&ndash;        <router-link to="/new-game-form">PROFILE</router-link>&ndash;&gt;-->
-<!--      </div>-->
     </div>
     <div id="content">
-      <router-view :allData=allData :loaded="loaded"></router-view>
+      <transition name="fade">
+        <router-view :allData=allData v-if='showContent' :loaded="dataLoaded"></router-view>
+        <div class="overlay" v-else>
+          <div class="loading">
+            <div class="loading-pulse loading-pulse-1"></div>
+            <div class="loading-pulse loading-pulse-2"></div>
+            <div class="loading-pulse loading-pulse-3"></div>
+          </div>
+          <p class="copy">loading</p>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
@@ -27,17 +29,32 @@ export default {
   },
   data () {
     return {
-      loaded: false,
-      allData: null
+      dataLoaded: false,
+      endOfAnimation: false,
+      showContent: false,
+      allData: null,
+      serverPrefix: null,
+      serverPath: null
     }
   },
   watch: {
     allData: function () {
-      this.loaded = true
+      this.dataLoaded = true
+      this.showContent = this.endOfAnimation
+    },
+    endOfAnimation: function () {
+      this.showContent = this.dataLoaded
     }
   },
   beforeCreate () {
-    this.$axios.get('').then(response => (this.allData = response.data.players))
+    this.serverPrefix= window.btoa('trvmp-prod');
+    this.serverPath= window.btoa('player_stats');
+    this.$axios.get('https://'+window.atob(this.serverPrefix)+'.herokuapp.com/'+window.atob(this.serverPath)).then(response => (this.allData = response.data.players))
+  },
+  mounted () {
+    setTimeout(function () {
+      this.endOfAnimation = true
+    }.bind(this),4000)
   }
 }
 </script>
@@ -47,14 +64,8 @@ export default {
 @import 'scss/animations';
 
 @font-face {
-  font-family: 'Comfortaa-Regular';
-  src: url('fonts/Comfortaa-Regular.ttf');
-}
-
-@font-face {
-  font-family: 'Comfortaa-Bold';
-  src: url('fonts/Comfortaa-Bold.ttf');
-  font-weight: bold;
+  font-family: 'Sedgwick';
+  src: url('fonts/SedgwickAveDisplay-Regular.ttf');
 }
 
 @font-face {
@@ -75,67 +86,36 @@ export default {
 
 body {
   font-family: 'Montserrat-Light';
-  font-size: 14px;
+  font-size: 12px;
   background: #0F0E1E;
   margin: 0;
   color: #fff;
+  overflow-x: hidden;
+  height: 100vh;
 }
 
 #app {
-  text-align: center;
   display: flex;
+  flex-direction: column;
+  height: 100%;
 
   #top {
-    /*padding: 24px;*/
-    /*border-right: 1px solid #989898;*/
-    /*position: fixed;*/
-    /*height: 100vh;*/
-  }
+    flex: 0 1;
+    min-height: 60px;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity .5s ease 1s;
 
-  #content {
-    margin-left: 50px;
-    width: 100%;
-  }
-
-  .nav {
-    /*display: flex;*/
-    /*flex-direction: column;*/
-
-    a {
-      /*text-align: left;*/
-      /*text-decoration: none;*/
-      /*color: #fff;*/
-      /*padding: 16px;*/
-      /*position: relative;*/
-      /*background: transparent;*/
-
-      &:after {
-        /*<!--content: "";-->*/
-        /*<!--width: 100%;-->*/
-        /*<!--height: 100%;-->*/
-        /*<!--opacity: 0;-->*/
-        /*<!--background: $gradient-blue-to-turquise;-->*/
-        /*<!--transition: all .35s ease;-->*/
-        /*<!--position: absolute;-->*/
-        /*<!--left: 0;-->*/
-        /*<!--top: 0;-->*/
-        /*<!--z-index: -1;-->*/
-      }
-
-      &:hover, &.router-link-active {
-
-        &:after {
-          /*<!--background: $gradient-blue-to-turquise;-->*/
-          /*<!--opacity: 1;-->*/
-          /*<!--transition: all 0s ease;-->*/
-        }
-
-      }
-
-
+    &.visible {
+      opacity: 1;
     }
   }
 
+  #content {
+    height: 100%;
+    width: 100%;
+    flex: 1 1;
+  }
 }
 
 #chartjs-tooltip {
@@ -147,7 +127,7 @@ body {
     padding: 8px;
     color: #fff;
     position: relative;
-    animation:  pulse-box-shadow 2s infinite;
+    animation: pulse-box-shadow 2s infinite;
     box-shadow: 0 0 0 $color-blue-transparent-4;
     border-radius: 4px;
     border: 1px solid $color-blue;
@@ -163,7 +143,6 @@ body {
         font-family: Montserrat-Medium;
         margin: 0;
         font-size: 12px;
-        /*padding: 32px;*/
       }
     }
 
@@ -178,6 +157,62 @@ body {
       }
     }
   }
+}
+
+.overlay {
+  background: #0F0E1E;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .loading {
+    display: flex;
+  }
+
+  .loading-pulse {
+    animation: 2s pulse-box-shadow infinite -2s;
+    border-radius: 4px;
+
+    &.loading-pulse-2 {
+      animation: 2s pulse-box-shadow infinite -1.5s;
+    }
+
+    &.loading-pulse-3 {
+      animation: 2s pulse-box-shadow infinite -1s;
+    }
+
+    ~ .loading-pulse {
+      margin-left: 32px;
+    }
+  }
+
+  .copy {
+    font-family: Sedgwick;
+    font-size: 32px;
+    transform: rotate(-7deg);
+    color: $color-blue;
+  }
+}
+
+
+//----Transition-----
+.fade-enter-active {
+  transition: opacity 0.3s ease .5s;
+}
+
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter,
+.fade-leave-active {
+  opacity: 0
 }
 
 </style>

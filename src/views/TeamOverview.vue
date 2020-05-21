@@ -5,8 +5,8 @@
         <div class="copy">
           <h2>Elo</h2>
           <p class="text">
-            This section is an overview about die current point each player has.
-            It is based on the Elo rating system, which is a method for calculating the relative skill levels.
+            This section is an overview about current points each player has.
+            It is based on the elo rating system, which is a method for calculating the relative skill levels.
             There is also shown a excerpt from the history plus a trendline of the last 25 played games.
           </p>
         </div>
@@ -935,18 +935,10 @@ $padding-chart: 16px;
 
     &.section-games {
       //specific styling for section elo goes here
-
-
     }
 
     &.section-goals {
-      .charts {
-        /*flex-wrap: wrap;*/
-
-        > .chart {
-          /*max-width: calc(50% - 16px);*/
-        }
-      }
+      //specific styling for section elo goes here
     }
   }
 }
