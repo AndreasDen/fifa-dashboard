@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import TeamOverview from '../views/TeamOverview'
-import PlayerOverview from '../views/PlayerOverview'
-import PlayerComparison from '../views/PlayerComparison'
-import NewGameForm from '../views/NewGameForm'
+import Dashboard from '../views/Dashboard'
+import Comparison from '../views/Comparison'
+import Score from '../views/Score'
+import Tournament from '../views/Tournament'
+import Profile from '../views/Profile'
+import Form from '../views/Form'
 
 Vue.use(Router)
 
@@ -12,14 +14,16 @@ export default new Router({
   // base: __dirname,
   routes: [
     {
-      path: '/team-overview',
-      name: 'TeamOverview',
-      component: TeamOverview,
+      path: '/dashboard',
+      name: 'Dashboard',
+      component: Dashboard,
       props: true
     },
-    {path: '/player-overview', name: 'PlayerOverview', component: PlayerOverview, props: true},
-    {path: '/player-comparison', name: 'PlayerComparison', component: PlayerComparison, props: true},
-    {path: '/new-game-form', name: 'NewGameForm', component: NewGameForm, props: true},
-    {path: '/', redirect: {name: 'TeamOverview'}}
+    {path: '/comparison', name: 'Comparison', component: Comparison, props: true},
+    {path: '/score', name: 'Score', component: Score, props: true},
+    {path: '/tournament', name: 'Tournament', component: Tournament, props: true},
+    {path: '/profile', name: 'Profile', component: Profile, props: true},
+    {path: '/form', name: 'Form', component: Form, props: true},
+    {path: '/', redirect: {name: 'Dashboard'}}
   ]
 })
