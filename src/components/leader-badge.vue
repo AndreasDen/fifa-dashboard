@@ -100,7 +100,7 @@ export default {
   height: auto;
   background: $color-blue;
   padding: 4px 8px;
-  color: #0F0E1E;
+  color: $color-dark-blue;
   display: flex;
   border-radius: 0px 8px;
 

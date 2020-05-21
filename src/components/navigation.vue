@@ -52,7 +52,7 @@ export default {
   min-height: 60px;
   justify-content: center;
   width: 100%;
-  background: #0F0E1E;
+  background: $color-dark-blue;
 }
 
 .navigation-icon {
@@ -79,7 +79,7 @@ export default {
   flex-direction: column;
   min-width: 100%;
   height: 100vh;
-  background: #0F0E1E;
+  background: $color-dark-blue;
 
   @media (min-width: 768px) {
     flex-direction: row;
@@ -150,7 +150,7 @@ export default {
     }
 
     &:hover {
-      color: #0F0E1E;
+      color: $color-dark-blue;
       background: $color-blue;
     }
   }

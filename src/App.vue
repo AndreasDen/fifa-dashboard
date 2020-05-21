@@ -87,7 +87,7 @@ export default {
 body {
   font-family: 'Montserrat-Light';
   font-size: 12px;
-  background: #0F0E1E;
+  background: $color-dark-blue;
   margin: 0;
   color: #fff;
   overflow-x: hidden;
@@ -160,7 +160,7 @@ body {
 }
 
 .overlay {
-  background: #0F0E1E;
+  background: $color-dark-blue;
   position: absolute;
   top: 0;
   left: 0;
