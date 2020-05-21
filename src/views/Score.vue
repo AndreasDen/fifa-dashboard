@@ -18,14 +18,14 @@ import Description from './../components/description-block'
 import ResultPanel from './../components/result-panel'
 
 export default {
-  name: 'PlayerComparison',
+  name: 'Score',
   components: {
     Description,
     ResultPanel
   },
   props: {
     dataDashboard: Array,
-    dataScore: Array,
+    dataScore: Object,
     loaded: Boolean
   }
 }
@@ -49,7 +49,7 @@ section {
   border-bottom: 1px dashed $color-blue;
   border-right: 0;
   padding: 0 0 16px 0;
-  margin: 0 0 16px 0;
+  margin: 0;
 }
 
 </style>

@@ -53,6 +53,7 @@ export default {
   min-height: 60px;
   justify-content: center;
   width: 100%;
+  max-width: 100vw;
   background: $color-dark-blue;
 }
 
