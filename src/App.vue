@@ -6,10 +6,13 @@
     <div id="content">
       <transition name="fade">
         <router-view
+            v-if='showContent'
             :dataDashboard=dataDashboard
             :dataScore=dataScore
-            v-if='showContent'
-            :loaded="dataLoaded">
+            :dataComparison=dataComparison
+            :loaded="dataLoaded"
+            @player-selection-changed="getPlayersData"
+        >
         </router-view>
         <div class="overlay" v-else>
           <div class="loading">
@@ -39,8 +42,7 @@ export default {
       showContent: false,
       dataDashboard: null,
       dataScore: null,
-      serverPrefix: null,
-      serverPathDashboard: null
+      dataComparison: null
     }
   },
   watch: {
@@ -52,13 +54,23 @@ export default {
       this.showContent = this.dataLoaded
     }
   },
-  beforeCreate () {
-    this.serverPrefix= window.btoa('trvmp-prod');
-    this.serverPathDashboard= window.btoa('player_stats');
-    this.serverPathScore= window.btoa('games?amount=15');
+  methods: {
+    getPlayersData: function (data) {
+      const serverPrefix= window.btoa('trvmp-prod');
+      const serverPathComparison= window.btoa('pvp');
 
-    this.$axios.get('https://'+window.atob(this.serverPrefix)+'.herokuapp.com/'+window.atob(this.serverPathDashboard)).then(response => (this.dataDashboard = response.data.players))
-    this.$axios.get('https://'+window.atob(this.serverPrefix)+'.herokuapp.com/'+window.atob(this.serverPathScore)).then(response => (this.dataScore = response.data))
+      if(data.playerOneID !== null && data.playerTwoID !== null) {
+        this.$axios.get('https://'+window.atob(serverPrefix)+'.herokuapp.com/'+window.atob(serverPathComparison)+ '/' + data.playerOneID + '/' + data.playerTwoID).then(response => (this.dataComparison = response.data.pvp))
+      }
+    }
+  },
+  beforeCreate () {
+    const serverPrefix= window.btoa('trvmp-prod');
+    const serverPathDashboard= window.btoa('player_stats');
+    const serverPathScore= window.btoa('games?amount=15');
+
+    this.$axios.get('https://'+window.atob(serverPrefix)+'.herokuapp.com/'+window.atob(serverPathDashboard)).then(response => (this.dataDashboard = response.data.players))
+    this.$axios.get('https://'+window.atob(serverPrefix)+'.herokuapp.com/'+window.atob(serverPathScore)).then(response => (this.dataScore = response.data))
   },
   mounted () {
     setTimeout(function () {
@@ -111,7 +123,7 @@ body {
   #top {
     flex: 0 1;
     min-height: 60px;
-    z-index: 1;
+    z-index: 2;
     opacity: 0;
     transition: opacity .5s ease 1s;
 

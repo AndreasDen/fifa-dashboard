@@ -39,6 +39,7 @@ export default {
   }
 
   h2 {
+    display: inline-block;
     text-align: center;
     font-size: 28px;
     font-family: Sedgwick;

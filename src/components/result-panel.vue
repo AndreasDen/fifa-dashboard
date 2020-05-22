@@ -6,7 +6,7 @@
       <p v-else
          v-html="game.home_player.user.name + ' lost ' +  awayWanderedElo + ' points to '+ game.away_player.user.name"></p>
     </div>
-    <p class="index">{{index +1}}</p>
+    <p class="index" v-if="index">{{index +1}}</p>
     <div class="player-home">
       <div class="player-home-linup">
         <p class="player-home-name">{{game.home_player.user.name}}</p>
@@ -29,21 +29,23 @@
 </template>
 
 <script>
+
 export default {
   name: "result-panel",
   props: {
     game: Object,
     index: Number
   },
-  data: function () {
-    return {
-      homeWanderedElo: parseInt(this.game.home_wandered_elo.toFixed() ),
-      awayWanderedElo: parseInt(this.game.away_wandered_elo.toFixed()) ,
-      playerHomeWonElo: null
+  computed: {
+    homeWanderedElo: function () {
+      return parseInt(this.game.home_wandered_elo.toFixed())
+    },
+    awayWanderedElo: function () {
+      return parseInt(this.game.away_wandered_elo.toFixed())
+    },
+    playerHomeWonElo: function () {
+      return this.homeWanderedElo > this.awayWanderedElo
     }
-  },
-  mounted () {
-    this.playerHomeWonElo = (this.homeWanderedElo > this.awayWanderedElo)
   }
 }
 </script>
@@ -96,80 +98,79 @@ export default {
   }
 
 
+  .player-home, .player-away {
+    flex: 1;
+    display: flex;
+    position: relative;
+  }
 
-.player-home, .player-away {
-flex: 1;
-display: flex;
-position: relative;
-}
+  .player-away {
+    flex-direction: row-reverse;
+    text-align: left;
+  }
 
-.player-away {
-flex-direction: row-reverse;
-text-align: left;
-}
+  .player-home {
+    &:after {
+      position: absolute;
+      content: ":";
+      font-size: 32px;
+      color: #fff;
+      font-family: Sedgwick;
+      top: 0;
+      right: -4px;
+      line-height: 1;
+    }
+  }
 
-.player-home {
-&:after {
-  position: absolute;
-  content: ":";
-  font-size: 32px;
-  color: #fff;
-  font-family: Sedgwick;
-  top: 0;
-  right: -4px;
-  line-height: 1;
-}
-}
+  .player-home-linup {
+    text-align: right;
 
-.player-home-linup {
-text-align: right;
+    @media (min-width: 768px) {
+      flex-direction: row-reverse;
+    }
+  }
 
-@media (min-width: 768px) {
-  flex-direction: row-reverse;
-}
-}
+  .player-away-linup {
+    text-align: left
+  }
 
-.player-away-linup {
-text-align: left
-}
+  .player-home-linup, .player-away-linup {
+    flex: 1;
 
-.player-home-linup, .player-away-linup {
-flex: 1;
+    @media (min-width: 768px) {
+      display: flex;
+      align-items: center;
+    }
+  }
 
-@media (min-width: 768px) {
-  display: flex;
-  align-items: center;
-}
-}
+  .player-home-goals, .player-away-goals {
+    font-size: 30px;
+    font-family: Sedgwick;
+    margin: 0 16px;
+    color: #fff;
+    transform: rotate(-7deg);
+    line-height: 1;
+  }
 
-.player-home-goals, .player-away-goals {
-font-size: 30px;
-font-family: Sedgwick;
-margin: 0 16px;
-color: #fff;
-transform: rotate(-7deg);
-line-height: 1;
-}
+  .player-away-name, .player-home-name {
+    font-family: Montserrat-Black;
+  }
 
-.player-away-name, .player-home-name {
-font-family: Montserrat-Black;
-}
+  .player-home-name {
+    @media (min-width: 768px) {
+      margin-left: 16px;
+      padding-left: 16px;
+      border-left: 1px solid;
+    }
+  }
 
-.player-home-name {
-@media (min-width: 768px) {
-  margin-left: 16px;
-  padding-left: 16px;
-  border-left: 1px solid;
-}
-}
-
-.player-away-name {
-@media (min-width: 768px) {
-  margin-right: 16px;
-  padding-right: 16px;
-  border-right: 1px solid;
-}
-}
+  .player-away-name {
+    @media (min-width: 768px) {
+      margin-right: 16px;
+      padding-right: 16px;
+      border-right: 1px solid;
+    }
+  }
 }
 
 </style>

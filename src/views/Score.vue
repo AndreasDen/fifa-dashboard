@@ -46,7 +46,7 @@ section {
 
 
 .description-block {
-  border-bottom: 1px dashed $color-blue;
+  /*<!--border-bottom: 1px dashed $color-blue;-->*/
   border-right: 0;
   padding: 0 0 16px 0;
   margin: 0;

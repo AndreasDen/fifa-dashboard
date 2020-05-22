@@ -79,7 +79,6 @@
 <script>
 import LineChart from './../components/graphs/line-chart'
 import BarChart from './../components/graphs/bar-chart'
-import HorizontalBarChart from './../components/graphs/horizontal-bar-chart'
 import DoughnutChart from './../components/graphs/doughnut-chart'
 import PieChart from './../components/graphs/pie-chart'
 import RadarChart from './../components/graphs/radar-chart'
@@ -93,8 +92,6 @@ export default {
   components: {
     LineChart,
     BarChart,
-    // eslint-disable-next-line vue/no-unused-components
-    HorizontalBarChart,
     DoughnutChart,
     PieChart,
     RadarChart,
@@ -193,68 +190,6 @@ export default {
         //     }
         //   ]
         // }
-      },
-      optionsBarChartGames: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          yAxes: [{
-            ticks: {
-              fontColor: '#fff',
-              beginAtZero: false
-            },
-            gridLines: {
-              display: false,
-            }
-          }],
-          xAxes: [{
-            display: false,
-            ticks: {
-              beginAtZero: true
-            },
-            gridLines: {
-              display: false,
-            }
-          }]
-        },
-        legend: {
-          position: 'bottom',
-          onClick: (e) => e.stopPropagation(),
-          labels: {
-            fontColor: '#fff'
-          },
-        },
-        animation: {
-          easing: 'easeInOutCubic',
-          duration: 1000,// general animation time,
-          onComplete: function () {
-            var chartInstance = this.chart;
-            var ctx = chartInstance.ctx;
-
-            ctx.textAlign = 'center';
-            ctx.fillStyle = "#fff";
-            ctx.textBaseline = 'bottom';
-
-            this.data.datasets.forEach(function (dataset, i) {
-              var meta = chartInstance.controller.getDatasetMeta(i);
-              meta.data.forEach(function (bar, index) {
-                var data = dataset.data[index];
-                ctx.fillText(data, bar._model.x + 15, bar._model.y + 6);
-              });
-            });
-          }
-        },
-        hover: {
-          animationDuration: 0,
-        },
-        layout: {
-          padding: {
-            top: 16,
-            bottom: 16,
-            left: 16,
-            right: 16
-          }
-        }
       },
       optionsLineChart: {
         responsive: true,
