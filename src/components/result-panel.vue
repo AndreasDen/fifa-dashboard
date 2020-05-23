@@ -2,27 +2,27 @@
   <div class="result-panel">
     <div class="tooltip">
       <p v-if="playerHomeWonElo"
-         v-html="game.home_player.user.name + ' won ' +  homeWanderedElo+ ' points from '+ game.away_player.user.name"></p>
+         v-html="game[player_1_location+'_player'].user.name + ' won ' +  homeWanderedElo+ ' points from '+ game[player_2_location+'_player'].user.name"></p>
       <p v-else
-         v-html="game.home_player.user.name + ' lost ' +  awayWanderedElo + ' points to '+ game.away_player.user.name"></p>
+         v-html="game[player_1_location+'_player'].user.name + ' lost ' +  awayWanderedElo + ' points to '+ game[player_2_location+'_player'].user.name"></p>
     </div>
     <p class="index" v-if="index">{{index +1}}</p>
     <div class="player-home">
       <div class="player-home-linup">
-        <p class="player-home-name">{{game.home_player.user.name}}</p>
-        <p class="player-home-team">{{game.home_team.name}}</p>
+        <p class="player-home-name">{{game[player_1_location+'_player'].user.name}}</p>
+        <p class="player-home-team">{{game[player_1_location+'_team'].name}}</p>
       </div>
       <div class="player-home-goals">
-        {{game.home_goals_end}}
+        {{game[player_1_location+'_goals_end']}}
       </div>
     </div>
     <div class="player-away">
       <div class="player-away-linup">
-        <p class="player-away-name">{{game.away_player.user.name}}</p>
-        <p class="player-away-team">{{game.away_team.name}}</p>
+        <p class="player-away-name">{{game[player_2_location+'_player'].user.name}}</p>
+        <p class="player-away-team">{{game[player_2_location+'_team'].name}}</p>
       </div>
       <div class="player-away-goals">
-        {{game.away_goals_end}}
+        {{game[player_2_location+'_goals_end']}}
       </div>
     </div>
   </div>
@@ -34,19 +34,35 @@ export default {
   name: "result-panel",
   props: {
     game: Object,
-    index: Number
+    index: Number,
+    playerOrderReverse: Boolean
+  },
+  data: function () {
+    return {
+      player_1_location: 'home',
+      player_2_location: 'away'
+    }
   },
   computed: {
     homeWanderedElo: function () {
-      return parseInt(this.game.home_wandered_elo.toFixed())
+      return parseInt(this.game[this.player_1_location + '_wandered_elo'].toFixed())
     },
     awayWanderedElo: function () {
-      return parseInt(this.game.away_wandered_elo.toFixed())
+      return parseInt(this.game[this.player_2_location + '_wandered_elo'].toFixed())
     },
     playerHomeWonElo: function () {
       return this.homeWanderedElo > this.awayWanderedElo
+    },
+  },
+  watch: {
+    playerOrderReverse: {
+      handler: function(val) {
+          this.player_1_location = val ? 'away' : 'home'
+          this.player_2_location = val ? 'home' : 'away'
+      },
+      deep: true
     }
-  }
+  },
 }
 </script>
 
