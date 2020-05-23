@@ -17,11 +17,6 @@ export default {
       default: null
     }
   },
-  watch: {
-    chartData: function () {
-      this.renderChart(this.chartData, this.options)
-    }
-  },
   mounted () {
     setTimeout(function () {
       this.renderChart(this.chartData, this.options)

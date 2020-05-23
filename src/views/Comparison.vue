@@ -3,7 +3,13 @@
     <section class="section section-comparison">
       <description>
         <h2 slot="headline">Comparison</h2>
-        <p slot="text" class="text">Chose your players to see data in direct comparison</p>
+        <p slot="text" class="text">
+          Chose your players to see data in direct comparison! <br>
+          <br>
+          Who stole more elo pints?<br>
+          Who won more games?<br>
+          Who scored more goals against the other player?<br>
+        </p>
       </description>
       <div class="comparison-showOff">
         <div class="dropdowns">
@@ -14,36 +20,37 @@
             <dropdown :dropdownIndex="2" :options="optionsPlayerTwo" @selected-item-changed="onItemChange"></dropdown>
           </div>
         </div>
-        <div class="result" v-if="dataComparison">
-          <div class="result-last-game">
-            <description>
-              <p slot="text" class="text">Last Game</p>
-            </description>
-            <result-panel :game="dataComparison.last_game.game"></result-panel>
+        <transition name="fade">
+          <div class="result" v-if="loaded">
+            <div class="charts">
+              <div class="chart">
+                <description>
+                  <p slot="text" class="text">Elo Points</p>
+                </description>
+                <horizontal-bar-chart :chart-data="this.getPlayersEloDataCollection()" :options="optionsBarChartGames"></horizontal-bar-chart>
+              </div>
+              <div class="chart">
+                <description>
+                  <p slot="text" class="text">Won Games</p>
+                </description>
+                <horizontal-bar-chart :chart-data="this.getPlayersGamesDataCollection()" :options="optionsBarChartGames"></horizontal-bar-chart>
+              </div>
+              <div class="chart">
+                <description>
+                  <p slot="text" class="text">Scored Goals</p>
+                </description>
+                <horizontal-bar-chart :chart-data="this.getPlayersGoalsDataCollection()" :options="optionsBarChartGames"></horizontal-bar-chart>
+              </div>
+            </div>
+            <div class="result-last-game">
+              <description>
+                <p slot="text" class="text">Last Game</p>
+              </description>
+              <result-panel :playerOrderReverse="playerOrderReverse" :game="dataComparison.last_game.game"></result-panel>
+            </div>
           </div>
-          <div class="charts">
-            <div class="chart">
-              <description>
-                <p slot="text" class="text">Elo Points</p>
-              </description>
-              <horizontal-bar-chart :chart-data="this.getPlayersEloDataCollection()" :options="optionsBarChartGames"></horizontal-bar-chart>
-            </div>
-            <div class="chart">
-              <description>
-                <p slot="text" class="text">Won Games</p>
-              </description>
-              <horizontal-bar-chart :chart-data="this.getPlayersGamesDataCollection()" :options="optionsBarChartGames"></horizontal-bar-chart>
-            </div>
-            <div class="chart">
-              <description>
-                <p slot="text" class="text">Scored Goals</p>
-              </description>
-              <horizontal-bar-chart :chart-data="this.getPlayersGoalsDataCollection()" :options="optionsBarChartGames"></horizontal-bar-chart>
-            </div>
-          </div>
-        </div>
+        </transition>
       </div>
-
     </section>
   </div>
 </template>
@@ -73,7 +80,7 @@ export default {
       optionsPlayerOne: null,
       optionsPlayerTwo: null,
       selectedPlayerOne: null,
-      selectedPlayerTwo: null,
+      selectedPlayerTwo: null
     }
   },
   watch: {
@@ -93,6 +100,9 @@ export default {
     }
   },
   computed: {
+    loaded: function () {
+      return this.selectedPlayerOne !== null && this.selectedPlayerTwo !== null && this.dataComparison !== null
+    },
     optionsBarChartGames: function () {
       return {
         responsive: true,
@@ -117,8 +127,8 @@ export default {
             ticks: {
               beginAtZero: true,
               //had to find a way to size the chart dynamically to the biggest number
-              min: -(this.dataComparison.elo.player_1 > this.dataComparison.elo.player_2 ? this.dataComparison.elo.player_1 : this.dataComparison.elo.player_2) - 50,
-              max: (this.dataComparison.elo.player_1 > this.dataComparison.elo.player_2 ? this.dataComparison.elo.player_1 : this.dataComparison.elo.player_2) + 50,
+              min: -900,
+              max: 900,
             }
           }]
         },
@@ -167,6 +177,11 @@ export default {
     },
     selectedPlayers: function () {
       return {playerOneID: this.selectedPlayerOne, playerTwoID: this.selectedPlayerTwo}
+    },
+
+    //set player order to check if player_home is also player_1. To make sure the result_panel is shown in right order
+    playerOrderReverse: function () {
+      return this.dataComparison.last_game.game.home_player.id !== this.selectedPlayerOne
     }
   },
   methods: {
@@ -183,14 +198,12 @@ export default {
       return {
         datasets: [
           {
-            label: this.dataComparison.players.player_1.user.name,
             backgroundColor: "rgba(30, 218, 171, .4)",
             borderColor: "rgba(30, 218, 171, 1)",
             borderWidth: 2,
             data: [-this.dataComparison.elo.player_1.toFixed()],
           },
           {
-            label: this.dataComparison.players.player_2.user.name,
             backgroundColor: "rgba(30, 218, 171, 1)",
             borderColor: "rgba(30, 218, 171, 1)",
             borderWidth: 2,
@@ -203,14 +216,12 @@ export default {
       return {
         datasets: [
           {
-            label: this.dataComparison.players.player_1.user.name,
             backgroundColor: "rgba(30, 218, 171, .4)",
             borderColor: "rgba(30, 218, 171, 1)",
             borderWidth: 2,
             data: [-this.dataComparison.games.player_1.toFixed()],
           },
           {
-            label: this.dataComparison.players.player_2.user.name,
             backgroundColor: "rgba(30, 218, 171, 1)",
             borderColor: "rgba(30, 218, 171, 1)",
             borderWidth: 2,
@@ -223,14 +234,12 @@ export default {
       return {
         datasets: [
           {
-            label: this.dataComparison.players.player_1.user.name,
             backgroundColor: "rgba(30, 218, 171, .4)",
             borderColor: "rgba(30, 218, 171, 1)",
             borderWidth: 2,
             data: [-this.dataComparison.goals.player_1.toFixed()],
           },
           {
-            label: this.dataComparison.players.player_2.user.name,
             backgroundColor: "rgba(30, 218, 171, 1)",
             borderColor: "rgba(30, 218, 171, 1)",
             borderWidth: 2,
@@ -240,14 +249,16 @@ export default {
       }
     },
     onItemChange: function (val) {
+      //set selected player ID to data
       val.dropdownIndex === 1 ? this.selectedPlayerOne = val.playerID : this.selectedPlayerTwo = val.playerID
+
+      //emit selected player object ti event
       this.$emit('player-selection-changed', this.selectedPlayers);
     },
   },
   mounted () {
     this.optionsPlayerOne = this.getAllPlayersIDandNames()
     this.optionsPlayerTwo = this.getAllPlayersIDandNames()
-    this.dataComparison = null
   }
 }
 </script>
@@ -260,8 +271,10 @@ section {
 }
 
 .comparison {
+  height: 100%;
+
   .dropdowns {
-    margin: 40px 0;
+    margin: 16px 0 40px 0;
     display: flex;
     align-items: center;
     justify-items: center;
@@ -290,7 +303,6 @@ section {
       margin-bottom: 32px;
     }
 
-
     .charts {
       display: flex;
       flex-direction: column;
@@ -306,6 +318,7 @@ section {
     }
 
     .result-panel {
+      margin-top: 0;
       border: 0
     }
 
@@ -323,6 +336,7 @@ section {
 .description-block {
   /*<!--border-bottom: 1px dashed $color-blue;-->*/
   border-right: 0;
+  border-bottom: 0;
   padding: 0 0 16px 0;
   margin: 0;
 }

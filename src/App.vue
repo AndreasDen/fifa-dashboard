@@ -112,6 +112,7 @@ body {
   margin: 0;
   color: #fff;
   overflow-x: hidden;
+  overflow-y: scroll;
   height: 100vh;
 }
 
