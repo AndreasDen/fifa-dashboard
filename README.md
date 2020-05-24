@@ -8,6 +8,8 @@ TRVMP is a single-page application prototype to track, analyze, and visualize FI
 You can go to visit a live demo [here](https://andreasden.github.io/fifa-dashboard).
 Feel free to play around and even add a new game to the data.
 
+Since this is a WIP it is only tested in Chrome and FF. 
+
 ## Roadmap
 This prototype WIP. There are a lot of ideas for the future: 
 - build a UI for the users' profile. There could be functions like:
