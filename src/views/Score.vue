@@ -26,7 +26,8 @@ export default {
   props: {
     dataDashboard: Array,
     dataScore: Object,
-    dataTeams: Object,
+    dataComparison: Object,
+    dataTeams: Array,
     loaded: Boolean
   }
 }

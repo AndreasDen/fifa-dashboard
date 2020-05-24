@@ -18,10 +18,19 @@ export default {
   name: 'PlayerComparison',
   components: {
     Description
+  },
+  props: {
+    dataDashboard: Array,
+    dataScore: Object,
+    dataComparison: Object,
+    dataTeams: Array
   }
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.description-block {
+  border: 0;
+  padding: 0 0 16px 0;
+}
 </style>

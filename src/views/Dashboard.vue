@@ -102,7 +102,7 @@ export default {
     dataDashboard: Array,
     dataScore: Object,
     dataComparison: Object,
-    dataTeam: Object,
+    dataTeams: Array,
     loaded: Boolean
   },
   data () {
