@@ -11,10 +11,9 @@ Vue.use(Router)
 
 export default new Router({
   mode: 'history',
-  // base: __dirname,
+  base: __dirname,
   routes: [
-    {
-      path: '/dashboard',
+    { path: '/dashboard',
       name: 'Dashboard',
       component: Dashboard,
       props: true
