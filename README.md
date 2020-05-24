@@ -11,7 +11,7 @@ Feel free to play around and even add a new game to the data.
 Since this is a WIP it is only tested in Chrome and FF. 
 
 ## Roadmap
-This prototype WIP. There are a lot of ideas for the future: 
+This prototype is WIP. There are a lot of ideas for the future: 
 - build a UI for the users' profile. There could be functions like:
   - have access to settings (clear data, add member, create new group etc.)
   - personal statistics (some badges you earned (won tournament, the best player in... etc.)

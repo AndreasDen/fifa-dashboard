@@ -4,7 +4,7 @@
       <description>
         <h2 slot="headline">Comparison</h2>
         <p slot="text" class="text">
-          Chose your players to see data in direct comparison! <br>
+          Choose your players to see data in direct comparison! <br>
           <br>
           Who stole more elo pints?<br>
           Who won more games?<br>
