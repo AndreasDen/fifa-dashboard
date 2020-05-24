@@ -11,7 +11,7 @@ Vue.use(Router)
 
 export default new Router({
   mode: 'history',
-  base: __dirname,
+  base: 'fifa-dashboard',
   routes: [
     { path: '/dashboard',
       name: 'Dashboard',
