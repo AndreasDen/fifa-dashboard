@@ -248,14 +248,25 @@ export default {
     submit: function () {
       const serverPrefix = window.btoa('trvmp-prod');
       const serverPathPushGame = window.btoa('games');
-
-      this.$axios.post('https://' + window.atob(serverPrefix) + '.herokuapp.com/' + window.atob(serverPathPushGame), this.dataObject)
-          .then(res => {
-            this.clearData();
-            this.$emit('new-game-was-pushed', true)
-            //TODO: give user some sign that games was pushed
-            console.log("success", res)
-          })
+      this.$axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+      this.$axios.post(
+          'https://' + window.atob(serverPrefix) + '.herokuapp.com/' + window.atob(serverPathPushGame),
+          JSON.stringify(this.dataObject),
+          {
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            },
+            proxy: {
+              host: '104.236.174.88',
+              port: 3128
+            }
+          }).then(res => {
+        this.clearData();
+        this.$emit('new-game-was-pushed', true)
+        //TODO: give user some sign that games was pushed
+        console.log("success", res)
+      })
           .catch(err => {
             //TODO: do something on failure
             console.log("error", err)
@@ -297,9 +308,11 @@ export default {
     &:hover {
       background: $color-blue-transparent-8;
     }
+
     &:active {
       background: $color-blue-transparent-4;
     }
+
     &:focus,
     &:active {
       outline: 0;

@@ -18,6 +18,7 @@ This prototype WIP. There are a lot of ideas for the future:
   - build a tournament modus. The basic idea is to show statistics/table for a specific period of time. For example, you want to play one evening with some friends a championship modus (cf. soccer world championship).
 - build a full functional Login to get access to the users' profile
 - make some styling improvements and add a logo
+- improve submit UI. Show user if data was successfully added or not.
 - etc.
 
 ## Credits
