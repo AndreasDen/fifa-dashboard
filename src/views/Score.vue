@@ -4,7 +4,7 @@
       <description>
         <h2 slot="headline">Score</h2>
         <p slot="text" class="text">This overview is showing a couple of last completed games and give you the information of the end result. Furthermore you can see how man elo points a user hast won or lost.
-        This list is updated after every new entry.</p>
+          This list is updated after every new entry.</p>
       </description>
       <div class="result-panel-group">
         <result-panel :index="index" :game="game" v-for="(game, index) in dataScore.games" :key="index"></result-panel>
@@ -26,6 +26,7 @@ export default {
   props: {
     dataDashboard: Array,
     dataScore: Object,
+    dataTeams: Object,
     loaded: Boolean
   }
 }
@@ -46,10 +47,8 @@ section {
 
 
 .description-block {
-  /*<!--border-bottom: 1px dashed $color-blue;-->*/
-  border-right: 0;
+  border: 0;
   padding: 0 0 16px 0;
-  margin: 0;
 }
 
 </style>

@@ -16,7 +16,9 @@ export default {
   name: "dropdown",
   props: {
     options: Array,
-    dropdownIndex: Number
+    dropdownIndex: Number,
+    value: String,
+    clear: Boolean
   },
   data () {
     return {
@@ -32,12 +34,19 @@ export default {
       setTimeout(() => {
         this.animationStart = val
       }, 250)
+    },
+    clear: function (val) {
+      val ? this.selected.name = 'Player-' + this.dropdownIndex : false
     }
   },
   methods: {
     selectOption: function (option) {
       this.selected = option
-      this.$emit('selected-item-changed', {dropdownIndex: this.dropdownIndex, playerID: this.selected.playerID, playerName: this.selected.name});
+      this.$emit('selected-item-changed',
+          {
+            key: this.value,
+            item: {dropdownIndex: this.dropdownIndex, playerID: this.selected.playerID, playerName: this.selected.name
+            }});
 
     },
   },
@@ -100,11 +109,11 @@ export default {
     padding: 0;
     list-style: none;
     text-align: center;
-    border-bottom: 1px dashed $color-blue;
-    background: $color-dark-blue;
+    /*<!--border-bottom: 1px dashed $color-blue;-->*/
+    background: $color-medium-blue;
+    border-radius: 4px;
     z-index: 1;
     width: 100%;
-    box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.75);
 
     &:before {
       width: 10px;

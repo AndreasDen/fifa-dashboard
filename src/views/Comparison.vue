@@ -14,10 +14,20 @@
       <div class="comparison-showOff">
         <div class="dropdowns">
           <div class="dropdown-player-one">
-            <dropdown :dropdownIndex="1" :options="optionsPlayerOne" @selected-item-changed="onItemChange"></dropdown>
+            <dropdown
+                :dropdownIndex="1"
+                :options="optionsPlayerOne"
+                :value="'player_1_name'"
+                @selected-item-changed="onItemChange">
+            </dropdown>
           </div>
           <div class="dropdown-player-two">
-            <dropdown :dropdownIndex="2" :options="optionsPlayerTwo" @selected-item-changed="onItemChange"></dropdown>
+            <dropdown
+                :dropdownIndex="2"
+                :options="optionsPlayerTwo"
+                :value="'player_2_name'"
+                @selected-item-changed="onItemChange">
+            </dropdown>
           </div>
         </div>
         <transition name="fade">
@@ -251,9 +261,9 @@ export default {
     },
     onItemChange: function (val) {
       //set selected player ID to data
-      val.dropdownIndex === 1 ? this.selectedPlayerOne = val.playerID : this.selectedPlayerTwo = val.playerID
+      val.key === 'player_1_name' ? this.selectedPlayerOne = val.item.playerID : this.selectedPlayerTwo = val.item.playerID
 
-      //emit selected player object ti event
+      //emit selected player object to event
       this.$emit('player-selection-changed', this.selectedPlayers);
     },
   },
@@ -269,6 +279,8 @@ export default {
 
 section {
   padding: 16px;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .comparison {
@@ -301,7 +313,8 @@ section {
 
   .comparison-showOff {
     .result-last-game {
-      margin-bottom: 32px;
+      margin-top: 32px;
+
     }
 
     .charts {
@@ -318,10 +331,7 @@ section {
       }
     }
 
-    .result-panel {
-      margin-top: 0;
-      border: 0
-    }
+
 
     .description-block {
       border: 0;
@@ -335,7 +345,6 @@ section {
 }
 
 .description-block {
-  /*<!--border-bottom: 1px dashed $color-blue;-->*/
   border-right: 0;
   border-bottom: 0;
   padding: 0 0 16px 0;

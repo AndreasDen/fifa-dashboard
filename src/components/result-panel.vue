@@ -1,6 +1,6 @@
 <template>
   <div class="result-panel">
-    <div class="tooltip">
+    <div class="tooltip" v-if="tooltip">
       <p v-if="playerHomeWonElo"
          v-html="game[player_1_location+'_player'].user.name + ' won ' +  homeWanderedElo+ ' points from '+ game[player_2_location+'_player'].user.name"></p>
       <p v-else
@@ -35,7 +35,11 @@ export default {
   props: {
     game: Object,
     index: Number,
-    playerOrderReverse: Boolean
+    playerOrderReverse: Boolean,
+    tooltip: {
+      default: true,
+      type: Boolean
+    }
   },
   data: function () {
     return {
@@ -71,12 +75,14 @@ export default {
 
 .result-panel {
   display: flex;
-  padding: 16px 0 32px 0;
+  padding: 16px 0 48px 0;
   position: relative;
+  background: $color-medium-blue;
+  border-radius: 4px;
 
   &:not(:first-child) {
     margin-top: 16px;
-    border-top: 1px dashed $color-blue;
+    /*<!--border-top: 1px dashed $color-blue;-->*/
   }
 
   p {
@@ -87,7 +93,7 @@ export default {
     position: absolute;
     width: 100%;
     max-width: 200px;
-    bottom: 0;
+    bottom: 16px;
     border-radius: 4px;
     padding: 4px;
     left: 50%;

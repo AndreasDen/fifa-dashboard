@@ -831,7 +831,7 @@ $padding-chart: 16px;
         }
 
         > div:not(.leader-badge) {
-          background: rgba(72, 72, 123, 0.1);
+          background: $color-medium-blue;
           border-radius: 4px;
           height: 250px;
 

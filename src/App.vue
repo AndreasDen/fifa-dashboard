@@ -13,6 +13,7 @@
             :dataTeams=dataTeams
             :loaded="dataLoaded"
             @player-selection-changed="getPlayersData"
+            @new-game-was-pushed="getDataFromServer"
         >
         </router-view>
         <div class="overlay" v-else>
@@ -58,28 +59,29 @@ export default {
   },
   methods: {
     getPlayersData: function (data) {
-      const serverPrefix= window.btoa('trvmp-prod');
-      const serverPathComparison= window.btoa('pvp');
+      const serverPrefix = window.btoa('trvmp-prod');
+      const serverPathComparison = window.btoa('pvp');
 
-      if(data.playerOneID !== null && data.playerTwoID !== null) {
-        this.$axios.get('https://'+window.atob(serverPrefix)+'.herokuapp.com/'+window.atob(serverPathComparison)+ '/' + data.playerOneID + '/' + data.playerTwoID).then(response => (this.dataComparison = response.data.pvp))
+      if (data.playerOneID !== null && data.playerTwoID !== null) {
+        this.$axios.get('https://' + window.atob(serverPrefix) + '.herokuapp.com/' + window.atob(serverPathComparison) + '/' + data.playerOneID + '/' + data.playerTwoID).then(response => (this.dataComparison = response.data.pvp))
       }
+    },
+    getDataFromServer () {
+      const serverPrefix = window.btoa('trvmp-prod');
+      const serverPathDashboard = window.btoa('player_stats');
+      const serverPathScore = window.btoa('games?amount=15');
+      const serverPathFrom = window.btoa('teams');
+
+      this.$axios.get('https://' + window.atob(serverPrefix) + '.herokuapp.com/' + window.atob(serverPathDashboard)).then(response => (this.dataDashboard = response.data.players))
+      this.$axios.get('https://' + window.atob(serverPrefix) + '.herokuapp.com/' + window.atob(serverPathScore)).then(response => (this.dataScore = response.data))
+      this.$axios.get('https://' + window.atob(serverPrefix) + '.herokuapp.com/' + window.atob(serverPathFrom)).then(response => (this.dataTeams = response.data.teams))
     }
   },
-  beforeCreate () {
-    const serverPrefix= window.btoa('trvmp-prod');
-    const serverPathDashboard= window.btoa('player_stats');
-    const serverPathScore= window.btoa('games?amount=15');
-    const serverPathFrom= window.btoa('teams');
-
-    this.$axios.get('https://'+window.atob(serverPrefix)+'.herokuapp.com/'+window.atob(serverPathDashboard)).then(response => (this.dataDashboard = response.data.players))
-    this.$axios.get('https://'+window.atob(serverPrefix)+'.herokuapp.com/'+window.atob(serverPathScore)).then(response => (this.dataScore = response.data))
-    this.$axios.get('https://'+window.atob(serverPrefix)+'.herokuapp.com/'+window.atob(serverPathFrom)).then(response => (this.dataTeams = response.data.teams))
-  },
   mounted () {
+    this.getDataFromServer()
     setTimeout(function () {
       this.endOfAnimation = true
-    }.bind(this),4000)
+    }.bind(this), 4000)
   }
 }
 </script>

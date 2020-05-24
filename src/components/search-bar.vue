@@ -21,6 +21,7 @@
 export default {
   name: "search-bar",
   props: {
+    clear: Boolean,
     options: Array,
     icon: {
       default: false,
@@ -81,7 +82,12 @@ export default {
   },
   watch: {
     search: function () {
-      this.$emit('chosen-item-changed', {object: this.selectedOption[0], key: this.value });
+      this.type === 'number' ?
+          this.$emit('chosen-item-changed', {key: this.value, item: !isNaN(parseInt(this.search)) ? parseInt(this.search) : null }):
+          this.$emit('chosen-item-changed', {key: this.value, item: this.selectedOption[0]});
+    },
+    clear: function (val) {
+      val ? this.search = this.placeholder : false
     }
   }
 }
@@ -141,7 +147,7 @@ export default {
   top: 48px;
   list-style: none;
   margin: 0;
-  background: $color-dark-blue;
+  background: $color-medium-blue;
   border-bottom: 1px dashed $color-blue;
 
 
