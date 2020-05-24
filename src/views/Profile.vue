@@ -31,6 +31,6 @@ export default {
 <style scoped lang="scss">
 .description-block {
   border: 0;
-  padding: 0 0 16px 0;
+  padding: 16px;
 }
 </style>

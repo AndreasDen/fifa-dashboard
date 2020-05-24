@@ -3,3 +3,4 @@ module.exports = {
       ? '/fifa-dashboard/'
       : '/'
 }
+C:\Workspace\fifa-dashboard

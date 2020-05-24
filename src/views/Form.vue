@@ -253,9 +253,11 @@ export default {
           .then(res => {
             this.clearData();
             this.$emit('new-game-was-pushed', true)
+            //TODO: give user some sign that games was pushed
             console.log("success", res)
           })
           .catch(err => {
+            //TODO: do something on failure
             console.log("error", err)
           });
     }
@@ -267,7 +269,8 @@ export default {
 @import "src/scss/variables";
 
 .form {
-  height: 100%
+  height: 100%;
+  padding: 16px;
 }
 
 .section-result {
