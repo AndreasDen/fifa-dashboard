@@ -5,12 +5,10 @@ import App from './App'
 import router from './router'
 import VueAxios from './plugins/axios'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
-import { faCrown } from '@fortawesome/free-solid-svg-icons'
-import { faEllipsisH } from '@fortawesome/free-solid-svg-icons'
+import { faSearch, faCrown, faAngleRight, faAngleLeft  } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faUserSecret, faCrown, faEllipsisH)
+library.add(faCrown, faSearch, faAngleRight, faAngleLeft)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

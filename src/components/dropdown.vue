@@ -37,7 +37,7 @@ export default {
   methods: {
     selectOption: function (option) {
       this.selected = option
-      this.$emit('selected-item-changed', {dropdownIndex: this.dropdownIndex, playerID: this.selected.playerID});
+      this.$emit('selected-item-changed', {dropdownIndex: this.dropdownIndex, playerID: this.selected.playerID, playerName: this.selected.name});
 
     },
   },
@@ -50,7 +50,6 @@ export default {
 
 .dropdown-custom {
   width: 100%;
-  max-width: 200px;
   position: relative;
   border-bottom: 1px dashed $color-blue;
 
@@ -58,7 +57,8 @@ export default {
     cursor: pointer;
     text-align: center;
     margin: 0;
-    padding: 8px 0;
+    padding: 16px 0;
+    font-family: Montserrat-Medium;
   }
 
   &:after {
@@ -79,7 +79,7 @@ export default {
   &.dropdown-open {
     &.animation-start {
       &:after {
-        top: 30px;
+        top: 48px;
         transform: translateY(-50%) rotate(45deg);
       }
 
@@ -95,12 +95,11 @@ export default {
 
   ul {
     position: absolute;
-    top: 18px;
+    top: 36px;
     left: 0;
     padding: 0;
     list-style: none;
     text-align: center;
-    border-top: 1px dashed $color-blue;
     border-bottom: 1px dashed $color-blue;
     background: $color-dark-blue;
     z-index: 1;
@@ -113,12 +112,13 @@ export default {
     }
 
     li {
-      padding: 8px 4px;
+      padding: 16px;
       position: relative;
       cursor: pointer;
       transform: translateX(-10px);
       opacity: 0;
       transition: all .25s ease;
+      font-family: Montserrat-Medium;
 
       &:after {
         content: "";

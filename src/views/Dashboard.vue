@@ -100,7 +100,9 @@ export default {
   },
   props: {
     dataDashboard: Array,
-    dataScore: Array,
+    dataScore: Object,
+    dataComparison: Object,
+    dataTeam: Object,
     loaded: Boolean
   },
   data () {

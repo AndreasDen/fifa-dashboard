@@ -74,6 +74,7 @@ export default {
     dataDashboard: Array,
     dataScore: Object,
     dataComparison: Object,
+    dataTeams: Array
   },
   data () {
     return {

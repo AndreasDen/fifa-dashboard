@@ -10,6 +10,7 @@
             :dataDashboard=dataDashboard
             :dataScore=dataScore
             :dataComparison=dataComparison
+            :dataTeams=dataTeams
             :loaded="dataLoaded"
             @player-selection-changed="getPlayersData"
         >
@@ -42,7 +43,8 @@ export default {
       showContent: false,
       dataDashboard: null,
       dataScore: null,
-      dataComparison: null
+      dataComparison: null,
+      dataTeams: null
     }
   },
   watch: {
@@ -68,9 +70,11 @@ export default {
     const serverPrefix= window.btoa('trvmp-prod');
     const serverPathDashboard= window.btoa('player_stats');
     const serverPathScore= window.btoa('games?amount=15');
+    const serverPathFrom= window.btoa('teams');
 
     this.$axios.get('https://'+window.atob(serverPrefix)+'.herokuapp.com/'+window.atob(serverPathDashboard)).then(response => (this.dataDashboard = response.data.players))
     this.$axios.get('https://'+window.atob(serverPrefix)+'.herokuapp.com/'+window.atob(serverPathScore)).then(response => (this.dataScore = response.data))
+    this.$axios.get('https://'+window.atob(serverPrefix)+'.herokuapp.com/'+window.atob(serverPathFrom)).then(response => (this.dataTeams = response.data.teams))
   },
   mounted () {
     setTimeout(function () {
