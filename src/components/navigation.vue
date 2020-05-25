@@ -7,7 +7,7 @@
     </transition>
     <transition name="slide" v-else>
       <div class="navigation-routes" key="routes">
-        <router-link to='/dashboard' @click.native="toggleMenu()">Dashboard</router-link>
+        <router-link to='/' @click.native="toggleMenu()">Dashboard</router-link>
         <router-link to="/score" @click.native="toggleMenu()">Score</router-link>
         <router-link to="/comparison" @click.native="toggleMenu()">Comparison</router-link>
         <router-link to="/tournament" @click.native="toggleMenu()">Tournament</router-link>
