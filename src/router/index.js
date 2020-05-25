@@ -13,7 +13,7 @@ export default new Router({
   mode: 'history',
   base: 'fifa-dashboard',
   routes: [
-    { path: '/dashboard',
+    { path: '/',
       name: 'Dashboard',
       component: Dashboard,
       props: true
@@ -23,6 +23,6 @@ export default new Router({
     {path: '/tournament', name: 'Tournament', component: Tournament, props: true},
     {path: '/profile', name: 'Profile', component: Profile, props: true},
     {path: '/form', name: 'Form', component: Form, props: true},
-    {path: '/', redirect: {name: 'Dashboard'}}
+    // {path: '/', redirect: {name: 'Dashboard'}}
   ]
 })
