@@ -118,7 +118,7 @@ export default {
       border-radius: 4px;
     }
 
-    &:hover, &.router-link-active {
+    &:hover, &.router-link-exact-active {
       &:after {
         background: $color-blue;
         opacity: 1;
